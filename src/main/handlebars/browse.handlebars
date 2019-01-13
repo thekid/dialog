@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{title}}</title>
-    <style type="text/css">
-      section { padding-bottom: .5em; border-bottom: 1px solid black; }
-      ul.highlights { margin: 0; padding: 0; }
-      ul.highlights > li { padding: .5em; display: inline-block; }
-    </style>
-  </head>
-  <body>
+{{#> layout}}
+  {{#*inline "title"}}Home{{/inline}}
+  {{#*inline "content"}}
     <h1>{{title}}</h1>
 
     {{#each albums}}
@@ -27,5 +17,5 @@
         <a href="/album/{{name}}">More</a>
       </section>
     {{/each}}
-  </body>
-</html>
+  {{/inline}}
+{{/layout}}
