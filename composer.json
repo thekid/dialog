@@ -1,0 +1,18 @@
+{
+    "name": "thekid/dialog",
+    "description": "Dialog photoblog software",
+    "type": "project",
+    "license": "bsd3",
+    "authors": [
+        {
+            "name": "Timm Friebe",
+            "email": "thekid@thekid.de"
+        }
+    ],
+    "require": {
+        "xp-forge/web": "^1.6",
+        "xp-framework/compiler": "^2.12",
+        "xp-forge/frontend": "^0.7",
+        "xp-forge/handlebars": "^4.2"
+    }
+}
