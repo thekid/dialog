@@ -1,0 +1,23 @@
+body {
+  background-color: #202021;
+  color: white;
+  font-family: "Skolar Regular","Segoe WPC","Segoe UI",Helvetica,Arial,"Arial Unicode MS",Sans-Serif;
+}
+
+a, a:visited {
+  color: #efefef;
+}
+
+section {
+  padding-bottom: 1em;
+}
+
+ul.highlights {
+  margin: 0;
+  padding: 0;
+}
+
+ul.highlights > li {
+  padding: .5em;
+  display: inline-block;
+}
