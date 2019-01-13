@@ -6,10 +6,13 @@ use text\hash\{Hashing, HashCode};
 use util\{Secret, Date};
 
 class Storage {
+  const DATABASE = 'dialog.db';
+
   private $index, $hashing;
 
   public function __construct(private Path $path) {
-    $this->index= DriverManager::getConnection('sqlite://'.$this->path.'/dialog.db');
+    $database= new Path($this->path, self::DATABASE)->normalize();
+    $this->index= DriverManager::getConnection('sqlite://./'.$database->toString('/'));
     $this->hashing= Hashing::sha256();
   }
 
@@ -17,7 +20,7 @@ class Storage {
   public function path(): Path ==> $this->path;
 
   /** Returns whether the storage exists */
-  public function exists(): bool ==> new Path($this->path, 'dialog.db')->exists();
+  public function exists(): bool ==> new Path($this->path, self::DATABASE)->exists();
 
   /** Creates the storage; creating the database */
   public function create() {
