@@ -58,16 +58,25 @@ class Storage {
     return $this->index->query('select * from album order by created desc');
   }
 
-  public function findAlbum(string $name): array {
+  public function findAlbum(string $name): ?array {
     return $this->index->query('select * from album where name = %s', $name)->next() ?: null;
   }
 
-  public function createAlbum(string $name, string $title, Date $date): void {
+  public function createAlbum(string $name, string $title, Date $created): void {
     $this->index->insert(
       'into album (name, title, created) values (%s, %s, %s)',
       $name,
       $title,
-      $date
+      $created,
+    );
+  }
+
+  public function updateAlbum(string $name, string $title, Date $created): void {
+    $this->index->update(
+      'album set title = %s, created = %s where name = %s',
+      $title,
+      $created,
+      $name,
     );
   }
 
