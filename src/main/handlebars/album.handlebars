@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{album.title}} - {{title}}</title>
+    <style type="text/css">
+      section { padding-bottom: .5em; border-bottom: 1px solid black; }
+      ul.highlights { margin: 0; padding: 0; }
+      ul.highlights > li { padding: .5em; display: inline-block; }
+    </style>
+  </head>
+  <body>
+    <h1><a href="/">{{title}}</a> &raquo; {{album.title}}</h1>
+
+    <small>Created {{album.created}}</small>
+
+    <h2>Highlights</h2>
+    <ul class="highlights">
+      <li><img src="https://via.placeholder.com/200"></li>
+      <li><img src="https://via.placeholder.com/200"></li>
+      <li><img src="https://via.placeholder.com/200"></li>
+    </ul>
+  </body>
+</html>

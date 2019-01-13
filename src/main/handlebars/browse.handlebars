@@ -1,9 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Dialog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <style type="text/css">
+      section { padding-bottom: .5em; border-bottom: 1px solid black; }
+      ul.highlights { margin: 0; padding: 0; }
+      ul.highlights > li { padding: .5em; display: inline-block; }
+    </style>
   </head>
   <body>
-    <h1>It works</h1>
+    <h1>{{title}}</h1>
+
+    {{#each albums}}
+      <section>
+        <h2><a href="/album/{{name}}">{{title}}</a></h2>
+        <small>Created {{created}}</small>
+
+        <ul class="highlights">
+          <li><img src="https://via.placeholder.com/200"></li>
+          <li><img src="https://via.placeholder.com/200"></li>
+          <li><img src="https://via.placeholder.com/200"></li>
+        </ul>
+
+        <a href="/album/{{name}}">More</a>
+      </section>
+    {{/each}}
   </body>
 </html>
