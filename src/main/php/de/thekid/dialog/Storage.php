@@ -23,24 +23,25 @@ class Storage {
   /** Returns whether the storage exists */
   public function exists(): bool ==> new Path($this->path, self::DATABASE)->exists();
 
-  /** Creates the storage; creating the database */
+  /** Creates and initializes the storage; creating the database */
   public function create() {
     $this->index->query('drop table if exists configuration');
-    $this->index->query('create table configuration (
+    $this->index->query('drop table if exists user');
+    $this->index->query('drop table if exists album');
+    $this->initialize();
+  }
+
+  /** Initializes the storage; creating database tables if necessary */
+  public function initialize() {
+    $this->index->query('create table if not exists configuration (
       name text primary key not null,
       value text not null
     )');
-    $this->index->query('insert into configuration (name, value) values ("title", "Dialog")');
-    $this->index->query('insert into configuration (name, value) values ("theme", "default")');
-
-    $this->index->query('drop table if exists user');
-    $this->index->query('create table user (
+    $this->index->query('create table if not exists user (
       name text primary key not null,
       password text not null
     )');
-
-    $this->index->query('drop table if exists album');
-    $this->index->query('create table album (
+    $this->index->query('create table if not exists album (
       name text primary key not null,
       title text not null,
       created datetime not null
@@ -49,7 +50,7 @@ class Storage {
 
   public function configuration() {
     if (null === $this->configuration) {
-      $this->configuration= [];
+      $this->configuration= ['title' => 'Dialog', 'theme' => 'default'];
       foreach ($this->index->query('select name, value from configuration') as $c) {
         $this->configuration[$c['name']]= $c['value'];
       }

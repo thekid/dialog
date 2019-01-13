@@ -15,20 +15,30 @@ class App extends Application {
   public function __construct($env) {
     parent::__construct($env);
 
-    // First time initialization. Create database and admin user 
-    $this->storage= new Storage(new Path($env->arguments()[0] ?? '.'));
-    if (!$this->storage->exists()) {
-      $this->storage->create();
-      Console::writeLine('Welcome to Dialog. An empty database has been set up @ ', $this->storage->path());
-
-      $password= rtrim(base64_encode(new Random()->bytes(8)), '=');
-      $this->storage->newUser('admin', new Secret($password));
-      Console::writeLine("Your admin password is \e[1m", $password, "\e[0m\n");
-    }
+    // TODO: Add this to the xp-forge/web API, ensuring it's only executd
+    // once even with `-m develop`.
+    $this->initialize();
   }
 
-  protected function routes() {
+  public function initialize() {
+    $this->storage= new Storage(new Path($this->environment->arguments()[0] ?? '.'));
+    if ($this->storage->exists()) {
+      $this->storage->initialize();
+      return;
+    }
+
+    // First time initialization. Create database and admin user 
+    $this->storage->create();
+    Console::writeLine('Welcome to Dialog. An empty database has been set up @ ', $this->storage->path());
+
+    $password= rtrim(base64_encode(new Random()->bytes(8)), '=');
+    $this->storage->newUser('admin', new Secret($password));
+    Console::writeLine("Your admin password is \e[1m", $password, "\e[0m\n");
+  }
+
+  public function routes() {
     $files= new FilesFrom(new Path($this->environment->webroot(), 'src/main/webapp'));
+
     $templates= new TemplateEngine(new Path($this->environment->webroot(), 'src/main/handlebars'));
     $templates->global('configuration', [$this->storage, 'configuration']);
 
