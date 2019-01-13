@@ -8,9 +8,6 @@ class Album {
 
   <<get('/album/{name}')>>
   public function view(string $name) {
-    return [
-      'title' => 'Dialog',
-      'album' => $this->storage->findAlbum($name),
-    ];
+    return ['album' => $this->storage->findAlbum($name)];
   }
 }

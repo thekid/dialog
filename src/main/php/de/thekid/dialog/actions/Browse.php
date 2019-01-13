@@ -9,9 +9,6 @@ class Browse {
 
   <<get('/')>>
   public function home() {
-    return [
-      'title'  => 'Dialog',
-      'albums' => Sequence::of($this->storage->newestAlbums())->toArray(),
-    ];
+    return ['albums' => Sequence::of($this->storage->newestAlbums())->toArray()];
   }
 }

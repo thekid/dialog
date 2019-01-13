@@ -30,6 +30,7 @@ class App extends Application {
   protected function routes() {
     $files= new FilesFrom(new Path($this->environment->webroot(), 'src/main/webapp'));
     $templates= new TemplateEngine(new Path($this->environment->webroot(), 'src/main/handlebars'));
+    $templates->global('configuration', [$this->storage, 'configuration']);
 
     $create= ($name) ==> XPClass::forName($name)->newInstance($this->storage);
     $frontend= new Frontend(new ClassesIn('de.thekid.dialog.actions', $create), $templates);

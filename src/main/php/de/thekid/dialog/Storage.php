@@ -6,9 +6,10 @@ use text\hash\{Hashing, HashCode};
 use util\{Secret, Date};
 
 class Storage {
-  const DATABASE = 'dialog.db';
+  const DATABASE= 'dialog.db';
 
   private $index, $hashing;
+  private $configuration= null;
 
   public function __construct(private Path $path) {
     $database= new Path($this->path, self::DATABASE)->normalize();
@@ -24,6 +25,14 @@ class Storage {
 
   /** Creates the storage; creating the database */
   public function create() {
+    $this->index->query('drop table if exists configuration');
+    $this->index->query('create table configuration (
+      name text primary key not null,
+      value text not null
+    )');
+    $this->index->query('insert into configuration (name, value) values ("title", "Dialog")');
+    $this->index->query('insert into configuration (name, value) values ("theme", "default")');
+
     $this->index->query('drop table if exists user');
     $this->index->query('create table user (
       name text primary key not null,
@@ -36,6 +45,23 @@ class Storage {
       title text not null,
       created datetime not null
     )');
+  }
+
+  public function configuration() {
+    if (null === $this->configuration) {
+      $this->configuration= [];
+      foreach ($this->index->query('select name, value from configuration') as $c) {
+        $this->configuration[$c['name']]= $c['value'];
+      }
+    }
+    return $this->configuration;
+  }
+
+  public function configure($configuration) {
+    foreach ($configuration as $name => $value) {
+      $this->index->query('replace into configuration (name, value) values (%s, %s)', $name, $value);
+    }
+    $this->configuration= null; // Force re-read
   }
 
   public function newUser(string $user, Secret $password): void {
