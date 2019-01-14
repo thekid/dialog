@@ -20,5 +20,5 @@ create table album (
 insert into configuration (name, value) values ("theme", "default");
 insert into configuration (name, value) values ("title", "Dialog");
 
--- Your initial admin password is $PASSWORD (without the quotes)
-insert into user (name, password) values ("admin", $PASSWORD);
+-- Your initial admin password is $PASS (without the quotes)
+insert into user (name, password) values ("admin", $HASH);
