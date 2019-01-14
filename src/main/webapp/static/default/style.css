@@ -1,26 +1,32 @@
 body {
   background-color: #202021;
-  color: white;
 }
 
 nav {
   margin-bottom: 1em !important;
 }
 
-a, a:visited {
+nav #brand {
+  font-family: "Permanent Marker";
+}
+
+main {
+  color: white;
+  background-color: #202021;
+}
+
+main a, main a:visited {
   color: #efefef;
+}
+
+main a:hover {
+  text-decoration: underline;
+}
+
+main .title {
+  color: white;
 }
 
 section {
   padding-bottom: 1em;
-}
-
-ul.highlights {
-  margin: 0;
-  padding: 0;
-}
-
-ul.highlights > li {
-  padding: .5em;
-  display: inline-block;
 }
