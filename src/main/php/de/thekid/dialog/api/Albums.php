@@ -15,7 +15,7 @@ class Albums {
   }
 
   <<post('/')>>
-  public function create(string $name, string $title, ?Date $created= null) {
+  public function create($name, $title, $description= null, ?Date $created= null) {
     if (!preg_match('/^[a-z0-9_-]+$/', $name)) {
       throw new Error(400, 'Album name must consist of letters, numbers, dashes and underscores only');
     }
@@ -24,11 +24,11 @@ class Albums {
       throw new Error(400, 'Album "'.$name.'" already exists');
     }
 
-    $this->storage->createAlbum($name, $title, $created ?? Date::now());
+    $this->storage->createAlbum($name, $title, $description ?? '', $created ?? Date::now());
   }
 
   <<get('/{name}')>>
-  public function named(string $name) {
+  public function named($name) {
     if (null === ($album= $this->storage->findAlbum($name))) {
       throw new Error(404, 'No such album "'.$name.'"');
     }
@@ -37,16 +37,16 @@ class Albums {
   }
 
   <<put('/{name}')>>
-  public function update(string $name, string $title, ?Date $created= null) {
+  public function update($name, $title, $description= null, ?Date $created= null) {
     if (null === $this->storage->findAlbum($name)) {
       throw new Error(400, 'No such album "'.$name.'"');
     }
 
-    $this->storage->updateAlbum($name, $title, $created ?? Date::now());
+    $this->storage->updateAlbum($name, $title, $description ?? '', $created ?? Date::now());
   }
 
   <<delete('/{name}')>>
-  public function remove(string $name) {
+  public function remove($name) {
     if (null === $this->storage->findAlbum($name)) {
       throw new Error(400, 'No such album "'.$name.'"');
     }
