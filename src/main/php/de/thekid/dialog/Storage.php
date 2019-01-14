@@ -2,7 +2,7 @@
 
 use io\Path;
 use rdbms\DriverManager;
-use text\hash\{Hashing, HashCode};
+use text\hash\Hashing;
 use util\{Secret, Date};
 
 class Storage {
@@ -63,13 +63,13 @@ class Storage {
   }
 
   public function newUser(string $user, Secret $password): void {
-    $this->index->insert('into user values (%s, %s)', $user, $this->hashing->new()->digest($password->reveal())->hex());
+    $this->index->insert('into user values (%s, %s)', $user, $this->hashing->digest($password->reveal()));
   }
 
   public function authenticate(string $user, Secret $password): ?bool {
     $q= $this->index->query('select * from user where name = %s', $user);
     if ($user= $q->next()) {
-      return HashCode::fromHex($user['password'])->equals($this->hashing->new()->digest($password->reveal()));
+      return $this->hashing->digest($password->reveal())->equals($user['password']);
     }
     return null;
   }

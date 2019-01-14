@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd59dcaf38793bc841c885196c6ff787",
+    "content-hash": "eb134a2ff05f036b3c0966f16eb20fc0",
     "packages": [
         {
             "name": "xp-forge/frontend",
@@ -89,16 +89,16 @@
         },
         {
             "name": "xp-forge/hashing",
-            "version": "v0.1.0",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xp-forge/hashing.git",
-                "reference": "baa15bafa4e33025565d073e95ef16bc3a959c34"
+                "reference": "a3de5238960bfec1871a3245593ccf702f0a052e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xp-forge/hashing/zipball/baa15bafa4e33025565d073e95ef16bc3a959c34",
-                "reference": "baa15bafa4e33025565d073e95ef16bc3a959c34",
+                "url": "https://api.github.com/repos/xp-forge/hashing/zipball/a3de5238960bfec1871a3245593ccf702f0a052e",
+                "reference": "a3de5238960bfec1871a3245593ccf702f0a052e",
                 "shasum": ""
             },
             "require": {
@@ -124,7 +124,7 @@
                 "module",
                 "xp"
             ],
-            "time": "2018-08-12T10:37:09+00:00"
+            "time": "2019-01-14T01:24:31+00:00"
         },
         {
             "name": "xp-forge/json",
