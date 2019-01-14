@@ -1,0 +1,787 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "dd59dcaf38793bc841c885196c6ff787",
+    "packages": [
+        {
+            "name": "xp-forge/frontend",
+            "version": "v0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/frontend.git",
+                "reference": "8e71121a816c865d4bae6636aa494e554fd664e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/frontend/zipball/8e71121a816c865d4bae6636aa494e554fd664e1",
+                "reference": "8e71121a816c865d4bae6636aa494e554fd664e1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-forge/web": "^1.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 |^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Web Frontends",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-11-02T13:18:32+00:00"
+        },
+        {
+            "name": "xp-forge/handlebars",
+            "version": "v4.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/handlebars.git",
+                "reference": "963e4a40c8e8a2520cb1a64111e1d61c24b03bcb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/handlebars/zipball/963e4a40c8e8a2520cb1a64111e1d61c24b03bcb",
+                "reference": "963e4a40c8e8a2520cb1a64111e1d61c24b03bcb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-forge/mustache": "^5.3",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5",
+                "xp-framework/logging": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Handlebars for XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2019-01-13T20:18:59+00:00"
+        },
+        {
+            "name": "xp-forge/hashing",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/hashing.git",
+                "reference": "baa15bafa4e33025565d073e95ef16bc3a959c34"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/hashing/zipball/baa15bafa4e33025565d073e95ef16bc3a959c34",
+                "reference": "baa15bafa4e33025565d073e95ef16bc3a959c34",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Hashing library",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-08-12T10:37:09+00:00"
+        },
+        {
+            "name": "xp-forge/json",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/json.git",
+                "reference": "23f081b51c07b96fcded755e46d651174c265d76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/json/zipball/23f081b51c07b96fcded755e46d651174c265d76",
+                "reference": "23f081b51c07b96fcded755e46d651174c265d76",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Reads and writes JSON to and from various input sources",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-02-01T21:27:38+00:00"
+        },
+        {
+            "name": "xp-forge/marshalling",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/marshalling.git",
+                "reference": "452dfdf3705656ef5ef0200db9318008cae455b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/marshalling/zipball/452dfdf3705656ef5ef0200db9318008cae455b1",
+                "reference": "452dfdf3705656ef5ef0200db9318008cae455b1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 |^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Marshalling",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-08-29T15:48:14+00:00"
+        },
+        {
+            "name": "xp-forge/mustache",
+            "version": "v5.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/mustache.git",
+                "reference": "0a54e006841c3031079a937a5b575da3df3c5fc0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/mustache/zipball/0a54e006841c3031079a937a5b575da3df3c5fc0",
+                "reference": "0a54e006841c3031079a937a5b575da3df3c5fc0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^8.0 | ^7.0 | ^6.5",
+                "xp-framework/tokenize": "^8.0 | ^7.0 | ^6.6"
+            },
+            "require-dev": {
+                "xp-forge/json": "^3.0 | ^2.0",
+                "xp-framework/io-collections": "^8.0 | ^7.0 | ^6.5",
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The mustache template language implemented for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-03-14T17:46:59+00:00"
+        },
+        {
+            "name": "xp-forge/rest-api",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/rest-api.git",
+                "reference": "fc9925680390745b93c747ead0c6354d8b2a48b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/rest-api/zipball/fc9925680390745b93c747ead0c6354d8b2a48b1",
+                "reference": "fc9925680390745b93c747ead0c6354d8b2a48b1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-forge/json": "^3.1",
+                "xp-forge/marshalling": "^0.2",
+                "xp-forge/web": "^1.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 |^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Rest API",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-10-19T13:47:04+00:00"
+        },
+        {
+            "name": "xp-forge/sequence",
+            "version": "v8.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/sequence.git",
+                "reference": "637a78e72c9f70109cf9e7affe6ff507c3c2bc14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/sequence/zipball/637a78e72c9f70109cf9e7affe6ff507c3c2bc14",
+                "reference": "637a78e72c9f70109cf9e7affe6ff507c3c2bc14",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/collections": "^8.0 | ^7.0 | ^6.5",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Data sequences",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-06-08T00:18:02+00:00"
+        },
+        {
+            "name": "xp-forge/uri",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/uri.git",
+                "reference": "5c484f0cf13377fedf5a71da7b87bbb4e3208d27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/uri/zipball/5c484f0cf13377fedf5a71da7b87bbb4e3208d27",
+                "reference": "5c484f0cf13377fedf5a71da7b87bbb4e3208d27",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "URIs",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-08-25T10:01:32+00:00"
+        },
+        {
+            "name": "xp-forge/web",
+            "version": "v1.6.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/web.git",
+                "reference": "5a9daf08e87cc23a9a7fdb0e776e95a06e9e1748"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/web/zipball/5a9daf08e87cc23a9a7fdb0e776e95a06e9e1748",
+                "reference": "5a9daf08e87cc23a9a7fdb0e776e95a06e9e1748",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-forge/uri": "^1.2",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0",
+                "xp-framework/networking": "^9.0 | ^8.0 | ^7.0"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 |^7.0"
+            },
+            "bin": [
+                "bin/xp.xp-forge.web"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Web applications for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-10-09T15:33:08+00:00"
+        },
+        {
+            "name": "xp-framework/ast",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/ast.git",
+                "reference": "0ed0f55afbcaef22ca56d40fa7359f0969000ba9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/ast/zipball/0ed0f55afbcaef22ca56d40fa7359f0969000ba9",
+                "reference": "0ed0f55afbcaef22ca56d40fa7359f0969000ba9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.10"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "AST for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-04-02T12:15:35+00:00"
+        },
+        {
+            "name": "xp-framework/collections",
+            "version": "v8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/collections.git",
+                "reference": "72362a6b5155b7b1effbfb05957c648ad71db21f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/collections/zipball/72362a6b5155b7b1effbfb05957c648ad71db21f",
+                "reference": "72362a6b5155b7b1effbfb05957c648ad71db21f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | 7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Generic collections for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2017-05-28T12:24:38+00:00"
+        },
+        {
+            "name": "xp-framework/compiler",
+            "version": "v2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/compiler.git",
+                "reference": "1287a3bf9d3c71384b57c61a22a5829da765d5ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/compiler/zipball/1287a3bf9d3c71384b57c61a22a5829da765d5ab",
+                "reference": "1287a3bf9d3c71384b57c61a22a5829da765d5ab",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/ast": "^1.3",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.10",
+                "xp-framework/tokenize": "^8.0"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.3"
+            },
+            "suggest": {
+                "xp-framework/core": "^9.4"
+            },
+            "bin": [
+                "bin/xp.xp-framework.compiler.compile"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "AST for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-12-28T16:40:15+00:00"
+        },
+        {
+            "name": "xp-framework/core",
+            "version": "v9.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/core.git",
+                "reference": "13b5467959fdeb99e5c07956c8381e2c82b8c367"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/core/zipball/13b5467959fdeb99e5c07956c8381e2c82b8c367",
+                "reference": "13b5467959fdeb99e5c07956c8381e2c82b8c367",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "suggest": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/__xp.php",
+                    "src/main/resources/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The XP framework is an all-purpose, object oriented PHP framework.",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "framework",
+                "xp"
+            ],
+            "time": "2019-01-02T00:37:16+00:00"
+        },
+        {
+            "name": "xp-framework/logging",
+            "version": "v9.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/logging.git",
+                "reference": "5eef98a08e337e19727f4b87a720dfaec6ca7b95"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/logging/zipball/5eef98a08e337e19727f4b87a720dfaec6ca7b95",
+                "reference": "5eef98a08e337e19727f4b87a720dfaec6ca7b95",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/collections": "^8.0 | ^7.0 | ^6.5",
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Logging for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-11-05T20:06:54+00:00"
+        },
+        {
+            "name": "xp-framework/math",
+            "version": "v8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/math.git",
+                "reference": "7a17960cbe8cd8057c9b8a4ba9e89615c7699c11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/math/zipball/7a17960cbe8cd8057c9b8a4ba9e89615c7699c11",
+                "reference": "7a17960cbe8cd8057c9b8a4ba9e89615c7699c11",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Big number handling",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2017-05-29T21:48:35+00:00"
+        },
+        {
+            "name": "xp-framework/networking",
+            "version": "v9.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/networking.git",
+                "reference": "10335971abaf79b8fe66d99459372a4693a1a816"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/networking/zipball/10335971abaf79b8fe66d99459372a4693a1a816",
+                "reference": "10335971abaf79b8fe66d99459372a4693a1a816",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5",
+                "xp-framework/logging": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Networking for the XP Framework: Client and server APIs",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-10-06T16:06:03+00:00"
+        },
+        {
+            "name": "xp-framework/rdbms",
+            "version": "v12.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/rdbms.git",
+                "reference": "eae48b4cb608ab7e1c91fd1a7d6ca4a8ad81aa23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/rdbms/zipball/eae48b4cb608ab7e1c91fd1a7d6ca4a8ad81aa23",
+                "reference": "eae48b4cb608ab7e1c91fd1a7d6ca4a8ad81aa23",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.11",
+                "xp-framework/logging": "^9.0 | ^8.0 | ^7.0 | ^6.5",
+                "xp-framework/math": "^8.0 | ^7.0 | ^6.6",
+                "xp-framework/networking": "^9.0 | ^8.0 | ^7.0 | ^6.6"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "RDBMS support for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-10-06T15:00:42+00:00"
+        },
+        {
+            "name": "xp-framework/tokenize",
+            "version": "v8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/tokenize.git",
+                "reference": "ffd0f112d1207eb5037f49e77362d8164cbc4b39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/tokenize/zipball/ffd0f112d1207eb5037f49e77362d8164cbc4b39",
+                "reference": "ffd0f112d1207eb5037f49e77362d8164cbc4b39",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Text tokenizing",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2017-06-03T19:15:42+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
