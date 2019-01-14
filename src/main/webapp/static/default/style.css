@@ -1,7 +1,10 @@
 body {
   background-color: #202021;
   color: white;
-  font-family: "Skolar Regular","Segoe WPC","Segoe UI",Helvetica,Arial,"Arial Unicode MS",Sans-Serif;
+}
+
+nav {
+  margin-bottom: 1em !important;
 }
 
 a, a:visited {
