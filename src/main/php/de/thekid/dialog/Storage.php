@@ -49,11 +49,11 @@ class Storage {
   }
 
   public function configuration() {
-    $r= self::DEFAULTS;
+    $configuration= self::DEFAULTS;
     foreach ($this->index->query('select name, value from configuration') as $c) {
-      $r[$c['name']]= $c['value'];
+      $configuration[$c['name']]= $c['value'];
     }
-    return $r;
+    return $configuration;
   }
 
   public function configure($configuration) {

@@ -38,12 +38,13 @@ class App extends Application {
 
   public function routes() {
     $files= new FilesFrom(new Path($this->environment->webroot(), 'src/main/webapp'));
-    $cache= 'dev' === $this->environment->profile() ? TimeSpan::seconds(10) : TimeSpan::hours(1);
+    $cached= new Cache('dev' === $this->environment->profile() ? TimeSpan::seconds(10) : TimeSpan::hours(1));
+    $cached->register('configuration', [$this->storage, 'configuration']);
 
     $templates= new TemplateEngine(new Path($this->environment->webroot(), 'src/main/handlebars'));
-    $templates->global('configuration', [$this->storage, 'configuration'], $cache);
+    $templates->global('configuration', [$cached, 'value']);
 
-    $create= ($name) ==> XPClass::forName($name)->newInstance($this->storage);
+    $create= ($name) ==> XPClass::forName($name)->newInstance($this->storage, $cached);
     $frontend= new Frontend(new ClassesIn('de.thekid.dialog.actions', $create), $templates);
     $api= new Filters(
       [new BasicAuth($this->storage)],
