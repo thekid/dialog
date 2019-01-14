@@ -7,9 +7,9 @@ use util\{Secret, Date};
 
 class Storage {
   const DATABASE= 'dialog.db';
+  const DEFAULTS= ['title' => 'Dialog', 'theme' => 'default'];
 
   private $index, $hashing;
-  private $configuration= null;
 
   public function __construct(private Path $path) {
     $database= new Path($this->path, self::DATABASE)->normalize();
@@ -49,20 +49,17 @@ class Storage {
   }
 
   public function configuration() {
-    if (null === $this->configuration) {
-      $this->configuration= ['title' => 'Dialog', 'theme' => 'default'];
-      foreach ($this->index->query('select name, value from configuration') as $c) {
-        $this->configuration[$c['name']]= $c['value'];
-      }
+    $r= self::DEFAULTS;
+    foreach ($this->index->query('select name, value from configuration') as $c) {
+      $r[$c['name']]= $c['value'];
     }
-    return $this->configuration;
+    return $r;
   }
 
   public function configure($configuration) {
     foreach ($configuration as $name => $value) {
       $this->index->query('replace into configuration (name, value) values (%s, %s)', $name, $value);
     }
-    $this->configuration= null; // Force re-read
   }
 
   public function newUser(string $user, Secret $password): void {

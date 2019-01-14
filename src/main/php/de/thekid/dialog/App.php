@@ -3,7 +3,7 @@
 use io\Path;
 use lang\XPClass;
 use util\cmd\Console;
-use util\{Random, Secret};
+use util\{Random, Secret, TimeSpan};
 use web\frontend\{Frontend, Templates, ClassesIn};
 use web\handler\FilesFrom;
 use web\rest\{RestApi, ResourcesIn};
@@ -38,9 +38,10 @@ class App extends Application {
 
   public function routes() {
     $files= new FilesFrom(new Path($this->environment->webroot(), 'src/main/webapp'));
+    $cache= 'dev' === $this->environment->profile() ? TimeSpan::seconds(10) : TimeSpan::hours(1);
 
     $templates= new TemplateEngine(new Path($this->environment->webroot(), 'src/main/handlebars'));
-    $templates->global('configuration', [$this->storage, 'configuration']);
+    $templates->global('configuration', [$this->storage, 'configuration'], $cache);
 
     $create= ($name) ==> XPClass::forName($name)->newInstance($this->storage);
     $frontend= new Frontend(new ClassesIn('de.thekid.dialog.actions', $create), $templates);
