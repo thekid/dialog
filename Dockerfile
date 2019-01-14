@@ -22,4 +22,4 @@ VOLUME /space
 
 EXPOSE 3000
 
-CMD ["/bin/sh", "/usr/bin/xp-run", "xp.web.Runner", "-a", "0.0.0.0:3000", "de.thekid.dialog.App", "/space"]
+CMD ["/bin/sh", "/usr/bin/xp-run", "xp.web.Runner", "-a", "0.0.0.0:3000", "-p", "prod", "de.thekid.dialog.App", "/space"]
