@@ -4,6 +4,9 @@
     <section>
       <div class="content">
         <h1 class="title"><a href="/">{{configuration.title}}</a> &raquo; {{album.title}}</h1>
+        <div class="description">
+          {{&markdown album.description}}
+        </div>
         <small>Created {{album.created}}</small>
         <h2 class="subtitle">Highlights</h2>
       </div>

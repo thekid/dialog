@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb134a2ff05f036b3c0966f16eb20fc0",
+    "content-hash": "6600602e40f13ae72e14da68e8143563",
     "packages": [
         {
             "name": "xp-forge/frontend",
@@ -164,6 +164,45 @@
                 "xp"
             ],
             "time": "2018-02-01T21:27:38+00:00"
+        },
+        {
+            "name": "xp-forge/markdown",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-forge/markdown.git",
+                "reference": "2d3fa59de4622c699c431163e3aa80fb3ddfe83c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-forge/markdown/zipball/2d3fa59de4622c699c431163e3aa80fb3ddfe83c",
+                "reference": "2d3fa59de4622c699c431163e3aa80fb3ddfe83c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "xp-framework/core": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "require-dev": {
+                "xp-framework/unittest": "^9.0 | ^8.0 | ^7.0 | ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Markdown",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2018-07-22T18:52:17+00:00"
         },
         {
             "name": "xp-forge/marshalling",

@@ -2,6 +2,7 @@
 
 use com\handlebarsjs\{HandlebarsEngine, FilesIn};
 use io\Path;
+use net\daringfireball\markdown\Markdown;
 use web\frontend\Templates;
 
 class TemplateEngine implements Templates {
@@ -9,7 +10,11 @@ class TemplateEngine implements Templates {
   private $globals= [];
 
   public function __construct(Path $templates) {
-    $this->backing= (new HandlebarsEngine())->withTemplates(new FilesIn($templates));
+    $markdown= new Markdown();
+    $this->backing= new HandlebarsEngine()
+      ->withTemplates(new FilesIn($templates))
+      ->withHelper('markdown', ($in, $context, $options) ==> $markdown->transform($options[0]))
+    ;
   }
 
   /**
