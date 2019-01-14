@@ -11,7 +11,7 @@ class Statements implements Migration {
   public function perform(DBConnection $conn): iterable {
     $replace= [];
     foreach ($this->variables as $name => $value) {
-      $replace= ['$'.$name => $conn->prepare('%s', $value)];  
+      $replace['$'.$name]= $conn->prepare('%s', $value);
     }
     yield 'Running '.$this->source->relativeTo(getcwd()).' with '.sizeof($replace).' variable(s)';
 
