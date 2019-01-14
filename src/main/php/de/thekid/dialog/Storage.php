@@ -42,8 +42,10 @@ class Storage {
     // If no database file exists, shortcut to creating current version
     // directly; generating a random admin password. Otherwise, apply migrations
     if (empty($versions)) {
+      $password= rtrim(base64_encode(new Random()->bytes(8)), '=');
       yield new Statements(new Path($migrations, sprintf('create-v%d.sql', self::VERSION)), [
-        'PASSWORD' => rtrim(base64_encode(new Random()->bytes(8)), '=')
+        'PASS' => $password,
+        'HASH' => $this->hashing->digest($password),
       ]);
     } else {
       krsort($versions, SORT_NUMERIC | SORT_DESC);
