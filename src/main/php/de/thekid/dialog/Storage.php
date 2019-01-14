@@ -1,55 +1,61 @@
 <?php namespace de\thekid\dialog;
 
-use io\Path;
+use io\{Path, File};
 use rdbms\DriverManager;
 use text\hash\Hashing;
-use util\{Secret, Date};
+use util\{Secret, Date, Random};
 
 class Storage {
-  const DATABASE= 'dialog.db';
-  const DEFAULTS= ['title' => 'Dialog', 'theme' => 'default'];
+  const DATABASE= 'dialog';
+  const VERSION= 1;
 
-  private $index, $hashing;
+  private $path, $index, $hashing;
 
-  public function __construct(private Path $path) {
-    $database= new Path($this->path, self::DATABASE)->normalize();
-    $this->index= DriverManager::getConnection('sqlite://./'.$database->toString('/'));
+  public function __construct(Path $path) {
+    $this->path= $path->asRealpath();
+
+    $db= new Path($this->path, self::DATABASE.self::VERSION.'.db');
+    $this->index= DriverManager::getConnection('sqlite://./'.urlencode($db));
     $this->hashing= Hashing::sha256();
   }
 
-  /** Returns this storage's base path */
-  public function path(): Path ==> $this->path;
+  /** Returns base path for this storage */
+  public function path() ==> $this->path;
 
-  /** Returns whether the storage exists */
-  public function exists(): bool ==> new Path($this->path, self::DATABASE)->exists();
+  /** Returns database connection */
+  public function connection() ==> $this->index;
 
-  /** Creates and initializes the storage; creating the database */
-  public function create() {
-    $this->index->query('drop table if exists configuration');
-    $this->index->query('drop table if exists user');
-    $this->index->query('drop table if exists album');
-    $this->initialize();
-  }
+  /** Checks for migrations */
+  public function migrations(Path $migrations): iterable {
+    $current= new Path($this->path, self::DATABASE.self::VERSION.'.db');
 
-  /** Initializes the storage; creating database tables if necessary */
-  public function initialize() {
-    $this->index->query('create table if not exists configuration (
-      name text primary key not null,
-      value text not null
-    )');
-    $this->index->query('create table if not exists user (
-      name text primary key not null,
-      password text not null
-    )');
-    $this->index->query('create table if not exists album (
-      name text primary key not null,
-      title text not null,
-      created datetime not null
-    )');
+    // If current database exists, nothing is to be done
+    if ($current->exists()) return;
+
+    // Check which migrations to apply
+    $version= 0;
+    foreach (glob($this->path.DIRECTORY_SEPARATOR.self::DATABASE.'*.db') as $database) {
+      sscanf(basename($database), self::DATABASE.'%d', $version);
+      $versions[$version]= $database;
+    }
+
+    // If no database file exists, shortcut to creating current version
+    // directly; generating a random admin password. Otherwise, apply migrations
+    if (empty($versions)) {
+      yield new Statements(new Path($migrations, sprintf('create-v%d.sql', self::VERSION)), [
+        'PASSWORD' => rtrim(base64_encode(new Random()->bytes(8)), '=')
+      ]);
+    } else {
+      krsort($versions, SORT_NUMERIC | SORT_DESC);
+      $newest= key($versions);
+
+      yield new CopyOf(new Path($versions[$newest]), $current);
+      yield new Statements(new Path($migrations, sprintf('migrate-v%d-v%d.sql', $newest, self::VERSION)));
+    }
   }
 
   public function configuration() {
-    $configuration= self::DEFAULTS;
+    $configuration= [];
     foreach ($this->index->query('select name, value from configuration') as $c) {
       $configuration[$c['name']]= $c['value'];
     }
@@ -60,6 +66,14 @@ class Storage {
     foreach ($configuration as $name => $value) {
       $this->index->query('replace into configuration (name, value) values (%s, %s)', $name, $value);
     }
+  }
+
+  public function users(): iterable {
+    return $this->index->query('select * from user');
+  }
+
+  public function findUser(string $name): ?array {
+    return $this->index->query('select * from user where name = %s', $name)->next();
   }
 
   public function newUser(string $user, Secret $password): void {

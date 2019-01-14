@@ -2,8 +2,8 @@
 
 use io\Path;
 use lang\XPClass;
+use util\TimeSpan;
 use util\cmd\Console;
-use util\{Random, Secret, TimeSpan};
 use web\frontend\{Frontend, Templates, ClassesIn};
 use web\handler\FilesFrom;
 use web\rest\{RestApi, ResourcesIn};
@@ -22,18 +22,18 @@ class App extends Application {
 
   public function initialize() {
     $this->storage= new Storage(new Path($this->environment->arguments()[0] ?? '.'));
-    if ($this->storage->exists()) {
-      $this->storage->initialize();
-      return;
+    Console::writeLine("\e[1m══ Welcome to Dialog ═══════════════════════════════════════════════════\e[0m");
+    Console::writeLine('Storage @ ', $this->storage->path(), "\n");
+
+    // Perform any necessary migrations
+    $schemas= new Path($this->environment->webroot(), 'src/main/sql');
+    foreach ($this->storage->migrations($schemas) as $migration) {
+      foreach ($migration->perform($this->storage->connection()) as $result) {
+        Console::writeLine("\e[33;1m>\e[0m ", $result);
+      }
     }
 
-    // First time initialization. Create database and admin user 
-    $this->storage->create();
-    Console::writeLine('Welcome to Dialog. An empty database has been set up @ ', $this->storage->path());
-
-    $password= rtrim(base64_encode(new Random()->bytes(8)), '=');
-    $this->storage->newUser('admin', new Secret($password));
-    Console::writeLine("Your admin password is \e[1m", $password, "\e[0m\n");
+    Console::writeLine("> Initialization complete\n");
   }
 
   public function routes() {
