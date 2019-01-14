@@ -42,9 +42,9 @@ class App extends Application {
     $cached->register('configuration', [$this->storage, 'configuration']);
 
     $templates= new TemplateEngine(new Path($this->environment->webroot(), 'src/main/handlebars'));
-    $templates->global('configuration', [$cached, 'value']);
+    $templates->global('configuration', $name ==> $cached->value($name));
 
-    $create= ($name) ==> XPClass::forName($name)->newInstance($this->storage, $cached);
+    $create= $name ==> XPClass::forName($name)->newInstance($this->storage, $cached);
     $frontend= new Frontend(new ClassesIn('de.thekid.dialog.actions', $create), $templates);
     $api= new Filters(
       [new BasicAuth($this->storage)],

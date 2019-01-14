@@ -2,7 +2,6 @@
 
 use com\handlebarsjs\{HandlebarsEngine, FilesIn};
 use io\Path;
-use lang\FunctionType;
 use web\frontend\Templates;
 
 class TemplateEngine implements Templates {
@@ -14,14 +13,19 @@ class TemplateEngine implements Templates {
   }
 
   /**
-   * Registers a global variable along with a function to fetch it.
+   * Registers a global variable along with either a constant value or
+   * a function to fetch it.
    *
    * @param  string $var
-   * @param  function(var): var $func
+   * @param  var $arg
    * @return self
    */
-  public function global($var, $func) {
-    $this->globals[$var]= FunctionType::forName('function(var): var')->cast($func);
+  public function global($var, $arg) {
+    if ($arg instanceof \Closure) {
+      $this->globals[$var]= $arg;
+    } else {
+      $this->globals[$var]= () ==> $arg;
+    }
     return $this;
   }
 
