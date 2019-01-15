@@ -4,5 +4,5 @@ use rdbms\DBConnection;
 
 interface Migration {
 
-  public function perform(DBConnection $conn): iterable;
+  public function perform(): iterable;
 }

@@ -29,7 +29,7 @@ class App extends Application {
     // Perform any necessary migrations
     $schemas= new Path($this->environment->webroot(), 'src/main/sql');
     foreach ($this->storage->migrations($schemas) as $migration) {
-      foreach ($migration->perform($this->storage->connection()) as $result) {
+      foreach ($migration->perform() as $result) {
         Console::writeLine("\e[33;1m>\e[0m ", $result);
       }
     }

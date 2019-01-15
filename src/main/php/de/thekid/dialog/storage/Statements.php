@@ -6,12 +6,16 @@ use rdbms\DBConnection;
 
 class Statements implements Migration {
 
-  public function __construct(private Path $source, private array<string, string> $variables= []) { }
+  public function __construct(
+    private Storage $storage,
+    private Path $source,
+    private array<string, string> $variables= []
+  ) { }
 
-  public function perform(DBConnection $conn): iterable {
+  public function perform(): iterable {
     $replace= [];
     foreach ($this->variables as $name => $value) {
-      $replace['$'.$name]= $conn->prepare('%s', $value);
+      $replace['$'.$name]= $this->storage->connection()->prepare('%s', $value);
     }
     yield 'Running '.$this->source->relativeTo(getcwd()).' with '.sizeof($replace).' variable(s)';
 
@@ -20,12 +24,12 @@ class Statements implements Migration {
       if (preg_match('/^\-\-\s*(.+)$/', $line, $matches)) {
         yield strtr($matches[1], $replace);
       } else if (preg_match('/^(.+);\s*(\-\-.+)?$/', $line, $matches)) {
-        $conn->query(strtr($statement.$matches[1], $replace));
+        $this->storage->connection()->query(strtr($statement.$matches[1], $replace));
         $statement= '';
       } else {
         $statement.= $line."\n";
       }
     }
-    trim($statement) && $conn->query(strtr($statement, $replace));
+    trim($statement) && $this->storage->connection()->query(strtr($statement, $replace));
   }
 }

@@ -43,7 +43,7 @@ class Storage {
     // directly; generating a random admin password. Otherwise, apply migrations
     if (empty($versions)) {
       $password= rtrim(base64_encode(new Random()->bytes(8)), '=');
-      yield new Statements(new Path($migrations, sprintf('create-v%d.sql', self::VERSION)), [
+      yield new Statements($this, new Path($migrations, sprintf('create-v%d.sql', self::VERSION)), [
         'PASS' => $password,
         'HASH' => $this->hashing->digest($password),
       ]);
@@ -51,8 +51,8 @@ class Storage {
       krsort($versions, SORT_NUMERIC | SORT_DESC);
       $newest= key($versions);
 
-      yield new CopyOf(new Path($versions[$newest]), $current);
-      yield new Statements(new Path($migrations, sprintf('migrate-v%d-v%d.sql', $newest, self::VERSION)));
+      yield new CopyOf($this, new Path($versions[$newest]), $current);
+      yield new Statements($this, new Path($migrations, sprintf('migrate-v%d-v%d.sql', $newest, self::VERSION)));
     }
   }
 
