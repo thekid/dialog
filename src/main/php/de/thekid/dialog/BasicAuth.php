@@ -1,5 +1,6 @@
 <?php namespace de\thekid\dialog;
 
+use de\thekid\dialog\storage\Storage;
 use util\Secret;
 use web\Filter;
 

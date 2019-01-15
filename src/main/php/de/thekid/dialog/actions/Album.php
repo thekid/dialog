@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\actions;
 
-use de\thekid\dialog\Storage;
+use de\thekid\dialog\storage\Storage;
 
 class Album {
 

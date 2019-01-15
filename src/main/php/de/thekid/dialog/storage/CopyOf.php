@@ -1,4 +1,4 @@
-<?php namespace de\thekid\dialog;
+<?php namespace de\thekid\dialog\storage;
 
 use rdbms\DBConnection;
 

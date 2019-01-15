@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\api;
 
-use de\thekid\dialog\Storage;
+use de\thekid\dialog\storage\Storage;
 use util\Date;
 use web\Error;
 
