@@ -1,0 +1,57 @@
+{{#> layout}}
+  {{#*inline "title"}}{{journey.title}}{{/inline}}
+  {{#*inline "content"}}
+    <h1 class="title"><a href="/">Dialog</a> - {{journey.title}}</h1>
+
+    <!-- The journey itself -->
+    <section id="summary">
+      <div class="meta">
+        {{date journey.is.from format="d.m.Y"}} - {{date journey.is.until format="d.m.Y"}} @
+        <ul class="locations" role="list">
+          {{#each journey.locations}}
+            <li><a href="{{link}}">{{name}}</a></li>
+          {{/each}}
+        </ul>
+      </div>
+      {{& journey.content}}
+
+      <ul class="summary">
+        {{#each itinerary}}
+          <li><a href="#{{scroll slug}}">{{title}}</a></li>
+        {{/each}}
+      </ul>
+    </section>
+
+    <!-- The itinerary items -->
+    {{#with itinerary}}
+      {{#each .}}
+        <section id="{{scroll slug}}">
+          <h2><a class="scroll" href="#{{scroll slug}}">{{title}}</a></h2>
+
+          <div class="meta">
+            {{../date date format="d.m.Y"}} @
+            <ul class="locations" role="list">
+              {{#each locations}}
+                <li><a href="{{link}}">{{name}}</a></li>
+              {{/each}}
+            </ul>
+          </div>
+          <div class="images size-{{size images}}">
+            {{#each images}}
+              <img loading="lazy" src="/image/{{slug}}/thumb-{{.}}.webp" width="1024" onclick="lightbox.show(this)">
+            {{/each}}
+          </div>
+
+          <div class="content">
+            {{& content}}
+          </div>
+        </section>
+      {{/each}}
+    {{else}}
+      <section class="empty">
+        <h2>Noch keine Inhalte</h2>
+        <p>(Coming soon)</p>
+      </section>
+    {{/with}}
+  {{/inline}}
+{{/layout}}

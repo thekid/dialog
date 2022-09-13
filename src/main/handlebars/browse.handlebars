@@ -1,0 +1,53 @@
+{{#> layout}}
+  {{#*inline "title"}}Seite {{page}}{{/inline}}
+  {{#*inline "content"}}
+    <h1 class="title"><a href="/">Dialog</a> - Seite {{page}}</h1>
+
+    <div class="pagination">
+      <a class="previous" {{#if previous}}href="/?page={{previous}}"{{else}}disabled{{/if}}>Neuere</a>
+      <a class="next" {{#if next}}href="/?page={{next}}"{{else}}disabled{{/if}}>Ältere</a>
+    </div>
+
+    {{#with elements}}
+      {{#each .}}
+        <section>
+          <h2>
+            {{#if is.journey}}
+              <a href="/journey/{{slug}}">{{title}}</a>
+            {{else}}
+              {{title}}
+            {{/if}}
+          </h2>
+
+          <div class="meta">
+            {{../date date format="d.m.Y"}} @
+            <ul class="locations" role="list">
+              {{#each locations}}
+                <li><a href="{{link}}">{{name}}</a></li>
+              {{/each}}
+            </ul>
+          </div>
+          <div class="images size-{{size images}}">
+            {{#each images}}
+              <img loading="lazy" src="/image/{{slug}}/thumb-{{.}}.webp" width="1024" onclick="lightbox.show(this)">
+            {{/each}}
+          </div>
+
+          <div class="content">
+            {{& content}}
+          </div>
+        </section>
+      {{/each}}
+    {{else}}
+      <section class="empty">
+        <h2>Noch keine Inhalte</h2>
+        <p>(Coming soon)</p>
+      </section>
+    {{/with}}
+
+    <div class="pagination">
+      <a class="previous" {{#if previous}}href="/?page={{previous}}"{{else}}disabled{{/if}}>Neuere</a>
+      <a class="next" {{#if next}}href="/?page={{next}}"{{else}}disabled{{/if}}>Ältere</a>
+    </div>
+  {{/inline}}
+{{/layout}}

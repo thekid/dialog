@@ -1,0 +1,50 @@
+<?php namespace de\thekid\dialog;
+
+use com\mongodb\MongoConnection;
+use io\Path;
+use text\hash\Hashing;
+use util\{TimeZone, Secret};
+use web\Application;
+use web\auth\Basic;
+use web\frontend\helpers\{Assets, Dates};
+use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars};
+use web\handler\FilesFrom;
+use web\rest\{RestApi, ResourcesIn};
+
+class App extends Application {
+
+  /** Returns routing for this web application */
+  public function routes() {
+    $conn= new MongoConnection($this->environment->variable('MONGO_URI'));
+    $database= $conn->database($this->environment->variable('MONGO_DB') ?? 'dialog');
+    $storage= new Path($this->environment->arguments()[0]);
+    $new= fn($class) => $class->newInstance($database, $storage);
+
+    // Authenticate API users against MongoDB
+    $auth= new Basic('API', function($user, Secret $secret) use($database) {
+      $cursor= $database->collection('users')->find([
+        'handle' => $user,
+        'hash'   => Hashing::sha256()->digest($secret->reveal())->hex()
+      ]);
+      return $cursor->first();
+    });
+
+    $manifest= new AssetsManifest($this->environment->path('src/main/webapp/assets/manifest.json'));
+    return [
+      '/assets' => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
+        'Cache-Control' => $manifest->immutable($file) ?? 'max-age=31536000, must-revalidate'
+      ]),
+      '/image'  => new FilesFrom($this->environment->arguments()[0])->with([
+        'Cache-Control' => 'max-age=604800'
+      ]),
+      '/api'    => $auth->required(new RestApi(new ResourcesIn('de.thekid.dialog.api', $new))),
+      '/'       => new Frontend(
+        new HandlersIn('de.thekid.dialog.web', $new),
+        new Handlebars($this->environment->path('src/main/handlebars'), [
+          new Dates(TimeZone::getByName('Europe/Berlin')),
+          new Assets($manifest),
+        ])
+      ),
+    ];
+  }
+}

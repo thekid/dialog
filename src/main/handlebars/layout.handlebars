@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" type="text/css" href="/assets/{{asset 'vendor.css'}}">
+  <style type="text/css">
+    /* CSS reset, see https://piccalil.li/blog/a-modern-css-reset/ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html:focus-within {
+      scroll-behavior: smooth;
+    }
+
+    body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      text-rendering: optimizeSpeed;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, h4 {
+      line-height: 1.125;
+    }
+
+    ul[role='list'], ol[role='list'] {
+      list-style: none;
+    }
+
+    a:not([class]) {
+      text-decoration-skip-ink: auto;
+    }
+
+    img, picture {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Dialog */
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Overpass',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: orange;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      padding: 1rem;
+      width: 1023px;
+      max-width: 1023px;
+      background-color: #222;
+      border-bottom-left-radius: .25rem;
+      border-bottom-right-radius: .25rem;
+    }
+
+    section {
+      padding-top: 1rem;
+      margin-bottom: 3rem;
+      font-size: 1.125rem;
+    }
+
+    section h2 {
+      font-size: 1.75rem;
+      font-weight: 400;
+    }
+
+    section h2 a {
+      color: white;
+    }
+
+    .meta, .meta a {
+      color: #ccc;
+    }
+
+    ul.locations {
+      display: inline;
+      padding-left: 0;
+    }
+
+    .locations li {
+      display: inline;
+    }
+
+    .locations li:first-child:not(:last-child)::after, .locations li + li:not(:last-child)::after {
+      content: ' / ';
+      margin-right: -.1rem;dashed
+      color: orange;
+    }
+
+    ul.summary {
+      list-style: none;
+      line-height: 2rem;
+      background-color: rgb(255 255 255 / .2);
+      border-radius: .25rem;
+      padding: .25rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    ul.summary li::marker {
+      content: '\1F873 ';
+      color: orange;
+    }
+
+    .summary a {
+      color: white;
+      padding-left: .5ch;
+      text-decoration: none;
+      line-height: rem;
+    }
+
+    .summary a:hover {
+      text-decoration: underline dotted orange;
+    }
+
+    a.scroll {
+      text-decoration: none;
+      color: white;
+    }
+
+    a.scroll::after {
+      content: '#';
+      color: orange;
+      padding-left: .25rem;
+      opacity: 0;
+    }
+
+    a.scroll:hover::after {
+      opacity: .5;
+    }
+
+    section .content {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    section .content a {
+      overflow-wrap: anywhere;
+    }
+
+    section .content p {
+      margin-bottom: 1rem;
+    }
+
+    .images {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .images.size-1 {
+      grid-template-columns: 1fr;
+    }
+
+    .images img {
+      aspect-ratio: 15 / 10;
+      object-fit: cover;
+      border-radius: .25rem;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .pagination a {
+      background-color: #444;
+      border-radius: .125rem;
+      padding: .25rem .5rem;
+      width: 6rem;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .pagination a[disabled] {
+      color: #aaa;
+    }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #444;
+      transform: scale(0, 0);
+      transition: transform ease-in-out 300ms;
+      backdrop-filter: blur(10px) brightness(.5);
+      padding: .5rem;
+    }
+
+    #lightbox.open {
+      transform: scale(1, 1);
+    }
+
+    #lightbox img {
+      border: 2px solid #444;
+      border-radius: .25rem;
+      max-height: calc(100vh - 6rem);
+      width: auto;
+    }
+
+    #lightbox a {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      background-color: #444;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: 1px solid #666;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding-top: 6px;
+      font-size: 1.75rem;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    footer {
+      padding: .5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    @media (max-width: 767px) {
+      .images {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* See https://css-tricks.com/introduction-reduced-motion-media-query/ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+  <title>{{> title}} - Dialog - Timm Friebe</title>
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <!-- TODO -->
+  </nav>
+
+  <main>
+    <div class="container">
+      {{> content}}
+    </div>
+  </main>
+
+  <div id="lightbox" onclick="lightbox.close()">
+    <a>×</a>
+    <img width="100%">
+  </div>
+
+  <footer class="footer">
+    With ❤️ by Timm Friebe 2005-{{date null format="Y"}}
+  </footer>
+
+  <script type="text/javascript">
+    const lightbox = {
+      $element : document.querySelector('#lightbox'),
+      show     : function($thumb) {
+        // No zoom when we're already showing the image full size
+        if (window.innerWidth < 768) return;
+
+        const $full = lightbox.$element.querySelector('img');
+        $full.src = '';
+        lightbox.$element.classList.add('open');
+        $full.src = $thumb.src.replace('thumb-', 'full-');
+      },
+      close    : function() {
+        lightbox.$element.classList.remove('open');
+      }
+    };
+    document.onkeydown = function(e) {
+      switch (e.key) {
+        case 'ArrowRight': document.location.href = document.querySelector('a.next').href; break;
+        case 'ArrowLeft': document.location.href = document.querySelector('a.previous').href; break;
+        case 'Escape': lightbox.close(); break;
+      }
+    };
+  </script>
+</body>
+</html>
