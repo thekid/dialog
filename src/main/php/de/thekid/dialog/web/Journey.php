@@ -3,7 +3,7 @@
 use com\mongodb\Database;
 use util\Date;
 use web\Error;
-use web\frontend\{Handler, Get, Param};
+use web\frontend\{Handler, Get};
 
 #[Handler('/journey')]
 class Journey {
