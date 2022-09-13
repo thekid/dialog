@@ -56,9 +56,9 @@ abstract class Sources extends Enum {
 
   public abstract function items(Folder $origin): iterable;
 
-  public static function in(Folder $origin): self {
+  public static function in(Folder $origin): iterable {
     foreach ([self::$CONTENT, self::$JOURNEY] as $source) {
-      if ($source->file($origin)->exists()) return $source;
+      if ($source->file($origin)->exists()) return $source->items($origin);
     }
     throw new IllegalArgumentException('Cannot import '.$origin->getURI());
   }

@@ -30,8 +30,7 @@ class LocalDirectory extends Command {
   public function run(): int {
     $publish= time();
 
-    $source= Sources::in($this->origin);
-    foreach ($source->items($this->origin) as $folder => $item) {
+    foreach (Sources::in($this->origin) as $folder => $item) {
       $this->out->writeLine('[+] ', $item);
       $r= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json');
       $this->out->writeLine(' => ', $r->value());
