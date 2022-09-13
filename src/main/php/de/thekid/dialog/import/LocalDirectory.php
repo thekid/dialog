@@ -12,15 +12,23 @@ use webservices\rest\Endpoint;
 
 /**
  * Imports items from a local directory.
+ *
+ * The item type is determined by the presence of one of these files
+ * in the given origin folder.
+ *
+ * - content.md: A simple content element
+ * - journey.md: A journey element containt content elements
  */
 class LocalDirectory extends Command {
   private $origin, $api;
 
+  /** Sets origin folder, e.g. `./imports/album` */
   #[Arg(position: 0)]
   public function from(string $origin): void {
     $this->origin= new Folder($origin);
   }
 
+  /** Sets API url, e.g. `http://user:pass@localhost:8080/api` */
   #[Arg(position: 1)]
   public function using(string $api): void {
     $this->api= new Endpoint($api);
