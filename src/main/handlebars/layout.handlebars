@@ -171,6 +171,10 @@
       grid-template-columns: 1fr;
     }
 
+    .images.overview {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
     .images img {
       aspect-ratio: 15 / 10;
       object-fit: cover;
@@ -249,6 +253,10 @@
     @media (max-width: 767px) {
       .images {
         grid-template-columns: 1fr;
+      }
+
+      .images.overview {
+        grid-template-columns: 1fr 1fr;
       }
     }
 

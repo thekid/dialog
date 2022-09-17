@@ -13,7 +13,15 @@
           {{/each}}
         </ul>
       </div>
-      {{& journey.content}}
+      <div class="images overview size-{{size images}}">
+        {{#each journey.images}}
+          <img {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{journey.slug}}/thumb-{{.}}.webp" width="1024" onclick="lightbox.show(this)">
+        {{/each}}
+      </div>
+
+      <div class="content">
+        {{& journey.content}}
+      </div>
 
       <ul class="summary">
         {{#each itinerary}}
