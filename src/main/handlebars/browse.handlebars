@@ -23,7 +23,7 @@
             {{../date date format="d.m.Y"}} @
             <ul class="locations" role="list">
               {{#each locations}}
-                <li><a href="{{link}}">{{name}}</a></li>
+                <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
               {{/each}}
             </ul>
           </div>
