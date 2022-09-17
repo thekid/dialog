@@ -10,7 +10,7 @@ See https://dialog.sloppy.zone/
 ## Importing local directories
 
 ```bash
-$ xp cmd de.thekid.dialog.import.LocalDirectory import-target/ http://user:pass@localhost:8080/api
+$ xp import import-target/ http://user:pass@localhost:8080/api
 ```
 
 ### Content

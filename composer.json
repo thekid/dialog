@@ -26,6 +26,7 @@
   "scripts": {
     "dev": "xp -supervise web -m develop -a 0.0.0.0:8080 de.thekid.dialog.App ./import",
     "serve": "xp -supervise web -a 0.0.0.0:8080 de.thekid.dialog.App ./import",
+    "import": "xp cmd de.thekid.dialog.import.LocalDirectory",
     "post-update-cmd": "xp bundle -m src/main/webapp/assets/manifest.json src/main/webapp/assets/"
   }
 }
