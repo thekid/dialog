@@ -45,13 +45,13 @@ class LocalDirectory extends Command {
       // Aggregate coordinates from Google Maps links
       foreach ($item['locations'] as &$location) {
         $r= new HttpConnection($location['link'])->get();
-        if (!preg_match('#/maps/place/[^/]+/@([0-9.-]+),([0-9.-]+),([0-9]+)z#', $r->header('Location')[0], $m)) {
+        if (!preg_match('#/maps/place/[^/]+/@([0-9.-]+),([0-9.-]+),([0-9.]+)z#', $r->header('Location')[0], $m)) {
           throw new FormatException('Cannot resolve '.$location['link'].': '.$r->toString());
         }
 
         $location['lat']= (float)$m[1];
         $location['lon']= (float)$m[2];
-        $location['zoom']= (int)$m[3];
+        $location['zoom']= (float)$m[3];
       }
 
       $r= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json');
