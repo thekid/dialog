@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.2.0 / 2022-09-17
+
+* Merged PR #3: Aggregate coordinates from Google Maps links - @thekid
 * Merged PR #2: Do not lazy-load first item's images - @thekid
 
 ## 0.1.0 / 2022-09-13
