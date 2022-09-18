@@ -11,7 +11,7 @@
       box-sizing: border-box;
     }
 
-    html:focus-within {
+    html {
       scroll-behavior: smooth;
     }
 
@@ -181,6 +181,28 @@
       border-radius: .25rem;
     }
 
+    #map {
+      margin-top: 2rem;
+      width: 100%;
+      height: 20rem;
+      position: relative;
+    }
+
+    #map .popup {
+      position: absolute;
+      z-index: 1;
+      background-color: white;
+      border-radius: .25rem;
+      display: none;
+      padding: .25rem;
+    }
+
+    #map .popup ul {
+      list-style: none;
+      padding: .25rem;
+      margin: 0;
+    }
+
     .pagination {
       display: flex;
       justify-content: center;
@@ -292,6 +314,7 @@
     With ❤️ by Timm Friebe 2005-{{date null format="Y"}}
   </footer>
 
+  <script src="/assets/{{asset 'vendor.js'}}" defer></script>
   <script type="text/javascript">
     const lightbox = {
       $element : document.querySelector('#lightbox'),
@@ -316,5 +339,7 @@
       }
     };
   </script>
+
+  {{> scripts}}
 </body>
 </html>
