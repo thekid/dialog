@@ -20,9 +20,7 @@
       </div>
 
       <div id="map">
-        <div id="popup">
-          <a href="#"></a>
-        </div>
+        <div class="popup"></div>
       </div>
 
       <div class="content">
@@ -98,7 +96,7 @@
       map.addLayer(new ol.layer.Vector({source: source}));
       map.getView().fit(source.getExtent(), {padding: [32, 32, 32, 32]});
 
-      const $popup = document.querySelector('#popup');
+      const $popup = document.querySelector('#map .popup');
       map.on('movestart', event => {
         $popup.style.display = 'none';
       });
