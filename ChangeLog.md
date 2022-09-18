@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #4: Embed maps showing all journey points using OpenStreetMap
+  (@thekid)
+
 ## 0.2.0 / 2022-09-17
 
 * Merged PR #3: Aggregate coordinates from Google Maps links - @thekid
