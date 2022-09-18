@@ -15,7 +15,7 @@
       </div>
       <div class="images overview size-{{size images}}">
         {{#each journey.images}}
-          <img {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{journey.slug}}/thumb-{{.}}.webp" width="1024" onclick="lightbox.show(this)">
+          <img src="/image/{{journey.slug}}/thumb-{{.}}.webp" width="1024" onclick="lightbox.show(this)">
         {{/each}}
       </div>
 
