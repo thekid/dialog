@@ -1,6 +1,8 @@
 {{#> layout}}
   {{#*inline "title"}}Seite {{page}}{{/inline}}
   {{#*inline "meta"}}
+    <meta property="og:url" content="{{request.uri}}">
+    <meta property="og:type" content="website">
     <meta property="og:title" content="Seite {{page}} - Dialog">
     <meta property="og:description" content="Fotoblog von Timm Friebe">
     {{#each elements}}
