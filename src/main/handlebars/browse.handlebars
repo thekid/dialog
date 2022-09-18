@@ -4,7 +4,7 @@
     <meta property="og:title" content="Seite {{page}} - Dialog">
     <meta property="og:description" content="Fotoblog von Timm Friebe">
     {{#each elements}}
-      <meta property="og:image" content="/image/{{slug}}/thumb-{{images.0}}.webp">
+      <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/thumb-{{images.0}}.webp">
     {{/each}}
   {{/inline}}
   {{#*inline "content"}}

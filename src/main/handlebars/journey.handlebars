@@ -4,7 +4,7 @@
     <meta property="og:title" content="{{journey.title}} - Dialog">
     <meta property="og:description" content="{{text journey.content}}">
     {{#each journey.images}}
-      <meta property="og:image" content="/image/{{journey.slug}}/thumb-{{.}}.webp">
+      <meta property="og:image" content="{{request.uri.base}}/image/{{journey.slug}}/thumb-{{.}}.webp">
     {{/each}}
   {{/inline}}
   {{#*inline "content"}}
