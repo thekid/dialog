@@ -29,6 +29,7 @@
 
     h1, h2, h3, h4 {
       line-height: 1.125;
+      letter-spacing: 0px;
     }
 
     ul[role='list'], ol[role='list'] {
@@ -321,14 +322,14 @@
   <script type="text/javascript">
     const lightbox = {
       $element : document.querySelector('#lightbox'),
-      show     : function($thumb) {
-        // No zoom when we're already showing the image full size
-        if (window.innerWidth < 768) return;
+      show     : function($link) {
+        if (window.innerWidth < 768) return true;
 
         const $full = lightbox.$element.querySelector('img');
         $full.src = '';
         lightbox.$element.classList.add('open');
-        $full.src = $thumb.src.replace('thumb-', 'full-');
+        $full.src = $link.querySelector('img').src.replace('thumb-', 'full-');
+        return false;
       },
       close    : function() {
         lightbox.$element.classList.remove('open');

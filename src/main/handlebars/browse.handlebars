@@ -38,7 +38,9 @@
           </div>
           <div class="images size-{{size images}}">
             {{#each images}}
-              <img {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{slug}}/thumb-{{.}}.webp" width="1024" onclick="lightbox.show(this)">
+              <a href="/image/{{slug}}/full-{{.}}.webp" onclick="return lightbox.show(this)">
+                <img {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{slug}}/thumb-{{.}}.webp" width="1024">
+              </a>
             {{/each}}
           </div>
 
