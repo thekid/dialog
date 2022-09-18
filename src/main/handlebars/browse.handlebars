@@ -1,6 +1,6 @@
 {{#> layout}}
   {{#*inline "title"}}Seite {{page}}{{/inline}}
-  {{#*inline "content"}}
+  {{#*inline "main"}}
     <h1 class="title"><a href="/">Dialog</a> - Seite {{page}}</h1>
 
     <div class="pagination">
@@ -14,6 +14,8 @@
           <h2>
             {{#if is.journey}}
               <a href="/journey/{{slug}}">{{title}}</a>
+            {{else if is.content}}
+              <a href="/content/{{slug}}">{{title}}</a>
             {{else}}
               {{title}}
             {{/if}}

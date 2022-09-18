@@ -173,6 +173,11 @@
 
     .images.overview {
       grid-template-columns: 1fr 1fr 1fr 1fr;
+      padding-bottom: 1rem;
+    }
+
+    .images.all {
+      grid-template-columns: 1fr;
     }
 
     .images img {
@@ -182,10 +187,14 @@
     }
 
     #map {
-      margin-top: 2rem;
+      margin-top: 1rem;
       width: 100%;
       height: 20rem;
       position: relative;
+    }
+
+    #map .ol-viewport {
+      border-radius: .25rem;
     }
 
     #map .popup {
@@ -301,7 +310,7 @@
 
   <main>
     <div class="container">
-      {{> content}}
+      {{> main}}
     </div>
   </main>
 

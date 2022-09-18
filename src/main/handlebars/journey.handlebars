@@ -1,6 +1,6 @@
 {{#> layout}}
   {{#*inline "title"}}{{journey.title}}{{/inline}}
-  {{#*inline "content"}}
+  {{#*inline "main"}}
     <h1 class="title"><a href="/">Dialog</a> - {{journey.title}}</h1>
 
     <!-- The journey itself -->
@@ -94,7 +94,7 @@
         layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
       });
       map.addLayer(new ol.layer.Vector({source: source}));
-      map.getView().fit(source.getExtent(), {padding: [32, 32, 32, 32]});
+      map.getView().fit(source.getExtent(), {padding: [32, 32, 32, 32], minResolution: 30});
 
       const $popup = document.querySelector('#map .popup');
       map.on('movestart', event => {

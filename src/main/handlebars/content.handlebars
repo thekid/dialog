@@ -1,0 +1,71 @@
+{{#> layout}}
+  {{#*inline "title"}}{{item.title}}{{/inline}}
+  {{#*inline "meta"}}
+    <meta property="og:url" content="{{request.uri}}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{item.title}} - Dialog">
+    <meta property="og:description" content="{{text item.content}}">
+    {{#each item.images}}
+      <meta property="og:image" content="{{request.uri.base}}/image/{{item.slug}}/thumb-{{.}}.webp">
+    {{/each}}
+  {{/inline}}
+  {{#*inline "main"}}
+    <h1 class="title"><a href="/">Dialog</a> - {{item.title}}</h1>
+
+    <section>
+      <div class="meta">
+        {{date item.date format="d.m.Y"}} @
+        <ul class="locations" role="list">
+          {{#each item.locations}}
+            <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
+          {{/each}}
+        </ul>
+      </div>
+
+      <div id="map">
+        <!-- No popup -->
+      </div>
+
+      <div class="content">
+        {{& item.content}}
+      </div>
+
+      <div class="images all size-{{size images}}">
+        {{#each item.images}}
+          <a href="/image/{{item.slug}}/full-{{.}}.webp" onclick="return lightbox.show(this)">
+            <img src="/image/{{item.slug}}/thumb-{{.}}.webp" width="1024">
+          </a>
+        {{/each}}
+      </div>
+    </section>
+  {{/inline}}
+  {{#*inline "scripts"}}
+    <script type="module">
+      const markers = {
+        style : new ol.style.Style({image: new ol.style.Icon(({src: '/static/marker.png'}))}),
+        list  : [],
+        add   : function(slug, lon, lat, name) {
+          const marker = new ol.Feature({
+            geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+            slug     : slug,
+            name     : name
+          });
+          marker.setStyle(markers.style);
+          markers.list.push(marker);
+        }
+      };
+
+      {{#each item.locations}}
+        markers.add('{{item.slug}}', {{lon}}, {{lat}}, `{{item.title}}`);
+      {{/each}}
+
+      const source = new ol.source.Vector({features: markers.list});
+      const map = new ol.Map({
+        target: 'map',
+        layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
+      });
+      map.addLayer(new ol.layer.Vector({source: source}));
+      map.getView().fit(source.getExtent(), {padding: [32, 32, 32, 32], minResolution: 15});
+    </script>
+  {{/inline}}
+{{/layout}}
