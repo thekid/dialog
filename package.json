@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "ol": "7.1.0"
+    "ol": "^7.1"
   },
   "bundles": {
     "vendor": {
