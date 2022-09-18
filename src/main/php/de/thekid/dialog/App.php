@@ -29,13 +29,14 @@ class App extends Application {
       return $cursor->first();
     });
 
+    // Cache static content for one week, immutable fingerprinted assets for one year
     $manifest= new AssetsManifest($this->environment->path('src/main/webapp/assets/manifest.json'));
+    $static= ['Cache-Control' => 'max-age=604800'];
     return [
+      '/image'  => new FilesFrom($this->environment->arguments()[0])->with($static),
+      '/static' => new FilesFrom($this->environment->path('src/main/webapp'))->with($static),
       '/assets' => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
         'Cache-Control' => $manifest->immutable($file) ?? 'max-age=31536000, must-revalidate'
-      ]),
-      '/image'  => new FilesFrom($this->environment->arguments()[0])->with([
-        'Cache-Control' => 'max-age=604800'
       ]),
       '/api'    => $auth->required(new RestApi(new ResourcesIn('de.thekid.dialog.api', $new))),
       '/'       => new Frontend(

@@ -181,6 +181,28 @@
       border-radius: .25rem;
     }
 
+    #map {
+      margin-top: 2rem;
+      width: 100%;
+      height: 20rem;
+      position: relative;
+    }
+
+    #popup {
+      position: absolute;
+      z-index: 1;
+      background-color: white;
+      border-radius: .25rem;
+      display: none;
+      padding: .25rem;
+    }
+
+    #popup ul {
+      list-style: none;
+      padding: .25rem;
+      margin: 0;
+    }
+
     .pagination {
       display: flex;
       justify-content: center;
@@ -316,5 +338,8 @@
       }
     };
   </script>
+  <script src="/assets/{{asset 'vendor.js'}}"></script>
+
+  {{> scripts}}
 </body>
 </html>
