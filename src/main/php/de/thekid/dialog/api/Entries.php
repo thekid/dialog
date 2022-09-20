@@ -47,8 +47,8 @@ class Entries {
       }
 
       if ('100-continue' === $req->header('Expect')) $res->hint(100, 'Continue');
-      foreach ($multipart->files() as $kind => $file) {
-        $file->transfer(new File($f, $kind.'-'.$name.'.webp'));
+      foreach ($multipart->files() as $file) {
+        $file->transfer(new File($f, $file->name()));
         yield;
       }
     }

@@ -6,7 +6,7 @@
     <meta property="og:title" content="{{item.title}} - Dialog">
     <meta property="og:description" content="{{text item.content}}">
     {{#each item.images}}
-      <meta property="og:image" content="{{request.uri.base}}/image/{{item.slug}}/thumb-{{.}}.webp">
+      <meta property="og:image" content="{{request.uri.base}}/image/{{item.slug}}/preview-{{.}}.jpg">
     {{/each}}
   {{/inline}}
   {{#*inline "main"}}
