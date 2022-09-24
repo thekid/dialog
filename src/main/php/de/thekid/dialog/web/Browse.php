@@ -12,6 +12,6 @@ class Browse {
 
   #[Get]
   public function listing(#[Param] $page= 1) {
-    return $this->repository->entries($this->pagination, $page);
+    return $this->repository->entries($this->pagination, (int)$page);
   }
 }
