@@ -5,7 +5,7 @@ use util\Date;
 use web\frontend\{Handler, Get, Param};
 
 #[Handler('/')]
-class Browse {
+class Feed {
   private $pagination= new Pagination(5);
 
   public function __construct(private Repository $repository) { }
