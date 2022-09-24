@@ -17,14 +17,6 @@ class PaginationTest {
     new Pagination($limit);
   }
 
-  #[Test, Values([
-    [1, [['$skip' => 0], ['$limit' => 6]]],
-    [2, [['$skip' => 5], ['$limit' => 6]]],
-  ])]
-  public function pipeline($page, $expected) {
-    Assert::equals($expected, new Pagination(self::LIMIT)->pipeline($page));
-  }
-
   #[Test]
   public function paginate_empty() {
     Assert::equals(
@@ -55,11 +47,6 @@ class PaginationTest {
       ['elements' => [1, 2, 3, 4, 5], 'page' => 1, 'previous' => null, 'next' => 2],
       new Pagination(self::LIMIT)->paginate(1, [1, 2, 3, 4, 5, 6]),
     );
-  }
-
-  #[Test, Values([-1, 0])]
-  public function pipeline_handles_illegal_pages_gracefully($page) {
-    Assert::equals([['$skip' => 0], ['$limit' => 6]], new Pagination(self::LIMIT)->pipeline($page));
   }
 
   #[Test, Values([-1, 0])]

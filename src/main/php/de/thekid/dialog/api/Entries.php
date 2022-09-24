@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\api;
 
-use com\mongodb\{Database, Document};
+use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
 use web\rest\{Put, Resource, Body, Request, Response};
@@ -8,7 +8,7 @@ use web\rest\{Put, Resource, Body, Request, Response};
 #[Resource('/api')]
 class Entries {
 
-  public function __construct(private Database $database, private Path $storage) { }
+  public function __construct(private Repository $repository, private Path $storage) { }
 
   /** Returns folder for a given entry */
   private function folder(string $entry): Folder {
@@ -17,15 +17,14 @@ class Entries {
 
   #[Put('/entries/{id:.+(/.+)?}')]
   public function create(string $id, array<string, mixed> $attributes) {
-    $result= $this->database->collection('entries')->upsert(['slug' => $id], new Document([
-      'slug'      => $id,
+    $result= $this->repository->replace($id, [
       'parent'    => $attributes['parent'] ?? null,
       'date'      => new Date($attributes['date']),
       'title'     => $attributes['title'],
       'locations' => $attributes['locations'],
       'content'   => $attributes['content'],
       'is'        => $attributes['is'],
-    ]));
+    ]);
 
     if ($result->upserted()) {
       $this->folder($id)->create();
@@ -65,7 +64,7 @@ class Entries {
       }
     }
 
-    $this->database->collection('entries')->update(['slug' => $id], ['$set' => [
+    $this->repository->modify($id, ['$set' => [
       'published' => $date,
       'images'    => array_keys($images),
     ]]);

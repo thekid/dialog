@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\web;
 
-use com\mongodb\Database;
+use de\thekid\dialog\Repository;
 use util\Date;
 use web\frontend\{Handler, Get, Param};
 
@@ -8,16 +8,10 @@ use web\frontend\{Handler, Get, Param};
 class Browse {
   private $pagination= new Pagination(5);
 
-  public function __construct(private Database $database) { }
+  public function __construct(private Repository $repository) { }
 
   #[Get]
   public function listing(#[Param] $page= 1) {
-    $entries= $this->database->collection('entries')->aggregate([
-      ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
-      ['$sort'  => ['date' => -1]],
-      ...$this->pagination->pipeline($page),
-    ]);
-
-    return $this->pagination->paginate($page, $entries);
+    return $this->repository->entries($this->pagination, $page);
   }
 }

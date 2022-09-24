@@ -2,7 +2,6 @@
 
 use com\mongodb\MongoConnection;
 use io\Path;
-use text\hash\Hashing;
 use util\{TimeZone, Secret};
 use web\Application;
 use web\auth\Basic;
@@ -17,18 +16,12 @@ class App extends Application {
   /** Returns routing for this web application */
   public function routes() {
     $conn= new MongoConnection($this->environment->variable('MONGO_URI'));
-    $database= $conn->database($this->environment->variable('MONGO_DB') ?? 'dialog');
+    $repository= new Repository($conn->database($this->environment->variable('MONGO_DB') ?? 'dialog'));
     $storage= new Path($this->environment->arguments()[0]);
-    $new= fn($class) => $class->newInstance($database, $storage);
+    $new= fn($class) => $class->newInstance($repository, $storage);
 
     // Authenticate API users against MongoDB
-    $auth= new Basic('API', function($user, Secret $secret) use($database) {
-      $cursor= $database->collection('users')->find([
-        'handle' => $user,
-        'hash'   => Hashing::sha256()->digest($secret->reveal())->hex()
-      ]);
-      return $cursor->first();
-    });
+    $auth= new Basic('API', $repository->authenticate(...));
 
     // If behind a proxy, use an environment variable to rewrite the request URI
     if ($service= $this->environment->variable('SERVICE')) {

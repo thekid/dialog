@@ -6,19 +6,10 @@ use lang\IllegalArgumentException;
 class Pagination {
 
   /** @throws lang.IllegalArgumentException */
-  public function __construct(private int $limit) {
+  public function __construct(public readonly int $limit) {
     if ($limit < 1) {
       throw new IllegalArgumentException('Limit must be greater than 0');
     }
-  }
-
-  /** Returns the MongoDB pipeline stages `$skip` and `$limit` */
-  public function pipeline(int $page): array {
-    $page < 1 && $page= 1;
-    return [
-      ['$skip'  => ($page - 1) * $this->limit],
-      ['$limit' => $this->limit + 1],
-    ];
   }
 
   /** Returns the paginated elements as well as the links for previous and next */
