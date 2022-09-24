@@ -35,7 +35,7 @@ class App extends Application {
       '/image'  => new FilesFrom($this->environment->arguments()[0])->with($static),
       '/static' => new FilesFrom($this->environment->path('src/main/webapp'))->with($static),
       '/assets' => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
-        'Cache-Control' => $manifest->immutable($file) ?? 'max-age=31536000, must-revalidate'
+        'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
       ]),
       '/api'    => $auth->required(new RestApi(new ResourcesIn('de.thekid.dialog.api', $new))),
       '/'       => new Frontend(
