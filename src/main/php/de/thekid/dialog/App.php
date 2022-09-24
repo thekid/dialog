@@ -2,7 +2,7 @@
 
 use com\mongodb\MongoConnection;
 use io\Path;
-use util\{TimeZone, Secret};
+use util\TimeZone;
 use web\Application;
 use web\auth\Basic;
 use web\filters\BehindProxy;
