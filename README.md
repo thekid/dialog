@@ -16,7 +16,7 @@ See https://dialog.sloppy.zone/
 ## Setup
 
 ```bash
-$ printf "secret-password-here" | sha256sum
+$ echo -n "secret-password-here" | sha256sum
 4323135e32ac4...
 
 $ mongosh mongodb://localhost
