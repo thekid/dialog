@@ -55,7 +55,7 @@ abstract class Sources extends Enum {
       public function items(Folder $origin): iterable {
         $d= self::$descriptions->parse($this->file($origin));
         yield $origin => [
-          'slug'      => $origin->dirname,
+          'slug'      => '@cover',
           'parent'    => '~',
           'date'      => $d->meta['date'],
           'title'     => $d->meta['title'],
