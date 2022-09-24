@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.4.0 / 2022-09-24
+
+* Merged PR #6: Refactor codebase to use a repository instead of directly
+  querying the database
+  (@thekid)
+
 ## 0.3.0 / 2022-09-24
 
 * Merged PR #5: Add OpenGraph meta data - not perfect yet as in certain
