@@ -1,5 +1,14 @@
 {{#> layout}}
   {{#*inline "title"}}{{journey.title}}{{/inline}}
+  {{#*inline "meta"}}
+    <meta property="og:url" content="{{request.uri}}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{journey.title}} - Dialog">
+    <meta property="og:description" content="{{text journey.content}}">
+    {{#with journey.images.0}}
+      <meta property="og:image" content="{{request.uri.base}}/image/{{journey.slug}}/preview-{{.}}.jpg">
+    {{/with}}
+  {{/inline}}
   {{#*inline "main"}}
     <h1 class="title"><a href="/">Dialog</a> - {{journey.title}}</h1>
 

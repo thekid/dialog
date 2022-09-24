@@ -26,7 +26,8 @@ class Journey {
     return [
       'journey'   => $journey->first(),
       'itinerary' => $items->all(),
-      'scroll'    => fn($node, $context, $options) => substr($options[0], strlen($id) + 1)
+      'scroll'    => fn($node, $context, $options) => substr($options[0], strlen($id) + 1),
+      'text'      => fn($node, $context, $options) => strip_tags($options[0]),
     ];
   }
 }

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@timmfriebe">
+  {{> meta}}
   <link rel="stylesheet" type="text/css" href="/assets/{{asset 'vendor.css'}}">
   <style type="text/css">
     /* CSS reset, see https://piccalil.li/blog/a-modern-css-reset/ */
@@ -234,6 +236,7 @@
 
     #lightbox {
       position: fixed;
+      z-index: 999;
       inset: 0;
       display: flex;
       align-items: center;

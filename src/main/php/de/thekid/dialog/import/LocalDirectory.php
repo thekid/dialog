@@ -35,6 +35,13 @@ class LocalDirectory extends Command {
     $this->api= new Endpoint($api);
   }
 
+  /** Returns targets */
+  private function targets(): iterable {
+    yield 'preview' => new ResizeTo(720, 'jpg');
+    yield 'thumb'   => new ResizeTo(1024, 'webp');
+    yield 'full'    => new ResizeTo(3840, 'webp');
+  }
+
   /** Runs this command */
   public function run(): int {
     $publish= time();
@@ -58,19 +65,14 @@ class LocalDirectory extends Command {
       $this->out->writeLine(' => ', $r->value());
 
       foreach ($folder->entries() as $entry) {
-        if (preg_match('/^(?!(thumb|full)-).+(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
+        if (preg_match('/^(?!(thumb|full|preview)-).+(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
           $this->out->write(' => Processing ', $entry->name());
 
           $transfer= [];
-          foreach (['thumb' => 1024, 'full' => 3840] as $kind => $size) {
-            $source= $entry->asFile();
-            $webp= new File($folder, $kind.'-'.$entry->name().'.webp');
-            if (!$webp->exists() || $webp->lastModified() < $source->lastModified()) {
-              $image= Image::loadFrom(new StreamReader($source));
-              $resized= Image::create($size, (int)($image->height * ($size / $image->width)), Image::TRUECOLOR);
-              $resized->resampleFrom($image);
-              $resized->saveTo(new WebpStreamWriter($webp));
-              $transfer[$kind]= $webp;
+          $source= $entry->asFile();
+          foreach ($this->targets() as $kind => $target) {
+            if ($file= $target->resize($source, $kind)) {
+              $transfer[$kind]= $file;
             }
           }
 
@@ -79,7 +81,7 @@ class LocalDirectory extends Command {
           } else {
             $upload= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])->upload('PUT');
             foreach ($transfer as $kind => $file) {
-              $upload->transfer($file->filename, $file->in(), $kind);
+              $upload->transfer($kind, $file->in(), $file->filename);
             }
             $r= $upload->finish();
             $this->out->writeLine(': ', $r->status());
