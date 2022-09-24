@@ -63,6 +63,7 @@ class Entries {
         $images[$m[2]]= true;
       }
     }
+    ksort($images);
 
     $this->repository->modify($id, ['$set' => [
       'published' => $date,
