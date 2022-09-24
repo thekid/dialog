@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #5: Add OpenGraph meta data - not perfect yet as in certain
+  cases no preview images are displayed but a good start
+  (@thekid)
 * Merged PR #4: Embed maps showing all journey points using OpenStreetMap
   (@thekid)
 
