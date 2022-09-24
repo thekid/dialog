@@ -8,9 +8,24 @@
 
 See https://dialog.sloppy.zone/
 
-## Running locally
+## Prerequisites
 
-This will require a local MongoDB server running.
+* Install a local [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/).
+* Install [XP runners](https://github.com/xp-runners/reference)
+
+## Setup
+
+```bash
+$ printf "secret-password-here" | sha256sum
+4323135e32ac4...
+
+$ mongosh mongodb://localhost
+$ use dialog
+$ db.users.insert({handle: "import", pass: "4323135e32ac4..."});
+# ...
+```
+
+## Running locally
 
 ```bash
 $ export MONGO_URI=mongodb://localhost
@@ -21,7 +36,7 @@ $ xp serve
 ## Importing local directories
 
 ```bash
-$ xp import import-target/ http://user:pass@localhost:8080/api
+$ xp import import-target/ http://import:pass@localhost:8080/api
 # ...
 ```
 
