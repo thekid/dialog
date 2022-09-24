@@ -8,10 +8,21 @@
 
 See https://dialog.sloppy.zone/
 
+## Running locally
+
+This will require a local MongoDB server running.
+
+```bash
+$ export MONGO_URI=mongodb://localhost
+$ xp serve
+# ...
+````
+
 ## Importing local directories
 
 ```bash
 $ xp import import-target/ http://user:pass@localhost:8080/api
+# ...
 ```
 
 ### Content
