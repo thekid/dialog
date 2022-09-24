@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\unittest;
 
-use de\thekid\dialog\web\Pagination;
+use de\thekid\dialog\Pagination;
 use lang\IllegalArgumentException;
 use unittest\{Assert, Expect, Test, Values};
 

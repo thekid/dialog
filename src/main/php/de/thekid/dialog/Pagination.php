@@ -1,4 +1,4 @@
-<?php namespace de\thekid\dialog\web;
+<?php namespace de\thekid\dialog;
 
 use lang\IllegalArgumentException;
 

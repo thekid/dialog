@@ -2,7 +2,6 @@
 
 use com\mongodb\result\{Cursor, Update};
 use com\mongodb\{Database, Document};
-use de\thekid\dialog\web\Pagination;
 use text\hash\Hashing;
 use util\{Date, Secret};
 
