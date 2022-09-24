@@ -1,9 +1,16 @@
 <?php namespace de\thekid\dialog\web;
 
+use lang\IllegalArgumentException;
+
 /** @test de.thekid.dialog.unittest.PaginationTest */
 class Pagination {
 
-  public function __construct(private int $limit) { }
+  /** @throws lang.IllegalArgumentException */
+  public function __construct(private int $limit) {
+    if ($limit < 1) {
+      throw new IllegalArgumentException('Limit must be greater than 0');
+    }
+  }
 
   /** Returns the MongoDB pipeline stages `$skip` and `$limit` */
   public function pipeline(int $page): array {

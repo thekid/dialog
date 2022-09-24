@@ -1,7 +1,8 @@
 <?php namespace de\thekid\dialog\unittest;
 
 use de\thekid\dialog\web\Pagination;
-use unittest\{Assert, Test, Values};
+use lang\IllegalArgumentException;
+use unittest\{Assert, Expect, Test, Values};
 
 class PaginationTest {
   private const LIMIT = 5;
@@ -9,6 +10,11 @@ class PaginationTest {
   #[Test]
   public function can_create() {
     new Pagination(self::LIMIT);
+  }
+
+  #[Test, Expect(IllegalArgumentException::class), Values([-1, 0])]
+  public function limit_must_be_higher_than_zero($limit) {
+    new Pagination($limit);
   }
 
   #[Test, Values([
