@@ -42,8 +42,16 @@ class OptionalTest {
     );
   }
 
-  #[Test, Expect(IllegalStateException::class)]
+  #[Test]
   public function or_executes_callable_when_null() {
+    Assert::equals(
+      $this->document,
+      new Optional($this->document)->or(fn() => $this->document)
+    );
+  }
+
+  #[Test, Expect(IllegalStateException::class)]
+  public function or_raises_exceptions_from_callable() {
     new Optional(null)->or(fn() => throw new IllegalStateException('Test'));
   }
 }
