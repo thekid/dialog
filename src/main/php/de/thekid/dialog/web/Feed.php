@@ -1,7 +1,6 @@
 <?php namespace de\thekid\dialog\web;
 
 use de\thekid\dialog\{Repository, Pagination};
-use util\Date;
 use web\frontend\{Handler, Get, Param};
 
 #[Handler('/')]
