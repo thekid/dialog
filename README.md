@@ -10,10 +10,14 @@ See https://dialog.sloppy.zone/
 
 ## Prerequisites
 
-* Install a local [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/).
-* Install [XP runners](https://github.com/xp-runners/reference)
+* Install [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/) locally or create a [MongoDB Atlas account](https://account.mongodb.com/account/register)
+* Install [XP runners](https://github.com/xp-runners/reference) and [Composer](https://getcomposer.org/).
+
+*The following assume a local MongoDB.*
 
 ## Setup
+
+First, create the import user:
 
 ```bash
 $ echo -n "secret-password-here" | sha256sum
@@ -25,15 +29,28 @@ $ db.users.insert({handle: "import", pass: "4323135e32ac4..."});
 # ...
 ```
 
+Then, run composer to install PHP and JavaScript dependencies.
+
+```bash
+$ composer up
+# ...
+```
+
 ## Running locally
+
+Now, Dialog can be run locally.
 
 ```bash
 $ export MONGO_URI=mongodb://localhost
 $ xp serve
 # ...
-````
+```
+
+Open http://localhost:8080/ to see the empty page
 
 ## Importing local directories
+
+Next, we'll import some pictures:
 
 ```bash
 $ xp import import-target/ http://import:pass@localhost:8080/api
