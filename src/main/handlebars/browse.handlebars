@@ -5,9 +5,9 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Seite {{page}} - Dialog">
     <meta property="og:description" content="Fotoblog von Timm Friebe">
-    {{#each elements}}
+    {{#with elements.0}}
       <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{images.0}}.jpg">
-    {{/each}}
+    {{/with}}
   {{/inline}}
   {{#*inline "main"}}
     <h1 class="title"><a href="/">Dialog</a> - Seite {{page}}</h1>

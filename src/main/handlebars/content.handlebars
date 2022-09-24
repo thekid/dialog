@@ -5,9 +5,9 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{item.title}} - Dialog">
     <meta property="og:description" content="{{text item.content}}">
-    {{#each item.images}}
+    {{#with item.images.0}}
       <meta property="og:image" content="{{request.uri.base}}/image/{{item.slug}}/preview-{{.}}.jpg">
-    {{/each}}
+    {{/with}}
   {{/inline}}
   {{#*inline "main"}}
     <h1 class="title"><a href="/">Dialog</a> - {{item.title}}</h1>
