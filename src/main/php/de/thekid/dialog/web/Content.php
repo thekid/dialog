@@ -12,11 +12,11 @@ class Content {
 
   #[Get('/{id}')]
   public function index(string $id) {
-    $entries= $this->database->collection('entries');
-    $published= ['published' => ['$lt' => Date::now()]];
-
-    $item= $entries->find(['slug' => ['$eq' => $id], ...$published]);
-    if (!$item->present()) throw new Error(404);
+    $item= $this->database->collection('entries')->find([
+      'slug'      => ['$eq' => $id],
+      'published' => ['$lt' => Date::now()]
+    ]);
+    if (!$item->present()) throw new Error(404, 'Not found: '.$id);
 
     return [
       'item' => $item->first(),
