@@ -6,17 +6,23 @@ use lang\IllegalArgumentException;
 class Pagination {
 
   /** @throws lang.IllegalArgumentException */
-  public function __construct(public readonly int $limit) {
-    if ($limit < 1) {
-      throw new IllegalArgumentException('Limit must be greater than 0');
+  public function __construct(private int $paged) {
+    if ($paged < 1) {
+      throw new IllegalArgumentException('Paged must be greater than 0');
     }
   }
+
+  /** Returns how many items to skip */
+  public function skip(int $page): int { return $page < 1 ? 0 : ($page - 1) * $this->paged; }
+
+  /** Returns limit */
+  public function limit(): int { return $this->paged + 1; }
 
   /** Returns the paginated elements as well as the links for previous and next */
   public function paginate(int $page, iterable $elements): array<string, mixed> {
     $page < 1 && $page= 1;
     $r= [...$elements];
-    if (sizeof($r) > $this->limit) {
+    if (sizeof($r) > $this->paged) {
       array_pop($r);
       $next= $page + 1;
     } else {

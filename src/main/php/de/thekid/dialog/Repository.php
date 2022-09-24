@@ -23,8 +23,8 @@ class Repository {
     return $pagination->paginate($page, $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
       ['$sort'  => ['date' => -1]],
-      ['$skip'  => $page < 1 ? 0 : ($page - 1) * $pagination->limit],
-      ['$limit' => $pagination->limit + 1],
+      ['$skip'  => $pagination->skip($page)],
+      ['$limit' => $pagination->limit()],
     ]));
   }
 
