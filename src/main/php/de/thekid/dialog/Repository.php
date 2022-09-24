@@ -6,7 +6,7 @@ use text\hash\Hashing;
 use util\{Date, Secret};
 
 class Repository {
-  private $hashing= Hashing::sha256();
+  private $passwords= Hashing::sha256();
 
   public function __construct(private Database $database) { }
 
@@ -14,7 +14,7 @@ class Repository {
   public function authenticate(string $user, Secret $secret): ?Document {
     $cursor= $this->database->collection('users')->find([
       'handle' => $user,
-      'hash'   => $this->hashing->digest($secret->reveal())->hex()
+      'hash'   => $this->passwords->digest($secret->reveal())->hex()
     ]);
     return $cursor->first();
   }
