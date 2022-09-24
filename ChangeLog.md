@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.3.0 / 2022-09-24
+
 * Merged PR #5: Add OpenGraph meta data - not perfect yet as in certain
   cases no preview images are displayed but a good start
   (@thekid)
