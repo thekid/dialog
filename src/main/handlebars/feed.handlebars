@@ -10,7 +10,7 @@
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
-    <h1 class="title"><a href="/">Dialog</a> - Seite {{page}}</h1>
+    <h1 class="title">Dialog - Seite {{page}}</h1>
 
     <div class="pagination">
       <a class="previous" {{#if previous}}href="/?page={{previous}}"{{else}}disabled{{/if}}>Neuere</a>
@@ -19,7 +19,7 @@
 
     {{#with elements}}
       {{#each .}}
-        <section>
+        <section id="{{slug}}">
           <h2>
             {{#if is.journey}}
               <a href="/journey/{{slug}}">{{title}}</a>

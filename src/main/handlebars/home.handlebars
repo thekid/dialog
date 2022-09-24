@@ -1,0 +1,49 @@
+{{#> layout}}
+  {{#*inline "title"}}Home{{/inline}}
+  {{#*inline "meta"}}
+    <meta property="og:url" content="{{request.uri}}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Home - Dialog">
+    <meta property="og:description" content="Fotoblog von Timm Friebe">
+    {{#with elements.0}}
+      <meta property="og:image" content="{{request.uri.base}}/image/{{cover.slug}}/preview-{{cover.images.0}}.jpg">
+    {{/with}}
+  {{/inline}}
+  {{#*inline "main"}}
+
+    <!-- About me -->
+    {{#with cover}}
+      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{images.0}}.webp)">
+        <h1>{{title}}</h1>
+      </div>
+      <article class="intro">
+        {{&content}}
+      </article>
+    {{/with}}
+
+    <!-- Newest content -->
+    <h2 class="news">Neueste Inhalte</h2>
+    <div class="news">
+      {{#each newest}}
+        <div class="card">
+          <div class="date">{{../date date format='d.m.Y'}}</div>
+          <a
+            {{#if is.content}}
+              href="/content/{{slug}}"
+            {{else if is.journey}}
+              href="/journey/{{slug}}"
+            {{/if}}
+          >
+            <img src="/image/{{slug}}/thumb-{{images.0}}.webp">
+            <h3 title="{{title}}">{{title}}</h3>
+          </a>
+          <div class="content">
+            {{text content}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{/inline}}
+  {{#*inline "scripts"}}
+  {{/inline}}
+{{/layout}}
