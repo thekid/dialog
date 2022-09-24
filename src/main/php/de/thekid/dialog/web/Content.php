@@ -12,7 +12,7 @@ class Content {
   #[Get('/{id}')]
   public function index(string $id) {
     return [
-      'item' => $this->repository->entry($id)->or(fn() => throw new Error(404, 'Not found: '.$id)),
+      'item' => $this->repository->entry($id) ?? throw new Error(404, 'Not found: '.$id),
       'text' => fn($node, $context, $options) => strip_tags($options[0]),
     ];
   }

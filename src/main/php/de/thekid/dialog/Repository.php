@@ -29,12 +29,12 @@ class Repository {
   }
 
   /** Returns a single entry */
-  public function entry(string $slug): Optional {
+  public function entry(string $slug): ?Document {
     $cursor= $this->database->collection('entries')->find([
       'slug'      => ['$eq' => $slug],
       'published' => ['$lt' => Date::now()],
     ]);
-    return new Optional($cursor->first());
+    return $cursor->first();
   }
 
   /** Returns an entry's children */

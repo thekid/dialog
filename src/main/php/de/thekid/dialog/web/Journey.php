@@ -11,7 +11,7 @@ class Journey {
 
   #[Get('/{id}')]
   public function index(string $id) {
-    $journey= $this->repository->entry($id)->or(fn() => throw new Error(404, 'Not found: '.$id));
+    $journey= $this->repository->entry($id) ?? throw new Error(404, 'Not found: '.$id);
     return [
       'journey'   => $journey,
       'itinerary' => $this->repository->children($id),
