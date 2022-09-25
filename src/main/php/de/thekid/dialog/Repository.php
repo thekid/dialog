@@ -19,6 +19,16 @@ class Repository {
     return $cursor->first();
   }
 
+  /** Returns newest (top-level) entries */
+  public function newest(int $limit): iterable {
+    $cursor= $this->database->collection('entries')->aggregate([
+      ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+      ['$sort'  => ['date' => -1]],
+      ['$limit' => $limit],
+    ]);
+    return $cursor->all();
+  }
+
   /** Returns paginated (top-level) entries */
   public function entries(Pagination $pagination, int $page): iterable {
     return $pagination->paginate($page, $this->database->collection('entries')->aggregate([

@@ -61,6 +61,37 @@
       color: orange;
     }
 
+    nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul {
+      width: 1023px;
+      display: flex;
+      flex-direction: row;
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      background-color: #111;
+    }
+
+    nav li {
+      padding: .5rem 1.5rem;
+      font-size: 1.35rem;
+      font-variant-caps: all-small-caps;
+      font-weight: 900;
+      letter-spacing: .2rem;
+    }
+
+    nav li.active {
+      border-bottom: .25rem solid #444;
+    }
+
+    nav li a {
+      text-decoration: none;
+    }
+
     main {
       display: flex;
       justify-content: center;
@@ -73,6 +104,98 @@
       background-color: #222;
       border-bottom-left-radius: .25rem;
       border-bottom-right-radius: .25rem;
+    }
+
+    .cover {
+      margin: -1rem -1rem 1rem -1rem;
+      background-size: cover;
+      background-position: center;
+      height: 50vh;
+      box-shadow: 0 .5rem 1rem rgb(0 0 0 / .4);
+    }
+
+    .cover h1 {
+      font-size: 7rem;
+      margin: 1rem;
+      letter-spacing: .25rem;
+      display: inline-block;
+    }
+
+    article.intro {
+      font-size: 1.25rem;
+    }
+
+    h2.news {
+      margin-top: 2rem;
+      margin-bottom: .5rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      border-radius: .25rem;
+      position: relative;
+      transform: scale;
+      transition: 100ms ease-in-out;
+      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
+    }
+
+    .card:hover {
+      scale: 1.05;
+    }
+
+    .card img {
+      border-radius: .25rem;
+      height: 22rem;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .card:last-child img {
+      opacity: .3;
+    }
+
+    .card .next {
+      position: absolute;
+      top: calc(50% - 1.5rem);
+      left: calc(50% - 1.5rem);
+      background-color: white;
+      height: 3rem;
+      width: 3rem;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 3rem;
+      opacity: 1;
+      font-size: 1.75rem;
+      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
+    }
+
+    .card .date {
+      position: absolute;
+      top: .75rem;
+      left: .75rem;
+      background-color: black;
+      border-radius: .25rem;
+      color: white;
+      padding: .125rem .4rem;
+    }
+
+    .card h3 {
+      position: absolute;
+      inset: auto 1rem 1rem 1rem;
+      font-size: 1.5rem;
+      height: 1.5rem;
+      color:  white;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      text-shadow: 0 0 .5rem rgb(0 0 0 / .6);
     }
 
     section {
@@ -187,6 +310,7 @@
       aspect-ratio: 15 / 10;
       object-fit: cover;
       border-radius: .25rem;
+      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
     }
 
     #map {
@@ -294,6 +418,18 @@
       .images.overview {
         grid-template-columns: 1fr 1fr;
       }
+
+      .cover h1 {
+        font-size: 5rem;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .card:hover {
+        scale: 1;
+      }
     }
 
     /* See https://css-tricks.com/introduction-reduced-motion-media-query/ */
@@ -310,7 +446,10 @@
 </head>
 <body>
   <nav class="navbar" role="navigation" aria-label="main navigation">
-    <!-- TODO -->
+    <ul>
+      <li {{#if (equals scope 'home')}}class="active"{{/if}}><a href="/">Home</a></li>
+      <li {{#unless (equals scope 'home')}}class="active"{{/unless}}><a href="/feed">Feed</a></li>
+    </ul>
   </nav>
 
   <main>

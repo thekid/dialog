@@ -3,7 +3,7 @@
 use de\thekid\dialog\{Repository, Pagination};
 use web\frontend\{Handler, Get, Param};
 
-#[Handler('/')]
+#[Handler('/feed')]
 class Feed {
   private $pagination= new Pagination(5);
 
