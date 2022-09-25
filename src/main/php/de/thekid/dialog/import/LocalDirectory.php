@@ -70,7 +70,7 @@ class LocalDirectory extends Command {
       $this->out->writeLine(' => ', $r->value());
 
       foreach ($folder->entries() as $entry) {
-        if (preg_match('/^(thumb|full|preview|screen|video)-/', $entry->name())) continue;
+        if (preg_match('/^(thumb|preview|full|video)-/', $entry->name())) continue;
 
         $transfer= [];
         if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
@@ -102,7 +102,7 @@ class LocalDirectory extends Command {
           }
 
           // Extract screenshot and preview image
-          $screen= new File($folder, 'screen-'.$entry->name().'.webp');
+          $screen= new File($folder, 'thumb-'.$entry->name().'.webp');
           if (!$screen->exists() || $screen->lastModified() < $source->lastModified()) {
             $preview= new File($folder, 'preview-'.$entry->name().'.jpg');
             $this->execute('ffmpeg', [
