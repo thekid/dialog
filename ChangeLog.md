@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.5.0 / 2022-09-25
+
+* Merged PR #7: Add cover page displaying the newest 5 entries from the
+  feed, and optionally a cover picture and text.
+  (@thekid)
+
 ## 0.4.0 / 2022-09-24
 
 * Merged PR #6: Refactor codebase to use a repository instead of directly
