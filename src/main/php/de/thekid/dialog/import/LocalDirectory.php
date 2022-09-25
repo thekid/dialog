@@ -5,7 +5,7 @@ use img\Image;
 use img\io\{StreamReader, WebpStreamWriter};
 use io\streams\TextReader;
 use io\{Folder, File};
-use lang\{Enum, IllegalArgumentException, FormatException};
+use lang\{Enum, IllegalArgumentException, FormatException, Process};
 use peer\http\HttpConnection;
 use util\Date;
 use util\cmd\{Command, Arg};
@@ -35,11 +35,16 @@ class LocalDirectory extends Command {
     $this->api= new Endpoint($api);
   }
 
-  /** Returns targets */
+  /** Returns image resizing targets */
   private function targets(): iterable {
     yield 'preview' => new ResizeTo(720, 'jpg');
     yield 'thumb'   => new ResizeTo(1024, 'webp');
     yield 'full'    => new ResizeTo(3840, 'webp');
+  }
+
+  /** Executes a given external command and returns its exit code */
+  private function execute(string $command, array<string> $args): int {
+    return new Process($command, $args, null, null, [STDIN, STDOUT, STDERR])->close();
   }
 
   /** Runs this command */
@@ -65,27 +70,72 @@ class LocalDirectory extends Command {
       $this->out->writeLine(' => ', $r->value());
 
       foreach ($folder->entries() as $entry) {
-        if (preg_match('/^(?!(thumb|full|preview)-).+(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
-          $this->out->write(' => Processing ', $entry->name());
+        if (preg_match('/^(thumb|full|preview|screen|video)-/', $entry->name())) continue;
 
-          $transfer= [];
+        $transfer= [];
+        if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
           $source= $entry->asFile();
+          $this->out->write(' => Processing image ', $entry->name());
+
+          // Resize images
           foreach ($this->targets() as $kind => $target) {
             if ($file= $target->resize($source, $kind)) {
               $transfer[$kind]= $file;
             }
           }
+        } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $entry->name())) {
+          $source= $entry->asFile();
+          $this->out->write(' => Processing video ', $entry->name());
 
-          if (empty($transfer)) {
-            $this->out->writeLine(': (not updated)');
-          } else {
-            $upload= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])->upload('PUT');
-            foreach ($transfer as $kind => $file) {
-              $upload->transfer($kind, $file->in(), $file->filename);
-            }
-            $r= $upload->finish();
-            $this->out->writeLine(': ', $r->status());
+          // Convert to web-optimized H.264 video, scaling to a width of 1920 pixels
+          $video= new File($folder, 'video-'.$entry->name().'.mp4');
+          if (!$video->exists() || $video->lastModified() < $source->lastModified()) {
+            $this->execute('ffmpeg', [
+              '-i', (string)$entry,
+              '-vcodec', 'libx264',
+              '-vf', 'scale=1920:-1',
+              '-acodec', 'aac',
+              '-g', '30', // group of picture (GOP)
+              $video->getURI(),
+            ]);
+            $transfer['video']= $video;
           }
+
+          // Extract screenshot and preview image
+          $screen= new File($folder, 'screen-'.$entry->name().'.webp');
+          if (!$screen->exists() || $screen->lastModified() < $source->lastModified()) {
+            $preview= new File($folder, 'preview-'.$entry->name().'.jpg');
+            $this->execute('ffmpeg', [
+              '-i', (string)$entry,
+              '-vf', 'scale=1024:-1',
+              '-ss', '00:00:03',
+              '-vsync', 'vfr',
+              '-frames:v', '1',
+              '-qscale:v', '1',
+              $screen->getURI(),
+              '-ss', '00:00:03',
+              '-vf', 'scale=720:-1',
+              '-vsync', 'vfr',
+              '-frames:v', '1',
+              '-qscale:v', '1',
+              $preview->getURI(),
+            ]);
+            $transfer['screen']= $screen;
+            $transfer['preview']= $preview;
+          }
+        } else {
+          continue;
+        }
+
+        if (empty($transfer)) {
+          $this->out->writeLine(': (not updated)');
+        } else {
+          $upload= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])->upload('PUT');
+          foreach ($transfer as $kind => $file) {
+            $upload->transfer($kind, $file->in(), $file->filename);
+          }
+          $r= $upload->finish();
+          $this->out->writeLine(': ', $r->status());
         }
       }
 

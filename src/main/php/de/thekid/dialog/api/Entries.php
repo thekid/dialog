@@ -59,15 +59,17 @@ class Entries {
     $images= [];
     $f= $this->folder($id);
     foreach ($f->entries() as $entry) {
-      if (preg_match('/^([a-z]+)-(.+)\.webp$/', $entry->name(), $m)) {
-        $images[$m[2]]= true;
+      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
+        $images[]= ['name' => $m[1], 'is' => ['image' => true]];
+      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
+        $images[]= ['name' => $m[1], 'is' => ['video' => true]];
       }
     }
     ksort($images);
 
     $this->repository->modify($id, ['$set' => [
       'published' => $date,
-      'images'    => array_keys($images),
+      'images'    => $images,
     ]]);
     return ['published' => $id];
   }
