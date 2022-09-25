@@ -38,19 +38,19 @@ class Entries {
   public function upload(string $id, string $name, #[Request] $req) {
     if ($multipart= $req->multipart()) {
       $f= $this->folder($id);
-      if (!$f->exists()) {
 
-        // TODO: This does not work, we seem to need to consume all
-        // uploaded files. Maybe just transfer them to /dev/null then?!
+      // If the folder (and thus the entry) does not exist, consume the
+      // file upload completeley, then return an error.
+      if (!$f->exists()) {
+        iterator_count($multipart->parts());
         return Response::error(417, 'Expectation Failed');
       }
 
-      if ('100-continue' === $req->header('Expect')) $res->hint(100, 'Continue');
       foreach ($multipart->files() as $file) {
         $file->transfer(new File($f, $file->name()));
-        yield;
       }
     }
+
     return Response::ok();
   }
 
