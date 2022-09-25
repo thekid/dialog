@@ -9,7 +9,7 @@ use lang\{Enum, IllegalArgumentException, FormatException, Process};
 use peer\http\HttpConnection;
 use util\Date;
 use util\cmd\{Command, Arg};
-use webservices\rest\Endpoint;
+use webservices\rest\{Endpoint, RestUpload};
 
 /**
  * Imports items from a local directory.
@@ -130,7 +130,12 @@ class LocalDirectory extends Command {
         if (empty($transfer)) {
           $this->out->writeLine(': (not updated)');
         } else {
-          $upload= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])->upload('PUT');
+          $upload= new RestUpload($this->api, $this->api
+            ->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])
+            ->with(['Expect' => '100-continue'])
+            ->request('PUT')
+            ->waiting(read: 3600)
+          );
           foreach ($transfer as $kind => $file) {
             $upload->transfer($kind, $file->in(), $file->filename);
           }
