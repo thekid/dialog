@@ -5,7 +5,7 @@ use lang\{Enum, IllegalArgumentException};
 
 abstract class Sources extends Enum {
   protected static $descriptions= new Descriptions();
-  public static $CONTENT, $JOURNEY;
+  public static $CONTENT, $JOURNEY, $COVER;
 
   static function __static() {
     self::$CONTENT= new class(0, 'content') extends self {
@@ -50,6 +50,21 @@ abstract class Sources extends Enum {
         }
       }
     };
+    self::$COVER= new class(2, 'cover') extends self {
+      public function file(Folder $origin): File { return new File($origin, 'cover.md'); }
+      public function items(Folder $origin): iterable {
+        $d= self::$descriptions->parse($this->file($origin));
+        yield $origin => [
+          'slug'      => '@cover',
+          'parent'    => '~',
+          'date'      => $d->meta['date'],
+          'title'     => $d->meta['title'],
+          'locations' => isset($d->meta['location']) ? [$d->meta['location']] : $d->meta['locations'],
+          'content'   => $d->content,
+          'is'        => ['content' => true],
+        ];
+      }
+    };
   }
 
   public abstract function file(Folder $origin): File;
@@ -57,7 +72,7 @@ abstract class Sources extends Enum {
   public abstract function items(Folder $origin): iterable;
 
   public static function in(Folder $origin): iterable {
-    foreach ([self::$CONTENT, self::$JOURNEY] as $source) {
+    foreach ([self::$CONTENT, self::$JOURNEY, self::$COVER] as $source) {
       if ($source->file($origin)->exists()) return $source->items($origin);
     }
     throw new IllegalArgumentException('Cannot import '.$origin->getURI());
