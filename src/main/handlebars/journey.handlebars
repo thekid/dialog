@@ -62,7 +62,7 @@
           <div class="images size-{{size images}}">
             {{#each images}}
               {{#if is.video}}
-                <video controls preload="none" width="100%" poster="/image/{{slug}}/thumb-{{name}}.webp">
+                <video controls preload="metadata" width="100%" poster="/image/{{slug}}/thumb-{{name}}.webp">
                   <source src="/image/{{slug}}/video-{{name}}.mp4" type="video/mp4">
                 </video>
               {{else}}
