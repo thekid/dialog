@@ -12,8 +12,7 @@ class Home {
   public function index() {
     return [
       'cover'  => $this->repository->entry('@cover'),
-      'newest' => $this->repository->newest(3),
-      'text'   => fn($node, $context, $options) => strip_tags($options[0]),
+      'newest' => $this->repository->newest(6),
     ];
   }
 }

@@ -130,7 +130,7 @@
       margin-bottom: .5rem;
     }
 
-    div.news {
+    .cards {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 1rem;
@@ -138,7 +138,6 @@
     }
 
     .card {
-      background-color: #111;
       border-radius: .25rem;
       position: relative;
       transform: scale;
@@ -148,6 +147,32 @@
 
     .card:hover {
       scale: 1.05;
+    }
+
+    .card img {
+      border-radius: .25rem;
+      height: 22rem;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .card:last-child img {
+      opacity: .3;
+    }
+
+    .card .next {
+      position: absolute;
+      top: calc(50% - 1.5rem);
+      left: calc(50% - 1.5rem);
+      background-color: white;
+      height: 3rem;
+      width: 3rem;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 3rem;
+      opacity: 1;
+      font-size: 1.75rem;
+      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
     }
 
     .card .date {
@@ -161,30 +186,16 @@
     }
 
     .card h3 {
-      padding: 1rem 1rem 0 1rem;
-      font-size: 1.25rem;
+      position: absolute;
+      inset: auto 1rem 1rem 1rem;
+      font-size: 1.5rem;
+      height: 1.5rem;
+      color:  white;
       overflow: hidden;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
-    }
-
-    .card .content {
-      font-size: 1.125rem;
-      padding: .5rem 1rem 0 1rem;
-      margin-bottom: 1rem;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-    }
-
-    .card img {
-      border-top-left-radius: .25rem;
-      border-top-right-radius: .25rem;
-      height: 12rem;
-      width: 100%;
-      object-fit: cover;
+      text-shadow: 0 0 .5rem rgb(0 0 0 / .6);
     }
 
     section {
