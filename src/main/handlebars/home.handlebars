@@ -28,7 +28,7 @@
         <div class="card">
           {{#if @last}}
             <a title="Seite 2" href="/feed?page=2">
-              <img src="/image/{{slug}}/thumb-{{images.0}}.webp">
+              {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <div class="next">&#187;</div>
             </a>
           {{else}}
@@ -40,7 +40,7 @@
                 href="/journey/{{slug}}"
               {{/if}}
             >
-              <img src="/image/{{slug}}/thumb-{{images.0}}.webp">
+              {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <h3>{{title}}</h3>
             </a>
           {{/if}}
