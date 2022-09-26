@@ -6,7 +6,9 @@
     <meta property="og:title" content="Seite {{page}} - Dialog">
     <meta property="og:description" content="Fotoblog von Timm Friebe">
     {{#with elements.0}}
-      <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{images.0}}.jpg">
+      {{#with images.0}}
+        <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{.}}.jpg">
+      {{/with}}
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
