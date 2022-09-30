@@ -6,14 +6,16 @@
     <meta property="og:title" content="Home - Dialog">
     <meta property="og:description" content="Fotoblog von Timm Friebe">
     {{#with elements.0}}
-      <meta property="og:image" content="{{request.uri.base}}/image/{{cover.slug}}/preview-{{cover.images.0}}.jpg">
+      {{#with cover.images.0}}
+        <meta property="og:image" content="{{request.uri.base}}/image/{{cover.slug}}/preview-{{.}}.jpg">
+      {{/with}}
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
 
     <!-- About me -->
     {{#with cover}}
-      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{images.0}}.webp)">
+      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{#with images.0}}{{.}}{{/with}}.webp)">
         <h1>{{title}}</h1>
       </div>
       <article class="intro">
@@ -28,7 +30,7 @@
         <div class="card">
           {{#if @last}}
             <a title="Seite 2" href="/feed?page=2">
-              <img src="/image/{{slug}}/thumb-{{images.0}}.webp">
+              {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <div class="next">&#187;</div>
             </a>
           {{else}}
@@ -40,7 +42,7 @@
                 href="/journey/{{slug}}"
               {{/if}}
             >
-              <img src="/image/{{slug}}/thumb-{{images.0}}.webp">
+              {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <h3>{{title}}</h3>
             </a>
           {{/if}}

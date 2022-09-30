@@ -3,7 +3,7 @@
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
-use web\rest\{Put, Resource, Request, Response};
+use web\rest\{Async, Put, Resource, Request, Response};
 
 #[Resource('/api')]
 class Entries {
@@ -36,22 +36,24 @@ class Entries {
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
   public function upload(string $id, string $name, #[Request] $req) {
-    if ($multipart= $req->multipart()) {
-      $f= $this->folder($id);
-      if (!$f->exists()) {
+    return new Async(function() use($id, $name, $req) {
+      if ($multipart= $req->multipart()) {
+        $f= $this->folder($id);
 
-        // TODO: This does not work, we seem to need to consume all
-        // uploaded files. Maybe just transfer them to /dev/null then?!
-        return Response::error(417, 'Expectation Failed');
+        // If the folder (and thus the entry) does not exist, consume the
+        // file upload completeley, then return an error.
+        if (!$f->exists()) {
+          iterator_count($multipart->parts());
+          return Response::error(417, 'Expectation Failed');
+        }
+
+        foreach ($multipart->files() as $file) {
+          yield from $file->transmit(new File($f, $file->name()));
+        }
       }
 
-      if ('100-continue' === $req->header('Expect')) $res->hint(100, 'Continue');
-      foreach ($multipart->files() as $file) {
-        $file->transfer(new File($f, $file->name()));
-        yield;
-      }
-    }
-    return Response::ok();
+      return Response::ok();
+    });
   }
 
   #[Put('/entries/{id:.+(/.+)?}/published')]
@@ -59,15 +61,17 @@ class Entries {
     $images= [];
     $f= $this->folder($id);
     foreach ($f->entries() as $entry) {
-      if (preg_match('/^([a-z]+)-(.+)\.webp$/', $entry->name(), $m)) {
-        $images[$m[2]]= true;
+      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
+        $images[]= ['name' => $m[1], 'is' => ['image' => true]];
+      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
+        $images[]= ['name' => $m[1], 'is' => ['video' => true]];
       }
     }
     ksort($images);
 
     $this->repository->modify($id, ['$set' => [
       'published' => $date,
-      'images'    => array_keys($images),
+      'images'    => $images,
     ]]);
     return ['published' => $id];
   }

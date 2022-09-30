@@ -20,8 +20,8 @@ class ResizeTo {
    * @throws io.IOException
    * @throws img.ImagingException
    */
-  public function resize(File $source, string $kind): ?File {
-    $target= new File($source->path, $kind.'-'.$source->filename.'.'.$this->type);
+  public function resize(File $source, string $kind, string $filename): ?File {
+    $target= new File($source->path, $kind.'-'.$filename.'.'.$this->type);
     if ($target->exists() && $target->lastModified() >= $source->lastModified()) return null;
 
     $image= Image::loadFrom(new StreamReader($source));
