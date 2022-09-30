@@ -5,7 +5,7 @@ use img\Image;
 use img\io\{StreamReader, WebpStreamWriter};
 use io\streams\TextReader;
 use io\{Folder, File};
-use lang\{Enum, IllegalArgumentException, FormatException, Process};
+use lang\{Enum, IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
 use util\Date;
 use util\cmd\{Command, Arg};
@@ -43,8 +43,11 @@ class LocalDirectory extends Command {
   }
 
   /** Executes a given external command and returns its exit code */
-  private function execute(string $command, array<string> $args): int {
-    return new Process($command, $args, null, null, [STDIN, STDOUT, STDERR])->close();
+  private function execute(string $command, array<string> $args): void {
+    $p= new Process($command, $args, null, null, [STDIN, STDOUT, STDERR]);
+    if (0 === ($r= $p->close())) return;
+
+    throw new IllegalStateException($p->getCommandLine().' exited with exit code '.$r);
   }
 
   /** Runs this command */
@@ -98,7 +101,22 @@ class LocalDirectory extends Command {
               '-g', '30', // group of picture (GOP)
               $video->getURI(),
             ]);
-            $transfer['video']= $video;
+            // $transfer['video']= $video;
+
+            // Uploading files that take longer than ~30 seconds is, for some reason,
+            // broken, and will result in a) the import tool crashing and b) the server
+            // to end up in an endless blocking loop.
+            $headers= [];
+            foreach ($this->api->headers() as $name => $value) {
+              $headers[]= '-H';
+              $headers[]= $name.': '.$value;
+            }
+            $this->execute('curl', [
+              '-v', ...$headers,
+              '-X', 'PUT',
+              '-F', 'video=@'.strtr($video->getURI(), [DIRECTORY_SEPARATOR => '/']),
+              $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])->uri(),
+            ]);
           }
 
           // Extract screenshot and preview image
@@ -132,7 +150,6 @@ class LocalDirectory extends Command {
         } else {
           $upload= new RestUpload($this->api, $this->api
             ->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])
-            ->with(['Expect' => '100-continue'])
             ->request('PUT')
             ->waiting(read: 3600)
           );
