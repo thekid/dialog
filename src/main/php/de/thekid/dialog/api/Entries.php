@@ -3,7 +3,7 @@
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
-use web\rest\{Put, Resource, Request, Response};
+use web\rest\{Async, Put, Resource, Request, Response};
 
 #[Resource('/api')]
 class Entries {
