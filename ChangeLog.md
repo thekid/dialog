@@ -3,6 +3,13 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.6.0 / 2022-09-30
+
+* Merged PR #8: Video support. Dialog can now import .mov, .mp4 and .mpeg
+  files, converting them to web-optimized H.264 video and automatically
+  extracting poster images.
+  (@thekid)
+
 ## 0.5.0 / 2022-09-25
 
 * Merged PR #7: Add cover page displaying the newest 5 entries from the
