@@ -82,7 +82,7 @@ class LocalDirectory extends Command {
 
           // Resize images
           foreach ($this->targets() as $kind => $target) {
-            if ($file= $target->resize($source, $kind)) {
+            if ($file= $target->resize($source, $kind, $source->filename)) {
               $transfer[$kind]= $file;
             }
           }
@@ -120,26 +120,28 @@ class LocalDirectory extends Command {
           }
 
           // Extract screenshot and preview image
-          $screen= new File($folder, 'thumb-'.$entry->name().'.webp');
-          if (!$screen->exists() || $screen->lastModified() < $source->lastModified()) {
-            $preview= new File($folder, 'preview-'.$entry->name().'.jpg');
+          $thumb= new File($folder, 'thumb-'.$entry->name().'.webp');
+          if (!$thumb->exists() || $thumb->lastModified() < $source->lastModified()) {
+
+            // Screenshot to JPEG using ffmpeg
+            $screen= new File($folder, sha1($entry->name()).'.jpg');
             $this->execute('ffmpeg', [
               '-i', (string)$entry,
-              '-vf', 'scale=1024:-1',
               '-ss', '00:00:03',
               '-vsync', 'vfr',
               '-frames:v', '1',
+              '-q:v', '1',
               '-qscale:v', '1',
               $screen->getURI(),
-              '-ss', '00:00:03',
-              '-vf', 'scale=720:-1',
-              '-vsync', 'vfr',
-              '-frames:v', '1',
-              '-qscale:v', '1',
-              $preview->getURI(),
             ]);
-            $transfer['screen']= $screen;
-            $transfer['preview']= $preview;
+
+            // Convert and resize this JPEG
+            foreach (['preview' => new ResizeTo(720, 'jpg'), 'thumb' => new ResizeTo(1024, 'webp')] as $kind => $target) {
+              if ($file= $target->resize($screen, $kind, $source->filename)) {
+                $transfer[$kind]= $file;
+              }
+            }
+            $screen->unlink();
           }
         } else {
           continue;
