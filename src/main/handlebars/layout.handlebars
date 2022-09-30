@@ -293,10 +293,6 @@
       gap: 1rem;
     }
 
-    .images.size-1 {
-      grid-template-columns: 1fr;
-    }
-
     .images.overview {
       grid-template-columns: 1fr 1fr 1fr 1fr;
       padding-bottom: 1rem;
@@ -314,7 +310,17 @@
     }
 
     .images video {
+      aspect-ratio: 15 / 10;
+      object-fit: cover;
       border-radius: .25rem;
+    }
+
+    .images.size-1 {
+      grid-template-columns: 1fr;
+    }
+
+    .image.size-1 video {
+      aspect-ratio: auto;
     }
 
     #map {
