@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.7.0 / 2022-10-01
+
 * Merged PR #10: Synchronize images. The import tool now uses server
   information to synchronize images instead of relying on the local
   directory being in a consistent state.
