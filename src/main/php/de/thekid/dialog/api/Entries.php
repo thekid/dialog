@@ -44,18 +44,9 @@ class Entries {
     // Ensure storage directory is created
     if ($result->created()) {
       $this->folder($id)->create();
-      return $result->entry();
     }
 
-    // Convert from old data structure if necessary
-    $entry= $result->entry();
-    foreach ($entry['images'] as $image) {
-      if (!is_array($image) || !isset($image['modified'])) {
-        $entry['images']= $this->media($id);
-        break;
-      }
-    }
-    return $entry;
+    return $result->entry();
   }
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
