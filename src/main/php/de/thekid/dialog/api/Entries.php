@@ -15,6 +15,21 @@ class Entries {
     return new Folder($this->storage, 'image', $entry);
   }
 
+  /** Returns media in a given entry */
+  private function media(string $entry): array<mixed> {
+    $media= [];
+    $f= $this->folder($entry);
+    foreach ($f->entries() as $entry) {
+      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
+        $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['image' => true]];
+      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
+        $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['video' => true]];
+      }
+    }
+    ksort($media);
+    return $media;
+  }
+
   #[Put('/entries/{id:.+(/.+)?}')]
   public function create(string $id, array<string, mixed> $attributes) {
     $result= $this->repository->replace($id, [
@@ -29,8 +44,18 @@ class Entries {
     // Ensure storage directory is created
     if ($result->created()) {
       $this->folder($id)->create();
+      return $result->entry();
     }
-    return $result->entry();
+
+    // Convert from old data structure if necessary
+    $entry= $result->entry();
+    foreach ($entry['images'] as $image) {
+      if (!is_array($image) || !isset($image['modified'])) {
+        $entry['images']= $this->media($id);
+        break;
+      }
+    }
+    return $entry;
   }
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
@@ -71,20 +96,9 @@ class Entries {
 
   #[Put('/entries/{id:.+(/.+)?}/published')]
   public function publish(string $id, Date $date) {
-    $images= [];
-    $f= $this->folder($id);
-    foreach ($f->entries() as $entry) {
-      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
-        $images[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['image' => true]];
-      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
-        $images[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['video' => true]];
-      }
-    }
-    ksort($images);
-
     $this->repository->modify($id, ['$set' => [
       'published' => $date,
-      'images'    => $images,
+      'images'    => $this->media($id),
     ]]);
     return ['published' => $id];
   }
