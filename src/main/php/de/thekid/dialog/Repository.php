@@ -40,12 +40,11 @@ class Repository {
   }
 
   /** Returns a single entry */
-  public function entry(string $slug): ?Document {
-    $cursor= $this->database->collection('entries')->find([
-      'slug'      => ['$eq' => $slug],
-      'published' => ['$lt' => Date::now()],
-    ]);
-    return $cursor->first();
+  public function entry(string $slug, bool $published= true): ?Document {
+    return $this->database->collection('entries')
+      ->find(['slug' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : []))
+      ->first()
+    ;
   }
 
   /** Returns an entry's children */
