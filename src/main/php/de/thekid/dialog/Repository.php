@@ -61,7 +61,7 @@ class Repository {
   public function replace(string $slug, array<string, mixed> $entity): Modification {
     $arguments= [
       'query'  => ['slug' => $slug],
-      'update' => ['slug' => $slug] + $entity,
+      'update' => ['$set' => ['slug' => $slug, ...$entity]],
       'new'    => true,  // Return modified document
       'upsert' => true,
     ];
