@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed *Codec AVOption g (set the group of picture (GOP) size) specified 
+  for input file* error
+  (@thekid)
+
 ## 0.6.0 / 2022-09-30
 
 * Merged PR #8: Video support. Dialog can now import .mov, .mp4 and .mpeg

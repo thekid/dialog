@@ -60,11 +60,11 @@ class LocalDirectory extends Command {
     if (!$video->exists() || $source->lastModified() > $video->lastModified()) {
       $this->execute('ffmpeg', [
         '-y',       // Overwrite files without asking
-        '-g', '30', // Group of picture (GOP)
         '-i', $source->getURI(),
         '-vcodec', 'libx264',
         '-vf', 'scale=1920:-1',
         '-acodec', 'aac',
+        '-g', '30', // Group of picture (GOP)
         $video->getURI(),
       ]);
     }
