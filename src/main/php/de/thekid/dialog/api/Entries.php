@@ -36,17 +36,16 @@ class Entries {
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
   public function upload(string $id, string $name, #[Request] $req) {
-    return new Async(function() use($id, $name, $req) {
+
+    // Verify the folder (and thus the entry) exists
+    $f= $this->folder($id);
+    if (!$f->exists()) {
+      return Response::error(400, 'Cannot upload to non-existant entry '.$id);
+    }
+
+    // Asynchronously process uploads
+    return new Async(function() use($f, $name, $req) {
       if ($multipart= $req->multipart()) {
-        $f= $this->folder($id);
-
-        // If the folder (and thus the entry) does not exist, consume the
-        // file upload completeley, then return an error.
-        if (!$f->exists()) {
-          iterator_count($multipart->parts());
-          return Response::error(417, 'Expectation Failed');
-        }
-
         foreach ($multipart->files() as $file) {
           yield from $file->transmit(new File($f, $file->name()));
         }
