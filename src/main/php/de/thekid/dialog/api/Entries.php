@@ -15,21 +15,6 @@ class Entries {
     return new Folder($this->storage, 'image', $entry);
   }
 
-  /** Returns media in a given entry */
-  private function media(string $entry): array<mixed> {
-    $media= [];
-    $f= $this->folder($entry);
-    foreach ($f->entries() as $entry) {
-      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
-        $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['image' => true]];
-      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
-        $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['video' => true]];
-      }
-    }
-    usort($media, fn($a, $b) => $a['name'] <=> $b['name']);
-    return $media;
-  }
-
   #[Put('/entries/{id:.+(/.+)?}')]
   public function create(string $id, array<string, mixed> $attributes) {
     $result= $this->repository->replace($id, [
