@@ -95,8 +95,8 @@ class LocalDirectory extends Command {
   }
 
   /** Executes a given external command and returns its exit code */
-  private function execute(string $command, array<string> $args): void {
-    $p= new Process($command, $args, null, null, [STDIN, STDOUT, STDERR]);
+  private function execute(string $command, array<string> $args, $redirect= null): void {
+    $p= new Process($command, $args, null, null, [STDIN, $redirect ?? STDOUT, STDERR]);
     if (0 === ($r= $p->close())) return;
 
     throw new IllegalStateException($p->getCommandLine().' exited with exit code '.$r);
@@ -162,11 +162,12 @@ class LocalDirectory extends Command {
                 $headers[]= $name.': '.$value;
               }
               $this->execute('curl', [
-                '-v', ...$headers,
+                ...$headers,
+                '-#',
                 '-X', 'PUT',
                 '-F', $kind.'=@'.strtr($target->getURI(), [DIRECTORY_SEPARATOR => '/']),
                 $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->uri(),
-              ]);
+              ], ['null']);
             } else {
               $transfer[$kind]= $target;
             }
