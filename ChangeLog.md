@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.8.0 / 2022-10-02
+
+* Merged PR #11: Show EXIF meta data along with images - @thekid
+
 ## 0.7.0 / 2022-10-01
 
 * Merged PR #10: Synchronize images. The import tool now uses server
