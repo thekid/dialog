@@ -42,10 +42,56 @@ class LocalDirectory extends Command {
   }
 
   /** Returns image resizing targets */
-  private function targets(): iterable {
-    yield 'preview' => new ResizeTo(720, 'jpg');
-    yield 'thumb'   => new ResizeTo(1024, 'webp');
-    yield 'full'    => new ResizeTo(3840, 'webp');
+  private function image(File $source): iterable {
+    foreach ([
+      'preview' => new ResizeTo(720, 'jpg'),
+      'thumb'   => new ResizeTo(1024, 'webp'),
+      'full'    => new ResizeTo(3840, 'webp')
+    ] as $kind => $target) {
+      yield $kind => $target->resize($source, $kind, $source->filename);
+    }
+  }
+
+  /** Returns video resizing targets */
+  private function video(File $source): iterable {
+
+    // 1. Convert to web-optimized H.264 video, scaling to a width of 1920 pixels
+    $video= new File($source->path, 'video-'.$source->filename.'.mp4');
+    if (!$video->exists() || $source->lastModified() > $video->lastModified()) {
+      $this->execute('ffmpeg', [
+        '-y',       // Overwrite files without asking
+        '-g', '30', // Group of picture (GOP)
+        '-i', $source->getURI(),
+        '-vcodec', 'libx264',
+        '-vf', 'scale=1920:-1',
+        '-acodec', 'aac',
+        $video->getURI(),
+      ]);
+    }
+    yield 'video' => $video;
+
+    // 2. Extract screenshot and preview image using ffmpeg
+    $screen= new File($source->path, 'screen-'.$source->filename.'.jpg');
+    if (!$screen->exists() || $source->lastModified() > $screen->lastModified()) {
+      $this->execute('ffmpeg', [
+        '-y',
+        '-i', $source->getURI(),
+        '-ss', '00:00:03',
+        '-vsync', 'vfr',
+        '-frames:v', '1',
+        '-q:v', '1',
+        '-qscale:v', '1',
+        $screen->getURI(),
+      ]);
+    }
+
+    // 3. Convert and resize screenshot JPEG
+    foreach ([
+      'preview' => new ResizeTo(720, 'jpg'),
+      'thumb'   => new ResizeTo(1024, 'webp')
+    ] as $kind => $target) {
+      yield $kind => $target->resize($screen, $kind, $source->filename);
+    }
   }
 
   /** Executes a given external command and returns its exit code */
@@ -75,92 +121,57 @@ class LocalDirectory extends Command {
         $location['zoom']= (float)$m[3];
       }
 
+      // Fetch existing entry
       $document= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json')->value();
       $this->out->writeLine(' => ID<', $document['_id'], '>');
       $images= [];
       foreach ($document['images'] ?? [] as $image) {
-        $images[$image['name']]= $image;
+        is_array($image) && $images[$image['name']]= $image;
       }
 
       foreach ($folder->entries() as $entry) {
-        if (preg_match('/^(thumb|preview|full|video)-/', $entry->name())) continue;
+        $name= $entry->name();
 
-        $transfer= [];
-        if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
-          $this->out->write(' => Processing image ', $entry->name());
-
-          // Resize images
-          $modified= $images[$entry->name()]['modified'] ?? null;
-          if (null === $modified || $source->lastModified() > $modified) {
-            $source= $entry->asFile();
-            foreach ($this->targets() as $kind => $target) {
-              $transfer[$kind]= $target->resize($source, $kind, $source->filename);
-            }
-          }
-        } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $entry->name())) {
-          $source= $entry->asFile();
-          $this->out->write(' => Processing video ', $entry->name());
-
-          // Convert to web-optimized H.264 video, scaling to a width of 1920 pixels
-          $video= new File($folder, 'video-'.$entry->name().'.mp4');
-          if (!$video->exists() || $video->lastModified() < $source->lastModified()) {
-            $this->execute('ffmpeg', [
-              '-i', (string)$entry,
-              '-vcodec', 'libx264',
-              '-vf', 'scale=1920:-1',
-              '-acodec', 'aac',
-              '-g', '30', // group of picture (GOP)
-              $video->getURI(),
-            ]);
-            // $transfer['video']= $video;
-
-            // Uploading files that take longer than ~30 seconds is, for some reason,
-            // broken, and will result in a) the import tool crashing and b) the server
-            // to end up in an endless blocking loop.
-            $headers= [];
-            foreach ($this->api->headers() as $name => $value) {
-              $headers[]= '-H';
-              $headers[]= $name.': '.$value;
-            }
-            $this->execute('curl', [
-              '-v', ...$headers,
-              '-X', 'PUT',
-              '-F', 'video=@'.strtr($video->getURI(), [DIRECTORY_SEPARATOR => '/']),
-              $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])->uri(),
-            ]);
-          }
-
-          // Extract screenshot and preview image
-          $thumb= new File($folder, 'thumb-'.$entry->name().'.webp');
-          if (!$thumb->exists() || $thumb->lastModified() < $source->lastModified()) {
-
-            // Screenshot to JPEG using ffmpeg
-            $screen= new File($folder, sha1($entry->name()).'.jpg');
-            $this->execute('ffmpeg', [
-              '-i', (string)$entry,
-              '-ss', '00:00:03',
-              '-vsync', 'vfr',
-              '-frames:v', '1',
-              '-q:v', '1',
-              '-qscale:v', '1',
-              $screen->getURI(),
-            ]);
-
-            // Convert and resize this JPEG
-            foreach (['preview' => new ResizeTo(720, 'jpg'), 'thumb' => new ResizeTo(1024, 'webp')] as $kind => $target) {
-              if ($file= $target->resize($screen, $kind, $source->filename)) {
-                $transfer[$kind]= $file;
-              }
-            }
-            $screen->unlink();
-          }
+        // Select processing method
+        if (preg_match('/^(thumb|preview|full|video)-/', $name)) {
+          continue;
+        } else if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $name)) {
+          $this->out->write(' => Processing image ', $name);
+          $targets= $this->image(...);
+        } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $name)) {
+          $this->out->write(' => Processing video ', $name);
+          $targets= $this->video(...);
         } else {
           continue;
         }
 
-        if (empty($transfer)) {
-          $this->out->writeLine(': (not updated)');
-        } else {
+        // Synchronize with server
+        $modified= $images[$name]['modified'] ?? null;
+        $source= $entry->asFile();
+        if (null === $modified || $source->lastModified() > $modified) {
+          $transfer= [];
+          foreach ($targets($source) as $kind => $target) {
+
+            // FIXME: Uploading files that take longer than ~30 seconds is, for some reason,
+            // broken, and will result in a) the import tool crashing and b) the server to
+            // end up in an endless blocking loop. Use `curl` for videos instead.
+            if ('video' === $kind) {
+              $headers= [];
+              foreach ($this->api->headers() as $name => $value) {
+                $headers[]= '-H';
+                $headers[]= $name.': '.$value;
+              }
+              $this->execute('curl', [
+                '-v', ...$headers,
+                '-X', 'PUT',
+                '-F', $kind.'=@'.strtr($target->getURI(), [DIRECTORY_SEPARATOR => '/']),
+                $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->uri(),
+              ]);
+            } else {
+              $transfer[$kind]= $target;
+            }
+          }
+
           $upload= new RestUpload($this->api, $this->api
             ->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])
             ->request('PUT')
@@ -171,6 +182,8 @@ class LocalDirectory extends Command {
           }
           $r= $upload->finish();
           $this->out->writeLine(': ', $r->status());
+        } else {
+          $this->out->writeLine(': (not updated)');
         }
       }
 
