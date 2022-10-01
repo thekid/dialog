@@ -58,11 +58,14 @@ class Repository {
   }
 
   /** Replace an entry identified by a given slug with a given entity */
-  public function replace(string $slug, array<string, mixed> $entity): Update {
-    return $this->database->collection('entries')->upsert(
-      ['slug' => $slug],
-      new Document(['slug' => $slug] + $entity),
-    );
+  public function replace(string $slug, array<string, mixed> $entity): Modification {
+    $arguments= [
+      'query'  => ['slug' => $slug],
+      'update' => ['$set' => ['slug' => $slug, ...$entity]],
+      'new'    => true,  // Return modified document
+      'upsert' => true,
+    ];
+    return new Modification($this->database->collection('entries')->run('findAndModify', $arguments)->value());
   }
 
   /** Modify an entry identified by a given slug with MongoDB statements */

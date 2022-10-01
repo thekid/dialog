@@ -3,7 +3,7 @@
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
-use web\rest\{Async, Put, Resource, Request, Response};
+use web\rest\{Async, Delete, Put, Resource, Request, Response};
 
 #[Resource('/api')]
 class Entries {
@@ -13,6 +13,21 @@ class Entries {
   /** Returns folder for a given entry */
   private function folder(string $entry): Folder {
     return new Folder($this->storage, 'image', $entry);
+  }
+
+  /** Returns media in a given entry */
+  private function media(string $entry): array<mixed> {
+    $media= [];
+    $f= $this->folder($entry);
+    foreach ($f->entries() as $entry) {
+      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
+        $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['image' => true]];
+      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
+        $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['video' => true]];
+      }
+    }
+    usort($media, fn($a, $b) => $a['name'] <=> $b['name']);
+    return $media;
   }
 
   #[Put('/entries/{id:.+(/.+)?}')]
@@ -26,12 +41,12 @@ class Entries {
       'is'        => $attributes['is'],
     ]);
 
-    if ($result->upserted()) {
+    // Ensure storage directory is created
+    if ($result->created()) {
       $this->folder($id)->create();
-      return ['created' => $id];
-    } else {
-      return ['updated' => $id];
     }
+
+    return $result->entry();
   }
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
@@ -55,22 +70,26 @@ class Entries {
     });
   }
 
-  #[Put('/entries/{id:.+(/.+)?}/published')]
-  public function publish(string $id, Date $date) {
-    $images= [];
+  #[Delete('/entries/{id:.+(/.+)?}/images/{name}')]
+  public function remove(string $id, string $name) {
+    $pattern= '/^(.+)-('.$name.')\.(webp|jpg|mp4)$/';
+
     $f= $this->folder($id);
+    $deleted= [];
     foreach ($f->entries() as $entry) {
-      if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
-        $images[]= ['name' => $m[1], 'is' => ['image' => true]];
-      } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
-        $images[]= ['name' => $m[1], 'is' => ['video' => true]];
+      if (preg_match($pattern, $entry->name())) {
+        $entry->asFile()->unlink();
+        $deleted[]= $entry->name();
       }
     }
-    ksort($images);
+    return $deleted;
+  }
 
+  #[Put('/entries/{id:.+(/.+)?}/published')]
+  public function publish(string $id, Date $date) {
     $this->repository->modify($id, ['$set' => [
       'published' => $date,
-      'images'    => $images,
+      'images'    => $this->media($id),
     ]]);
     return ['published' => $id];
   }
