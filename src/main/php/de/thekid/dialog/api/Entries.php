@@ -26,7 +26,7 @@ class Entries {
         $media[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['video' => true]];
       }
     }
-    asort($media, fn($a, $b) => $a['name'] <=> $b['name']);
+    usort($media, fn($a, $b) => $a['name'] <=> $b['name']);
     return $media;
   }
 
