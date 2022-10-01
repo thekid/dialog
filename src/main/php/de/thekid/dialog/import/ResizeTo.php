@@ -19,20 +19,22 @@ class ResizeTo {
    */
   public function resize(File $source, string $kind, string $filename): File {
     $target= new File($source->path, $kind.'-'.$filename.'.'.$this->type);
+    if (!$target->exists() || $source->lastModified() > $target->lastModified()) {
+      $image= Image::loadFrom(new StreamReader($source));
 
-    $image= Image::loadFrom(new StreamReader($source));
-    $resized= Image::create(
-      $this->size,
-      (int)($image->height * ($this->size / $image->width)),
-      Image::TRUECOLOR
-    );
-    $resized->resampleFrom($image);
+      $resized= Image::create(
+        $this->size,
+        (int)($image->height * ($this->size / $image->width)),
+        Image::TRUECOLOR
+      );
+      $resized->resampleFrom($image);
 
-    $resized->saveTo(match ($this->type) {
-      'webp' => new WebpStreamWriter($target),
-      'jpg'  => new JpegStreamWriter($target),
-      'png'  => new PngStreamWriter($target),
-    });
+      $resized->saveTo(match ($this->type) {
+        'webp' => new WebpStreamWriter($target),
+        'jpg'  => new JpegStreamWriter($target),
+        'png'  => new PngStreamWriter($target),
+      });
+    }
     return $target;
   }
 }
