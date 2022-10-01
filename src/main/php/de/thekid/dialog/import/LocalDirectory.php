@@ -194,7 +194,6 @@ class LocalDirectory extends Command {
       foreach ($images as $name => $image) {
         $r= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->delete();
         $this->out->writeLine(' => Deleted ', $r->value(), ' from ', $item['slug']);
-        fgetc(STDIN);
       }
 
       $r= $this->api->resource('entries/{0}/published', [$item['slug']])->put($publish, 'application/json');
