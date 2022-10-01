@@ -52,18 +52,36 @@ class Entries {
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
   public function upload(string $id, string $name, #[Request] $req) {
 
-    // Verify the folder (and thus the entry) exists
-    $f= $this->folder($id);
-    if (!$f->exists()) {
+    // Verify the (potentially unpublished) entry exists
+    if (null === ($entry= $this->repository->entry($id, published: false))) {
       return Response::error(400, 'Cannot upload to non-existant entry '.$id);
     }
 
     // Asynchronously process uploads
-    return new Async(function() use($f, $name, $req) {
+    return new Async(function() use($entry, $name, $req) {
       if ($multipart= $req->multipart()) {
+        $f= $this->folder($entry['slug']);
         foreach ($multipart->files() as $file) {
           yield from $file->transmit(new File($f, $file->name()));
         }
+
+        $op= '$push';
+        $path= 'images';
+        foreach ($entry['images'] ?? [] as $i => $image) {
+          if ($name !== $image['name']) continue;
+
+          $op= '$set';
+          $path= 'images.'.$i;
+          break;          
+        }
+
+        $is= preg_match('/\.(mp4|mov|webm)$/i', $name) ? 'video' : 'image';
+        $this->repository->modify($entry['slug'], [$op => [$path => [
+          'name'     => $name,
+          'modified' => time(),
+          'meta'     => $req->param('meta'),
+          'is'       => [$is => true]
+        ]]]);
       }
 
       return Response::ok();
@@ -72,11 +90,11 @@ class Entries {
 
   #[Delete('/entries/{id:.+(/.+)?}/images/{name}')]
   public function remove(string $id, string $name) {
-    $pattern= '/^(.+)-('.$name.')\.(webp|jpg|mp4)$/';
+    $this->repository->modify($id, ['$pull' => ['images' => ['name' => $name]]]);
 
-    $f= $this->folder($id);
     $deleted= [];
-    foreach ($f->entries() as $entry) {
+    $pattern= '/^(.+)-('.$name.')\.(webp|jpg|mp4)$/';
+    foreach ($this->folder($id)->entries() as $entry) {
       if (preg_match($pattern, $entry->name())) {
         $entry->asFile()->unlink();
         $deleted[]= $entry->name();
@@ -87,10 +105,8 @@ class Entries {
 
   #[Put('/entries/{id:.+(/.+)?}/published')]
   public function publish(string $id, Date $date) {
-    $this->repository->modify($id, ['$set' => [
-      'published' => $date,
-      'images'    => $this->media($id),
-    ]]);
-    return ['published' => $id];
+    $this->repository->modify($id, ['$set' => ['published' => $date]]);
+
+    return ['published' => $date];
   }
 }
