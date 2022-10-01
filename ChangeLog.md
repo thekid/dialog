@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #10: Synchronize images. The import tool now uses server
+  information to synchronize images instead of relying on the local
+  directory being in a consistent state.
+  (@thekid)
 * Fixed *Codec AVOption g (set the group of picture (GOP) size) specified 
   for input file* error
   (@thekid)
