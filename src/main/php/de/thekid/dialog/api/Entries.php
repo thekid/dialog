@@ -26,12 +26,11 @@ class Entries {
       'is'        => $attributes['is'],
     ]);
 
-    if ($result->upserted()) {
+    // Ensure storage directory is created
+    if ($result->created()) {
       $this->folder($id)->create();
-      return ['created' => $id];
-    } else {
-      return ['updated' => $id];
     }
+    return $result->entry();
   }
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]

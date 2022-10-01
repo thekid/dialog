@@ -9,6 +9,7 @@ use lang\{Enum, IllegalArgumentException, IllegalStateException, FormatException
 use peer\http\HttpConnection;
 use util\Date;
 use util\cmd\{Command, Arg};
+use util\log\Logging;
 use webservices\rest\{Endpoint, RestUpload};
 
 /**
@@ -33,6 +34,11 @@ class LocalDirectory extends Command {
   #[Arg(position: 1)]
   public function using(string $api): void {
     $this->api= new Endpoint($api);
+  }
+
+  #[Arg]
+  public function setVerbose() {
+    $this->api->setTrace(Logging::all()->toConsole());
   }
 
   /** Returns image resizing targets */
@@ -69,8 +75,8 @@ class LocalDirectory extends Command {
         $location['zoom']= (float)$m[3];
       }
 
-      $r= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json');
-      $this->out->writeLine(' => ', $r->value());
+      $entry= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json')->value();
+      $this->out->writeLine(' => ID<', $entry['_id'], '>');
 
       foreach ($folder->entries() as $entry) {
         if (preg_match('/^(thumb|preview|full|video)-/', $entry->name())) continue;
