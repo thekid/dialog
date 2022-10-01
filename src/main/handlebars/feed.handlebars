@@ -41,19 +41,7 @@
             </ul>
           </div>
 
-          <div class="images size-{{size images}}">
-            {{#each images}}
-              <div class="image">
-                {{#if is.video}}
-                  <video controls preload="metadata" width="100%" poster="/image/{{slug}}/thumb-{{name}}.webp">
-                    <source src="/image/{{slug}}/video-{{name}}.mp4" type="video/mp4">
-                  </video>
-                {{else}}
-                  <img {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{slug}}/thumb-{{.}}.webp" width="1024">
-                {{/if}}
-              </div>
-            {{/each}}
-          </div>
+          {{> partials/images in=.}}
 
           <div class="content">
             {{& content}}
