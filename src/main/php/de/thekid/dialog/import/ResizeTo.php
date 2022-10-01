@@ -14,15 +14,11 @@ class ResizeTo {
    * The resized file is stored in the same directory as the source
    * file with a file format specified by this target's extension.
    *
-   * Returns NULL if the resized file already exists and is not out-
-   * dated in respect to the source file.
-   *
    * @throws io.IOException
    * @throws img.ImagingException
    */
-  public function resize(File $source, string $kind, string $filename): ?File {
+  public function resize(File $source, string $kind, string $filename): File {
     $target= new File($source->path, $kind.'-'.$filename.'.'.$this->type);
-    if ($target->exists() && $target->lastModified() >= $source->lastModified()) return null;
 
     $image= Image::loadFrom(new StreamReader($source));
     $resized= Image::create(

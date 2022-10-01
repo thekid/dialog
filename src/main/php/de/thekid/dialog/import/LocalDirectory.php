@@ -75,21 +75,26 @@ class LocalDirectory extends Command {
         $location['zoom']= (float)$m[3];
       }
 
-      $entry= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json')->value();
-      $this->out->writeLine(' => ID<', $entry['_id'], '>');
+      $document= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json')->value();
+      $this->out->writeLine(' => ID<', $document['_id'], '>');
+      $images= [];
+      foreach ($document['images'] ?? [] as $image) {
+        $images[$image['name']]= $image;
+      }
 
       foreach ($folder->entries() as $entry) {
         if (preg_match('/^(thumb|preview|full|video)-/', $entry->name())) continue;
 
         $transfer= [];
         if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $entry->name())) {
-          $source= $entry->asFile();
           $this->out->write(' => Processing image ', $entry->name());
 
           // Resize images
-          foreach ($this->targets() as $kind => $target) {
-            if ($file= $target->resize($source, $kind, $source->filename)) {
-              $transfer[$kind]= $file;
+          $modified= $images[$entry->name()]['modified'] ?? null;
+          if (null === $modified || $source->lastModified() > $modified) {
+            $source= $entry->asFile();
+            foreach ($this->targets() as $kind => $target) {
+              $transfer[$kind]= $target->resize($source, $kind, $source->filename);
             }
           }
         } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $entry->name())) {

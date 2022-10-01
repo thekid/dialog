@@ -60,9 +60,9 @@ class Entries {
     $f= $this->folder($id);
     foreach ($f->entries() as $entry) {
       if (preg_match('/^full-(.+)\.webp$/', $entry->name(), $m)) {
-        $images[]= ['name' => $m[1], 'is' => ['image' => true]];
+        $images[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['image' => true]];
       } else if (preg_match('/^video-(.+)\.mp4$/', $entry->name(), $m)) {
-        $images[]= ['name' => $m[1], 'is' => ['video' => true]];
+        $images[]= ['name' => $m[1], 'modified' => $entry->asFile()->lastModified(), 'is' => ['video' => true]];
       }
     }
     ksort($images);
