@@ -30,19 +30,7 @@
         {{& item.content}}
       </div>
 
-      <div class="images all size-{{size images}}">
-        {{#each item.images}}
-          {{#if is.video}}
-            <video controls preload="metadata" width="100%" poster="/image/{{item.slug}}/thumb-{{name}}.webp">
-              <source src="/image/{{item.slug}}/video-{{name}}.mp4" type="video/mp4">
-            </video>
-          {{else}}
-            <a href="/image/{{item.slug}}/full-{{.}}.webp" onclick="return lightbox.show(this)">
-              <img {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{item.slug}}/thumb-{{.}}.webp" width="1024">
-            </a>
-          {{/if}}
-        {{/each}}
-      </div>
+      {{> partials/images in=item style='all'}}
     </section>
   {{/inline}}
   {{#*inline "scripts"}}

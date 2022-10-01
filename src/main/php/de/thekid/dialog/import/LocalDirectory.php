@@ -2,7 +2,7 @@
 
 use de\thekid\dialog\import\Sources;
 use img\Image;
-use img\io\{StreamReader, WebpStreamWriter};
+use img\io\{StreamReader, WebpStreamWriter, MetaDataReader};
 use io\streams\TextReader;
 use io\{Folder, File};
 use lang\{Enum, IllegalArgumentException, IllegalStateException, FormatException, Process};
@@ -23,6 +23,8 @@ use webservices\rest\{Endpoint, RestUpload};
  */
 class LocalDirectory extends Command {
   private $origin, $api;
+  private $meta= new MetaDataReader();
+  private $force= false;
 
   /** Sets origin folder, e.g. `./imports/album` */
   #[Arg(position: 0)]
@@ -37,12 +39,17 @@ class LocalDirectory extends Command {
   }
 
   #[Arg]
+  public function setForce() {
+    $this->force= true;
+  }
+
+  #[Arg]
   public function setVerbose() {
     $this->api->setTrace(Logging::all()->toConsole());
   }
 
   /** Returns image resizing targets */
-  private function image(File $source): iterable {
+  private function imageFile(File $source): iterable {
     foreach ([
       'preview' => new ResizeTo(720, 'jpg'),
       'thumb'   => new ResizeTo(1024, 'webp'),
@@ -52,8 +59,31 @@ class LocalDirectory extends Command {
     }
   }
 
+  /** Returns image meta data */
+  private function imageMeta(File $source): iterable {
+    try {
+      $meta= $this->meta->read($source->in());
+      if ($exif= $meta?->exifData()) {
+        yield 'width' => $exif->width;
+        yield 'height' => $exif->height;
+        yield 'dateTime' => $exif->dateTime?->toString('c');
+        yield 'make' => $exif->make;
+        yield 'model' => $exif->model;
+        yield 'apertureFNumber' => $exif->apertureFNumber;
+        yield 'exposureTime' => $exif->exposureTime;
+        yield 'isoSpeedRatings' => $exif->isoSpeedRatings;
+        yield 'focalLength' => $exif->focalLength;
+        yield 'flashUsed' => $exif->flashUsed();
+      }
+    } catch ($e) {
+      $this->err->writeLine('Cannot extract meta data from ', $source, ': ', $e);
+    } finally {
+      $source->close();
+    }
+  }
+
   /** Returns video resizing targets */
-  private function video(File $source): iterable {
+  private function videoFile(File $source): iterable {
 
     // 1. Convert to web-optimized H.264 video, scaling to a width of 1920 pixels
     $video= new File($source->path, 'video-'.$source->filename.'.mp4');
@@ -131,24 +161,26 @@ class LocalDirectory extends Command {
 
       foreach ($folder->entries() as $entry) {
         $name= $entry->name();
+        if (!$entry->isFile() || preg_match('/^(thumb|preview|full|video|screen)-/', $name)) continue;
 
         // Select processing method
-        if (preg_match('/^(thumb|preview|full|video|screen)-/', $name)) {
-          continue;
-        } else if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $name)) {
+        $source= $entry->asFile();
+        if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $name)) {
           $this->out->write(' => Processing image ', $name);
-          $targets= $this->image(...);
+          $targets= $this->imageFile(...);
+          $meta= $this->imageMeta(...);
         } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $name)) {
           $this->out->write(' => Processing video ', $name);
-          $targets= $this->video(...);
+          $targets= $this->videoFile(...);
+          $meta= fn() => [];
         } else {
           continue;
         }
 
         // Synchronize with server
         $modified= $images[$name]['modified'] ?? null;
-        $source= $entry->asFile();
-        if (null === $modified || $source->lastModified() > $modified) {
+        if ($this->force || null === $modified || $source->lastModified() > $modified) {
+          $resource= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()]);
           $transfer= [];
           foreach ($targets($source) as $kind => $target) {
 
@@ -156,28 +188,22 @@ class LocalDirectory extends Command {
             // broken, and will result in a) the import tool crashing and b) the server to
             // end up in an endless blocking loop. Use `curl` for videos instead.
             if ('video' === $kind) {
-              $headers= [];
-              foreach ($this->api->headers() as $name => $value) {
-                $headers[]= '-H';
-                $headers[]= $name.': '.$value;
-              }
               $this->execute('curl', [
-                ...$headers,
                 '-#',
                 '-X', 'PUT',
+                '-H', 'Authorization: '.$this->api->headers()['Authorization'],
                 '-F', $kind.'=@'.strtr($target->getURI(), [DIRECTORY_SEPARATOR => '/']),
-                $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->uri(),
+                $resource->uri(),
               ], ['null']);
             } else {
               $transfer[$kind]= $target;
             }
           }
 
-          $upload= new RestUpload($this->api, $this->api
-            ->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()])
-            ->request('PUT')
-            ->waiting(read: 3600)
-          );
+          $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
+          foreach ($meta($source) as $key => $value) {
+            $upload->pass('meta['.$key.']', $value);
+          }
           foreach ($transfer as $kind => $file) {
             $upload->transfer($kind, $file->in(), $file->filename);
           }

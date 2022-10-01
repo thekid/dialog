@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Fotoblog von Timm Friebe">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@timmfriebe">
   {{> meta}}
@@ -302,25 +303,19 @@
       grid-template-columns: 1fr;
     }
 
-    .images img {
-      aspect-ratio: 15 / 10;
-      object-fit: cover;
-      border-radius: .25rem;
-      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
-    }
-
-    .images video {
-      aspect-ratio: 15 / 10;
-      object-fit: cover;
-      border-radius: .25rem;
-    }
-
     .images.size-1 {
       grid-template-columns: 1fr;
     }
 
-    .image.size-1 video {
+    .images.size-1 video {
       aspect-ratio: auto;
+    }
+
+    .image img, .image video {
+      aspect-ratio: 15 / 10;
+      object-fit: cover;
+      border-radius: .25rem;
+      box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
     }
 
     #map {
@@ -387,6 +382,10 @@
       transform: scale(1, 1);
     }
 
+    #lightbox .image {
+      position: relative;
+    }
+
     #lightbox img {
       border: 2px solid #444;
       border-radius: .25rem;
@@ -394,7 +393,40 @@
       width: auto;
     }
 
-    #lightbox a {
+    #lightbox .meta {
+      position: absolute;
+      bottom: 2px;
+      right: 0;
+      left: 0;
+      outline: 1x solid red;
+      font-size: .9rem;
+      display: flex;
+      gap: 1px;
+      scale: 0;
+      transition: scale ease-in-out 70ms;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #lightbox img:hover + .meta {
+      scale: 1;
+    }
+
+    #lightbox .meta div {
+      background-color: white;
+      color: black;
+      padding: .25rem 1rem;
+    }
+
+    #lightbox .meta div:first-child {
+      border-top-left-radius: .25rem;
+    }
+
+    #lightbox .meta div:last-child {
+      border-top-right-radius: .25rem;
+    }
+
+    #lightbox i {
       position: absolute;
       top: .5rem;
       right: .5rem;
@@ -410,6 +442,7 @@
       color: white;
       padding-top: 6px;
       font-size: 1.75rem;
+      font-style: normal;
       font-weight: 400;
       cursor: pointer;
     }
@@ -469,8 +502,18 @@
   </main>
 
   <div id="lightbox" onclick="lightbox.close()">
-    <a>×</a>
-    <img width="100%">
+    <i>×</i>
+    <div class="image">
+      <img alt="Lightbox" width="100%">
+      <div class="meta">
+        <div><output name="make"></output></div>
+        <div><output name="model"></output></div>
+        <div>ISO <output name="isospeedratings"></output></div>
+        <div><output name="focallength"></output> mm</div>
+        <div><output name="aperturefnumber"></output></div>
+        <div><output name="exposuretime"></output> s</div>
+      </div>
+    </div>
   </div>
 
   <footer class="footer">
@@ -484,10 +527,22 @@
       show     : function($link) {
         if (window.innerWidth < 768) return true;
 
+        // Display image
         const $full = lightbox.$element.querySelector('img');
         $full.src = '';
         lightbox.$element.classList.add('open');
-        $full.src = $link.querySelector('img').src.replace('thumb-', 'full-');
+        $full.src = $link.href;
+
+        // Overlay meta data if present
+        const $img = $link.querySelector('img');
+        const $meta = lightbox.$element.querySelector('.meta');
+        if ('' !== $img.dataset.make ?? '') {
+          $meta.querySelectorAll('output').forEach($o => $o.value = $img.dataset[$o.name]);
+          $meta.style.visibility = 'visible';
+        } else {
+          $meta.style.visibility = 'hidden';
+        }
+
         return false;
       },
       close    : function() {
