@@ -1,0 +1,15 @@
+<div class="images {{style}} size-{{size in.images}}">
+  {{#each in.images}}
+    <div class="image">
+      {{#if is.video}}
+        <video controls preload="metadata" width="100%" poster="/image/{{in.slug}}/thumb-{{name}}.webp">
+          <source src="/image/{{in.slug}}/video-{{name}}.mp4" type="video/mp4">
+        </video>
+      {{else}}
+        <a href="/image/{{in.slug}}/full-{{name}}.webp" onclick="return lightbox.show(this)">
+          <img {{#unless ../@first}}loading="lazy"{{/unless}} {{#each meta}}data-{{@key}}="{{.}}"{{/each}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024">
+        </a>
+      {{/if}}
+    </div>
+  {{/each}}
+</div>
