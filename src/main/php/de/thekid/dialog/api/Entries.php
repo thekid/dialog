@@ -3,7 +3,7 @@
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
-use web\rest\{Async, Put, Resource, Request, Response};
+use web\rest\{Async, Delete, Put, Resource, Request, Response};
 
 #[Resource('/api')]
 class Entries {
@@ -52,6 +52,21 @@ class Entries {
 
       return Response::ok();
     });
+  }
+
+  #[Delete('/entries/{id:.+(/.+)?}/images/{name}')]
+  public function remove(string $id, string $name) {
+    $pattern= '/^(.+)-('.$name.')\.(webp|jpg|mp4)$/';
+
+    $f= $this->folder($id);
+    $deleted= [];
+    foreach ($f->entries() as $entry) {
+      if (preg_match($pattern, $entry->name())) {
+        $entry->asFile()->unlink();
+        $deleted[]= $entry->name();
+      }
+    }
+    return $deleted;
   }
 
   #[Put('/entries/{id:.+(/.+)?}/published')]

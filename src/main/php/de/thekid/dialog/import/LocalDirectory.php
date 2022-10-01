@@ -133,7 +133,7 @@ class LocalDirectory extends Command {
         $name= $entry->name();
 
         // Select processing method
-        if (preg_match('/^(thumb|preview|full|video)-/', $name)) {
+        if (preg_match('/^(thumb|preview|full|video|screen)-/', $name)) {
           continue;
         } else if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $name)) {
           $this->out->write(' => Processing image ', $name);
@@ -185,10 +185,20 @@ class LocalDirectory extends Command {
         } else {
           $this->out->writeLine(': (not updated)');
         }
+
+        // Mark image as processed
+        unset($images[$name]);
+      }
+
+      // Clean up images
+      foreach ($images as $name => $image) {
+        $r= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->delete();
+        $this->out->writeLine(' => Deleted ', $r->value(), ' from ', $item['slug']);
+        fgetc(STDIN);
       }
 
       $r= $this->api->resource('entries/{0}/published', [$item['slug']])->put($publish, 'application/json');
-      $this->out->writeLine(' => ', $r->value());
+      $this->out->writeLine('# ', $r->value());
     }
     return 0;
   }
