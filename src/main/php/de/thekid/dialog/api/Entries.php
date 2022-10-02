@@ -38,35 +38,40 @@ class Entries {
   public function upload(string $id, string $name, #[Request] $req) {
 
     // Verify the (potentially unpublished) entry exists
-    if (null === ($entry= $this->repository->entry($id, published: false))) {
+    if (null === $this->repository->entry($id, published: false)) {
       return Response::error(400, 'Cannot upload to non-existant entry '.$id);
     }
 
     // Asynchronously process uploads
-    return new Async(function() use($entry, $name, $req) {
+    return new Async(function() use($id, $name, $req) {
       if ($multipart= $req->multipart()) {
-        $f= $this->folder($entry['slug']);
+        $f= $this->folder($id);
         foreach ($multipart->files() as $file) {
           yield from $file->transmit(new File($f, $file->name()));
         }
 
-        $op= '$push';
-        $path= 'images';
-        foreach ($entry['images'] ?? [] as $i => $image) {
-          if ($name !== $image['name']) continue;
+        // Fetch entry again, it might have changed in the meantime!
+        $images= $this->repository->entry($id, published: false)['images'] ?? [];
 
-          $op= '$set';
-          $path= 'images.'.$i;
-          break;          
-        }
-
+        // Modify existing image, appending it if not existant
         $is= preg_match('/\.(mp4|mov|webm)$/i', $name) ? 'video' : 'image';
-        $this->repository->modify($entry['slug'], [$op => [$path => [
+        $image= [
           'name'     => $name,
           'modified' => time(),
-          'meta'     => $req->param('meta'),
+          'meta'     => (array)$req->param('meta') + ['dateTime' => gmdate('c')],
           'is'       => [$is => true]
-        ]]]);
+        ];
+        foreach ($images ?? [] as $i => $existing) {
+          if ($name === $existing['name']) {
+            $images[$i]= $image;
+            goto set;
+          }
+        }
+        $images[]= $image;
+
+        // Sort by date and time, then write back
+        set: usort($images, fn($a, $b) => $a['meta']['dateTime'] <=> $b['meta']['dateTime']);
+        $this->repository->modify($id, ['$set' => ['images' => $images]]);
       }
 
       return Response::ok();

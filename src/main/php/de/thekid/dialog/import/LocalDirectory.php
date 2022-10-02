@@ -7,9 +7,9 @@ use io\streams\TextReader;
 use io\{Folder, File};
 use lang\{Enum, IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
-use util\Date;
 use util\cmd\{Command, Arg};
 use util\log\Logging;
+use util\{Date, TimeZone};
 use webservices\rest\{Endpoint, RestUpload};
 
 /**
@@ -22,6 +22,7 @@ use webservices\rest\{Endpoint, RestUpload};
  * - journey.md: A journey element containt content elements
  */
 class LocalDirectory extends Command {
+  private static $UTC= TimeZone::getByName('UTC');
   private $origin, $api;
   private $meta= new MetaDataReader();
   private $force= false;
@@ -66,7 +67,7 @@ class LocalDirectory extends Command {
       if ($exif= $meta?->exifData()) {
         yield 'width' => $exif->width;
         yield 'height' => $exif->height;
-        yield 'dateTime' => $exif->dateTime?->toString('c');
+        yield 'dateTime' => $exif->dateTime?->toString('c', self::$UTC) ?? gmdate('c');
         yield 'make' => $exif->make;
         yield 'model' => $exif->model;
         yield 'apertureFNumber' => $exif->apertureFNumber;
