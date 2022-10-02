@@ -5,7 +5,8 @@
   "bundles": {
     "vendor": {
       "ol": "ol.css | dist/ol.js",
-      "fonts://display=swap": "Overpass"
+      "fonts://display=swap": "Overpass",
+      ".": "src/main/js/lightbox.js"
     }
   }
 }
