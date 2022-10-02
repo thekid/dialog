@@ -186,8 +186,8 @@ class LocalDirectory extends Command {
           foreach ($targets($source) as $kind => $target) {
 
             // FIXME: Uploading files that take longer than ~30 seconds is, for some reason,
-            // broken, and will result in a) the import tool crashing and b) the server to
-            // end up in an endless blocking loop. Use `curl` for videos instead.
+            // broken, and will result in a) the import tool crashing and b) the server ending
+            // up in an endless blocking loop. Use `curl` for videos instead.
             if ('video' === $kind) {
               $this->execute('curl', [
                 '-#',
