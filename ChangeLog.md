@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Sort images by date and time originally taken. This fixes the ordering
+  when using images from multiple cameras (e.g. DSLR and smart phone)
+  and when image numbers wrap around (IMG_9999.jpg -> IMG_0001.jpg)
+  (@thekid)
+
 ## 0.8.0 / 2022-10-02
 
 * Merged PR #11: Show EXIF meta data along with images - @thekid
