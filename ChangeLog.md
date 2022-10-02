@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 0.9.0 / 2022-10-02
+
 * Sort images by date and time originally taken. This fixes the ordering
   when using images from multiple cameras (e.g. DSLR and smart phone)
   and when image numbers wrap around (IMG_9999.jpg -> IMG_0001.jpg)
