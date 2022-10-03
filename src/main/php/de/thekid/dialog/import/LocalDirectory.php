@@ -20,6 +20,7 @@ use webservices\rest\{Endpoint, RestUpload};
  *
  * - content.md: A simple content element
  * - journey.md: A journey element containt content elements
+ * - cover.md: The image to use for the cover page
  */
 class LocalDirectory extends Command {
   private static $UTC= TimeZone::getByName('UTC');
@@ -39,11 +40,13 @@ class LocalDirectory extends Command {
     $this->api= new Endpoint($api);
   }
 
+  /** Transfers images even if they have not been changed */
   #[Arg]
   public function setForce() {
     $this->force= true;
   }
 
+  /** Add verbose logging for API calls */
   #[Arg]
   public function setVerbose() {
     $this->api->setTrace(Logging::all()->toConsole());
