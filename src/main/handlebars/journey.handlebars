@@ -34,7 +34,10 @@
 
       <ul class="summary">
         {{#each itinerary}}
-          <li><a href="#{{scroll slug}}">{{title}}</a></li>
+          <li>
+            <a href="#{{scroll slug}}">{{title}}</a>
+            <span class="date">{{../date date format="d.m.Y"}}</span>
+          </li>
         {{/each}}
       </ul>
     </section>
@@ -43,7 +46,10 @@
     {{#with itinerary}}
       {{#each .}}
         <section id="{{scroll slug}}">
-          <h2><a class="scroll" href="#{{scroll slug}}">{{title}}</a></h2>
+          <h2>
+            <a class="scroll" href="#{{scroll slug}}">{{title}}</a>
+            <a title="Nach oben" class="top" href="#">&#8593;</a>
+          </h2>
 
           <div class="meta">
             {{../date date format="d.m.Y"}} @

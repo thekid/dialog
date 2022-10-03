@@ -208,10 +208,17 @@
     section h2 {
       font-size: 1.5rem;
       font-weight: 700;
+      display: grid;
+      grid-template-columns: 1fr max-content;
     }
 
     section h2 a {
       color: white;
+    }
+
+    section h2 .top {
+      text-decoration: none;
+      color: orange;
     }
 
     .meta, .meta a {
@@ -243,7 +250,7 @@
     }
 
     ul.summary li::marker {
-      content: '\1F873 ';
+      content: '\2193 ';
       color: orange;
     }
 
@@ -256,6 +263,12 @@
 
     .summary a:hover {
       text-decoration: underline dotted orange;
+    }
+
+    .summary .date {
+      float: right;
+      color: #ccc;
+      font-size: .9rem;
     }
 
     a.scroll {
@@ -472,6 +485,12 @@
 
       .card:hover {
         scale: 1;
+      }
+    }
+
+    @media (max-width: 419px) {
+      .summary .date {
+        display: none;
       }
     }
 
