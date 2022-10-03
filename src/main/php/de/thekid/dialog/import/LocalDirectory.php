@@ -1,6 +1,5 @@
 <?php namespace de\thekid\dialog\import;
 
-use de\thekid\dialog\import\Sources;
 use img\Image;
 use img\io\{StreamReader, WebpStreamWriter, MetaDataReader};
 use io\streams\TextReader;
