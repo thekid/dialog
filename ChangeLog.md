@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.0.0 / 2022-10-03
+
+* Fix scroll links on Safari - `li::marker` doesn't work - @thekid
+* Add links to scroll back to the top of the page to journeys - @thekid
+
 ## 0.9.0 / 2022-10-02
 
 * Sort images by date and time originally taken. This fixes the ordering
