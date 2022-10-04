@@ -94,7 +94,7 @@ parent: feed
 
       {{#each itinerary}}
         {{#each locations}}
-          markers.add('{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}`);
+          markers.add('{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
         {{/each}}
       {{/each}}
 
