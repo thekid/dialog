@@ -55,7 +55,7 @@
         layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
       });
       map.addLayer(new ol.layer.Vector({source: source}));
-      map.getView().fit(source.getExtent(), {padding: [64, 64, 64, 64], minResolution: 30});
+      map.getView().fit(source.getExtent(), {padding: [24, 24, 24, 24], minResolution: 30});
 
       const $popup = document.querySelector('#map .popup');
       map.on('movestart', event => {
