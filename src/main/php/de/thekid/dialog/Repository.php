@@ -29,6 +29,15 @@ class Repository {
     return $cursor->all();
   }
 
+  /** Returns all journeys */
+  public function journeys(): iterable {
+    $cursor= $this->database->collection('entries')->aggregate([
+      ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$sort'  => ['date' => -1]],
+    ]);
+    return $cursor->all();
+  }
+
   /** Returns paginated (top-level) entries */
   public function entries(Pagination $pagination, int $page): iterable {
     return $pagination->paginate($page, $this->database->collection('entries')->aggregate([

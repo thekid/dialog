@@ -157,7 +157,7 @@
       object-fit: cover;
     }
 
-    .card:last-child img {
+    .card.continue img {
       opacity: .3;
     }
 
@@ -250,8 +250,15 @@
     }
 
     .summary li::before {
-      content: '\2193 ';
       color: orange;
+    }
+
+    .itinerary.summary li::before {
+      content: '\2193 ';
+    }
+
+    .journeys.summary li::before {
+      content: '🌍 ';
     }
 
     .summary a {
@@ -336,6 +343,11 @@
       width: 100%;
       height: 20rem;
       position: relative;
+    }
+
+    #map.full {
+      height: 30rem;
+      margin-bottom: 2rem;
     }
 
     #map .ol-viewport {
@@ -510,7 +522,8 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <ul>
       <li {{#if (equals scope 'home')}}class="active"{{/if}}><a href="/">Home</a></li>
-      <li {{#unless (equals scope 'home')}}class="active"{{/unless}}><a href="/feed">Feed</a></li>
+      <li {{#if (any (equals scope 'feed') (equals parent 'feed'))}}class="active"{{/if}}><a href="/feed">Feed</a></li>
+      <li {{#if (equals scope 'journeys')}}class="active"{{/if}}><a href="/journeys">Reisen</a></li>
     </ul>
   </nav>
 

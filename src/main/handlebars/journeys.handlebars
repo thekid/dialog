@@ -1,49 +1,41 @@
----
-parent: feed
----
 {{#> layout}}
-  {{#*inline "title"}}{{item.title}}{{/inline}}
+  {{#*inline "title"}}Reisen{{/inline}}
   {{#*inline "meta"}}
     <meta property="og:url" content="{{request.uri}}">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="{{item.title}} - Dialog">
-    <meta property="og:description" content="{{text item.content}}">
-    {{#with item.images.0}}
-      <meta property="og:image" content="{{request.uri.base}}/image/{{item.slug}}/preview-{{.}}.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Reisen - Dialog">
+    <meta property="og:description" content="Fotoblog von Timm Friebe">
+    {{#with journeys.0}}
+      <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{images.0.name}}.jpg">
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
-    <h1 class="title">Dialog - {{item.title}}</h1>
+    <div id="map" class="full">
+      <div class="popup"></div>
+    </div>
 
-    <section>
-      <div class="meta">
-        {{date item.date format="d.m.Y"}} @
-        <ul class="locations" role="list">
-          {{#each item.locations}}
-            <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
-          {{/each}}
-        </ul>
-      </div>
-
-      <div id="map">
-        <div class="popup"></div>
-      </div>
-
-      <div class="content">
-        {{& item.content}}
-      </div>
-
-      {{> partials/images in=item style='all'}}
-    </section>
+    <h2 class="news">Nach Datum</h2>
+    <div class="cards">
+      {{#each journeys}}
+        <div class="card">
+          <div class="date">{{range is.from is.until format="M Y"}}</div>
+          <a title="{{title}}" href="/journey/{{slug}}">
+            {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
+            <h3>{{title}}</h3>
+          </a>
+        </div>
+      {{/each}}
+    </div>
   {{/inline}}
   {{#*inline "scripts"}}
     <script type="module">
       const markers = {
         style : new ol.style.Style({image: new ol.style.Icon(({src: '/static/marker.png'}))}),
         list  : [],
-        add   : function(lon, lat, name) {
+        add   : function(link, lon, lat, name) {
           const marker = new ol.Feature({
             geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+            link     : link,
             name     : name
           });
           marker.setStyle(markers.style);
@@ -51,8 +43,10 @@ parent: feed
         }
       };
 
-      {{#each item.locations}}
-        markers.add({{lon}}, {{lat}}, `{{name}}`);
+      {{#each journeys}}
+        {{#each locations}}
+          markers.add('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
+        {{/each}}
       {{/each}}
 
       const source = new ol.source.Vector({features: markers.list});
@@ -61,7 +55,7 @@ parent: feed
         layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
       });
       map.addLayer(new ol.layer.Vector({source: source}));
-      map.getView().fit(source.getExtent(), {padding: [32, 32, 32, 32], minResolution: 15});
+      map.getView().fit(source.getExtent(), {padding: [64, 64, 64, 64], minResolution: 30});
 
       const $popup = document.querySelector('#map .popup');
       map.on('movestart', event => {
@@ -71,7 +65,7 @@ parent: feed
         $popup.style.display = 'none';
         const items = [];
         map.forEachFeatureAtPixel(event.pixel, feature => {
-          items.push(`<li>${feature.get('name')}</li>`);
+          items.push(`<li><a href="${feature.get('link')}">${feature.get('name')}</a></li>`);
         })
         if (0 === items.length) return;
 

@@ -1,3 +1,6 @@
+---
+parent: feed
+---
 {{#> layout}}
   {{#*inline "title"}}{{journey.title}}{{/inline}}
   {{#*inline "meta"}}
@@ -32,7 +35,7 @@
         {{& journey.content}}
       </div>
 
-      <ul class="summary">
+      <ul class="itinerary summary">
         {{#each itinerary}}
           <li>
             <a href="#{{scroll slug}}">{{title}}</a>
