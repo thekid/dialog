@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.1.0 / 2022-10-04
+
+* Merged PR #14: Show a map and list of all journeys - @thekid
+
 ## 1.0.0 / 2022-10-03
 
 * Fix scroll links on Safari - `li::marker` doesn't work - @thekid
