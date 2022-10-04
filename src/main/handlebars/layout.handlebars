@@ -157,7 +157,7 @@
       object-fit: cover;
     }
 
-    .card:last-child img {
+    .card.continue img {
       opacity: .3;
     }
 
@@ -338,6 +338,11 @@
       position: relative;
     }
 
+    #map.full {
+      height: 50vh;
+      margin-bottom: 2rem;
+    }
+
     #map .ol-viewport {
       border-radius: .25rem;
     }
@@ -510,7 +515,8 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <ul>
       <li {{#if (equals scope 'home')}}class="active"{{/if}}><a href="/">Home</a></li>
-      <li {{#unless (equals scope 'home')}}class="active"{{/unless}}><a href="/feed">Feed</a></li>
+      <li {{#if (any (equals scope 'feed') (equals parent 'feed'))}}class="active"{{/if}}><a href="/feed">Feed</a></li>
+      <li {{#if (equals scope 'journeys')}}class="active"{{/if}}><a href="/journeys">Reisen</a></li>
     </ul>
   </nav>
 

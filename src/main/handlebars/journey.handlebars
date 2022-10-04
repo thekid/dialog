@@ -1,3 +1,6 @@
+---
+parent: feed
+---
 {{#> layout}}
   {{#*inline "title"}}{{journey.title}}{{/inline}}
   {{#*inline "meta"}}
@@ -91,7 +94,7 @@
 
       {{#each itinerary}}
         {{#each locations}}
-          markers.add('{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}`);
+          markers.add('{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
         {{/each}}
       {{/each}}
 
