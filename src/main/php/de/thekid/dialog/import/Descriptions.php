@@ -26,6 +26,8 @@ class Descriptions {
         $this->yaml->parse(new StringInput($yaml)),
         $this->markdown->transform($reader)
       );
+    } catch ($e) {
+      throw new FormatException('Cannot parse '.$source->toString(), $e);
     } finally {
       $reader->close();
     }
