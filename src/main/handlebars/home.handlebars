@@ -30,7 +30,7 @@
         {{#if @last}}
           <div class="continue card">
             <a title="Seite 2" href="/feed?page=2">
-              {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
+              {{#with images.0}}<img alt="Bild vom {{meta.dateTime}}" src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <div class="next">&#187;</div>
             </a>
           </div>
@@ -44,7 +44,7 @@
                 href="/journey/{{slug}}"
               {{/if}}
             >
-              {{#with images.0}}<img src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
+              {{#with images.0}}<img alt="Bild vom {{meta.dateTime}}" src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <h3>{{title}}</h3>
             </a>
           </div>

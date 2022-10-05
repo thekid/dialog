@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.1.1 / 2022-10-05
+
+* Fixed missing `alt` attributes for images. See #15 - @thekid
+
 ## 1.1.0 / 2022-10-04
 
 * Merged PR #14: Show a map and list of all journeys - @thekid
