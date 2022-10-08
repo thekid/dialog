@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.2.0 / 2022-10-08
+
 * Changed home page to display *from* and *until* dates for journeys
   instead of just showing their start date
   (@thekid)
