@@ -18,13 +18,6 @@ class Home {
 
   #[Get('/journeys')]
   public function journeys() {
-    return View::named('journeys')->with([
-      'journeys' => $this->repository->journeys(),
-      'range'    => fn($node, $context, $options) => {
-        $from= date($options['format'], strtotime($options[0]));
-        $until= date($options['format'], strtotime($options[1]));
-        return $from === $until ? $from : $from.' - '.$until;
-      }
-    ]);
+    return View::named('journeys')->with(['journeys' => $this->repository->journeys()]);
   }
 }

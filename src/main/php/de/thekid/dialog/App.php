@@ -43,6 +43,11 @@ class App extends Application {
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
           new Assets($manifest),
+          ['range' => fn($node, $context, $options) => {
+            $from= date($options['format'], strtotime($options[0]));
+            $until= date($options['format'], strtotime($options[1]));
+            return $from === $until ? $from : $from.' - '.$until;
+          }]
         ])
       ),
     ];

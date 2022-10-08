@@ -36,14 +36,13 @@
           </div>
         {{else}}
           <div class="card">
-            <div class="date">{{date ./date format='d.m.Y'}}</div>
-            <a title="{{title}}"
-              {{#if is.content}}
-                href="/content/{{slug}}"
-              {{else if is.journey}}
-                href="/journey/{{slug}}"
-              {{/if}}
-            >
+            {{#if is.content}}
+              <div class="date">{{date ./date format='d.m.Y'}}</div>
+              <a title="{{title}}" href="/content/{{slug}}">
+            {{else if is.journey}}
+              <div class="date">{{range is.from is.until format="M Y"}}</div>
+              <a title="{{title}}" href="/journey/{{slug}}">
+            {{/if}}
               {{#with images.0}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
               <h3>{{title}}</h3>
             </a>

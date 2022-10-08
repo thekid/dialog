@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Changed home page to display *from* and *until* dates for journeys
+  instead of just showing their start date
+  (@thekid)
 * Changed `alt` attributes to continue entry title and date. First part
   of feature suggested in #16
   (@thekid)
