@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Changed `alt` attributes to continue entry title and date. First part
+  of feature suggested in #16
+  (@thekid)
+
 ## 1.1.1 / 2022-10-05
 
 * Fixed missing `alt` attributes for images. See #15 - @thekid
