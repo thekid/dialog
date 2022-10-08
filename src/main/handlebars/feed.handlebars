@@ -33,7 +33,7 @@
           </h2>
 
           <div class="meta">
-            {{../date date format="d.m.Y"}} @
+            {{date ./date format="d.m.Y"}} @
             <ul class="locations" role="list">
               {{#each locations}}
                 <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>

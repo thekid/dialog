@@ -7,7 +7,7 @@
         </video>
       {{else}}
         <a href="/image/{{in.slug}}/full-{{name}}.webp" onclick="return lightbox.show(this)">
-          <img alt="Bild vom {{meta.dateTime}}" {{#unless first}}loading="lazy"{{/unless}} {{#each meta}}data-{{@key}}="{{.}}"{{/each}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024">
+          <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{#each meta}}data-{{@key}}="{{.}}"{{/each}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024">
         </a>
       {{/if}}
     </div>

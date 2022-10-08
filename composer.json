@@ -13,7 +13,7 @@
     "xp-forge/frontend": "^3.8",
     "xp-forge/rest-api": "^3.2",
     "xp-forge/rest-client": "^5.3",
-    "xp-forge/handlebars-templates": "^1.1",
+    "xp-forge/handlebars-templates": "^2.0",
     "xp-forge/markdown": "^6.0",
     "xp-forge/yaml": "^6.0",
     "xp-forge/hashing": "^2.1",

@@ -39,7 +39,7 @@ parent: feed
         {{#each itinerary}}
           <li>
             <a href="#{{scroll slug}}">{{title}}</a>
-            <span class="date">{{../date date format="d.m.Y"}}</span>
+            <span class="date">{{date ./date format="d.m.Y"}}</span>
           </li>
         {{/each}}
       </ul>
@@ -55,7 +55,7 @@ parent: feed
           </h2>
 
           <div class="meta">
-            {{../date date format="d.m.Y"}} @
+            {{date ./date format="d.m.Y"}} @
             <ul class="locations" role="list">
               {{#each locations}}
                 <li><a href="{{link}}">{{name}}</a></li>
