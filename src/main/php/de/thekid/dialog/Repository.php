@@ -20,7 +20,7 @@ class Repository {
   }
 
   /** Returns newest (top-level) entries */
-  public function newest(int $limit): iterable {
+  public function newest(int $limit): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
       ['$sort'  => ['date' => -1]],
@@ -30,7 +30,7 @@ class Repository {
   }
 
   /** Returns all journeys */
-  public function journeys(): iterable {
+  public function journeys(): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
       ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$sort'  => ['date' => -1]],
@@ -39,7 +39,7 @@ class Repository {
   }
 
   /** Returns paginated (top-level) entries */
-  public function entries(Pagination $pagination, int $page): iterable {
+  public function entries(Pagination $pagination, int $page): array<Document> {
     return $pagination->paginate($page, $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
       ['$sort'  => ['date' => -1]],
@@ -57,7 +57,7 @@ class Repository {
   }
 
   /** Returns an entry's children */
-  public function children(string $slug): iterable {
+  public function children(string $slug): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => $slug], 'published' => ['$lt' => Date::now()]]],
       ['$sort'  => ['date' => -1]],
