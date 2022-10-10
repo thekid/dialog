@@ -8,8 +8,6 @@
 
 See https://dialog.sloppy.zone/
 
-![Lighthouse score](https://user-images.githubusercontent.com/696742/194957066-6090908f-1520-4b69-a17b-f02d1315882e.png)
-
 ## Prerequisites
 
 * Install [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/) locally or create a [MongoDB Atlas account](https://account.mongodb.com/account/register)
