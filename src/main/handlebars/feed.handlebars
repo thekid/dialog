@@ -15,8 +15,8 @@
     <h1 class="title">Dialog - Seite {{page}}</h1>
 
     <div class="pagination">
-      <a class="previous" href={{#if previous}}"/feed?page={{previous}}"{{else}}"#" disabled{{/if}}>Neuere</a>
-      <a class="next" href={{#if next}}"/feed?page={{next}}"{{else}}"#" disabled{{/if}}>Ältere</a>
+      <a class="previous" href={{#if previous}}"/feed?page={{previous}}"{{else}}"#" aria-disabled="true"{{/if}}>Neuere</a>
+      <a class="next" href={{#if next}}"/feed?page={{next}}"{{else}}"#" aria-disabled="true"{{/if}}>Ältere</a>
     </div>
 
     {{#with elements}}
@@ -56,8 +56,8 @@
     {{/with}}
 
     <div class="pagination">
-      <a class="previous" href={{#if previous}}"/feed?page={{previous}}"{{else}}"#" disabled{{/if}}>Neuere</a>
-      <a class="next" href={{#if next}}"/feed?page={{next}}"{{else}}"#" disabled{{/if}}>Ältere</a>
+      <a class="previous" href={{#if previous}}"/feed?page={{previous}}"{{else}}"#" aria-disabled="true"{{/if}}>Neuere</a>
+      <a class="next" href={{#if next}}"/feed?page={{next}}"{{else}}"#" aria-disabled="true"{{/if}}>Ältere</a>
     </div>
   {{/inline}}
   {{#*inline "scripts"}}
