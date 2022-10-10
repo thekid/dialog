@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Added small improvements to /feed and improved LightHouse score
+  See issue #18
+  (@thekid)
+
 ## 1.2.0 / 2022-10-08
 
 * Changed home page to display *from* and *until* dates for journeys
