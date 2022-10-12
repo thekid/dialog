@@ -21,17 +21,17 @@ class Search {
       'meta'    => $meta,
       'results' => $results,
       'time'    => sprintf('%.3f', $this->timer->elapsedTime()),
+      'pages'   => function($node, $context, $options) {
+        $end= ceil($options['count'] / $this->pagination->paged);
+        for ($i= 1; $i <= $end; $i++) {
+          yield ['page' => $i, 'current' => $i === $options['current']];
+        }
+      },
       'link'    => function($node, $context, $options) {
         if (isset($options[1])) {
           return 'journey/'.strtr($options[0], ['/' => '#']);
         } else {
           return 'content/'.$options[0];
-        }
-      },
-      'pages'   => function($node, $context, $options) {
-        $end= ceil($options['count'] / $this->pagination->paged);
-        for ($i= 1; $i <= $end; $i++) {
-          yield ['page' => $i, 'current' => $i === $options['current']];
         }
       },
       'excerpt' => function($node, $context, $options) {
