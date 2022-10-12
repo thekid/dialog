@@ -63,9 +63,9 @@ class Repository {
     $search= [
       'should' => [
         ['text'   => ['query' => $query, 'path' => 'locations.name', 'score' => ['boost' => ['value' => 5.0]]]],
-        ['text'   => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 2.0]]]],
+        ['phrase' => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 2.0]]]],
         ['phrase' => ['query' => $query, 'path' => $fields]],
-        ['text'   => $fuzzy + ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['value' => 0.5]]]],
+        ['text'   => $fuzzy + ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['value' => 0.2]]]],
       ],
       'mustNot' => [
         ['text' => ['path' => 'slug', 'query' => '@cover']
