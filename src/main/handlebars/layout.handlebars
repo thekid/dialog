@@ -122,6 +122,59 @@
       display: inline-block;
     }
 
+    #search {
+      margin-bottom: 1rem;
+      background-color: white;
+      border-radius: 2rem;
+      padding: .25rem 1rem;
+      display: grid;
+      grid-template-columns: 1fr max-content;
+      box-shadow: 0 .5rem 1rem rgb(0 0 0 / .4);
+    }
+
+    #search input {
+      font-size: 1.15rem;
+      font-family: inherit;
+      padding: .25rem;
+      border: none;
+      outline: none;
+      background-color: transparent;
+    }
+
+    #results .summary {
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    #results em {
+      font-style: normal;
+      font-weight: 900;
+      text-decoration: underline dotted orange;
+    }
+
+    .pages {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .pages span {
+      padding: .25rem 0;
+      color: #ccc;
+    }
+
+    .pages a {
+      background-color: #444;
+      border-radius: .125rem;
+      padding: .25rem .25rem;
+      width: 2rem;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .pages a.current {
+      border-bottom: 2px solid orange;
+    }
+
     article.intro {
       font-size: 1.15rem;
     }

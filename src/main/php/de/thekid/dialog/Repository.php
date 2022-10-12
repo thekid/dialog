@@ -48,6 +48,49 @@ class Repository {
     ]));
   }
 
+  public function search(string $query, Pagination $pagination, int $page): array {
+    static $fields= ['title', 'content'];
+    static $fuzzy= ['fuzzy' => ['maxEdits' => 1]];
+
+    // Handle egde case
+    if ('' === $query) return [[], []];
+
+    // Rank as follows:
+    // - A direct hit on a location name
+    // - A direct hit in the title
+    // - Phrase contained in the content
+    // - Fuzzy matching on title and content
+    $search= [
+      'should' => [
+        ['text'   => ['query' => $query, 'path' => 'locations.name', 'score' => ['boost' => ['value' => 5.0]]]],
+        ['text'   => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 2.0]]]],
+        ['phrase' => ['query' => $query, 'path' => $fields]],
+        ['text'   => $fuzzy + ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['value' => 0.5]]]],
+      ],
+      'mustNot' => [
+        ['text' => ['path' => 'slug', 'query' => '@cover']
+      ]],
+    ];
+    $meta= $this->database->collection('entries')->aggregate([
+      ['$searchMeta' => [
+        'index'    => $this->database->name(),
+        'count'    => ['type' => 'lowerBound'],
+        'compound' => $search,
+      ]]
+    ]);
+    $cursor= $this->database->collection('entries')->aggregate([
+      ['$search' => [
+        'index'     => $this->database->name(),
+        'compound'  => $search,
+        'highlight' => ['path' => 'content', 'maxNumPassages' => 3]
+      ]],
+      ['$addFields' => ['meta' => ['highlights' => ['$meta' => 'searchHighlights']]]],
+      ['$skip'  => $pagination->skip($page)],
+      ['$limit' => $pagination->limit()],
+    ]);
+    return [$meta->first(), $pagination->paginate($page, $cursor)];
+  }
+
   /** Returns a single entry */
   public function entry(string $slug, bool $published= true): ?Document {
     return $this->database->collection('entries')

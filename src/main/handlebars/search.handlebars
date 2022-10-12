@@ -1,0 +1,72 @@
+{{#> layout}}
+  {{#*inline "title"}}{{request.params.q}} - Suche{{/inline}}
+  {{#*inline "meta"}}
+    <meta property="og:url" content="{{request.uri}}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{request.params.q}} - Suche - Dialog">
+    <meta property="og:description" content="Fotoblog von Timm Friebe">
+    {{#with elements.0}}
+      {{#with images.0}}
+        <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{.}}.jpg">
+      {{/with}}
+    {{/with}}
+  {{/inline}}
+  {{#*inline "main"}}
+    <h1 class="title">Dialog - Suche</h1>
+
+    <form id="search" method="GET">
+      <input type="text" name="q" value="{{request.params.q}}" placeholder="Suche...">
+      <input type="submit" value="🔍">
+    </form>
+
+    <div id="results">
+      {{#with results.elements}}
+        <div class="summary">Seite {{results.page}} von {{meta.count.lowerBound.number}} Ergebnissen in {{time}} Sekunden</div>
+        {{#each .}}
+          <section>
+            <h2>
+              {{#if is.journey}}
+                <a href="/journey/{{slug}}">Reise: {{title}}</a>
+              {{else if is.content}}
+                <a href="{{link slug parent}}">{{title}}</a>
+              {{else}}
+                {{title}}
+              {{/if}}
+            </h2>
+
+            <div class="meta">
+              {{date ./date format="d.m.Y"}} @
+              <ul class="locations" role="list">
+                {{#each locations}}
+                  <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
+                {{/each}}
+              </ul>
+            </div>
+
+            {{#if is.journey}}
+              {{> partials/images in=. first=@first style='overview'}}
+            {{/if}}
+
+            <div class="excerpt">
+              {{&excerpt . 'content'}}
+            </div>
+          </section>
+        {{/each}}
+
+        <div class="pages">
+          <span>Seite</span>
+          {{#each (pages current=results.page count=meta.count.lowerBound.number)}}
+            <a {{#if current}}class="current"{{/if}} href="/search?q={{encode request.params.q}}&amp;page={{page}}">{{page}}</a>
+          {{/each}}
+        </div>
+      {{else}}
+        <section class="empty">
+          <h2>Keine Ergebnisse</h2>
+          <p>Suche nach etwas anderem...</p>
+        </section>
+      {{/with}}
+    </div>
+  {{/inline}}
+  {{#*inline "scripts"}}
+  {{/inline}}
+{{/layout}}
