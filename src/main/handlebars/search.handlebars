@@ -8,11 +8,7 @@
   {{/inline}}
   {{#*inline "main"}}
     <h1 class="title">Dialog - Suche</h1>
-
-    <form id="search" method="GET">
-      <input type="text" name="q" value="{{request.params.q}}" placeholder="Suche...">
-      <input type="submit" value="🔍">
-    </form>
+    {{> partials/search}}
 
     <div id="results">
       {{#with results.elements}}
