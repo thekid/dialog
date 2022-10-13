@@ -49,7 +49,7 @@ class Repository {
   }
 
   public function search(string $query, Pagination $pagination, int $page): array {
-    static $fields= ['title', 'content'];
+    static $fields= ['title', 'keywords', 'content'];
     static $fuzzy= ['fuzzy' => ['maxEdits' => 1]];
 
     // Handle egde case

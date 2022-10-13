@@ -21,6 +21,7 @@ class Entries {
       'parent'    => $attributes['parent'] ?? null,
       'date'      => new Date($attributes['date']),
       'title'     => $attributes['title'],
+      'keywords'  => $attributes['keywords'],
       'locations' => $attributes['locations'],
       'content'   => $attributes['content'],
       'is'        => $attributes['is'],
