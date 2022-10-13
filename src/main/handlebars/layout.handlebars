@@ -148,35 +148,16 @@
 
     #results .excerpt {
       overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     #results em {
       font-style: normal;
       font-weight: 900;
       text-decoration: underline dotted orange;
-    }
-
-    .pages {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .pages span {
-      padding: .25rem 0;
-      color: #ccc;
-    }
-
-    .pages a {
-      background-color: #444;
-      border-radius: .125rem;
-      padding: .25rem .25rem;
-      width: 2rem;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    .pages a.current {
-      border-bottom: 2px solid orange;
     }
 
     article.intro {
@@ -437,6 +418,10 @@
 
     .pagination a[aria-disabled] {
       color: #aaa;
+    }
+
+    .pagination .page {
+      padding: .25rem 0;
     }
 
     #lightbox {

@@ -48,12 +48,12 @@
           </section>
         {{/each}}
 
-        <div class="pages">
-          <span>Seite</span>
-          {{#each (pages current=results.page count=meta.count.lowerBound.number)}}
-            <a {{#if current}}class="current"{{/if}} href="/search?q={{encode request.params.q}}&amp;page={{page}}">{{page}}</a>
-          {{/each}}
+        <div class="pagination">
+          <a class="previous" href={{#if results.previous}}"/search?q={{encode request.params.q}}&amp;page={{results.previous}}"{{else}}"#" aria-disabled="true"{{/if}}>Vorherige</a>
+          <span class="page">Seite {{results.page}}</span>
+          <a class="next" href={{#if results.next}}"/search?q={{encode request.params.q}}&amp;page={{results.next}}"{{else}}"#" aria-disabled="true"{{/if}}>Nächste</a>
         </div>
+
       {{else}}
         <section class="empty">
           <h2>Keine Ergebnisse</h2>
