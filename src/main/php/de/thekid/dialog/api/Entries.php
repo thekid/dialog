@@ -5,7 +5,7 @@ use io\{Path, Folder, File};
 use util\Date;
 use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
 
-#[Resource('/api')]
+#[Resource('/api/entries')]
 class Entries {
 
   public function __construct(private Repository $repository, private Path $storage) { }
@@ -15,7 +15,7 @@ class Entries {
     return new Folder($this->storage, 'image', $entry);
   }
 
-  #[Put('/entries/{id:.+(/.+)?}')]
+  #[Put('/{id:.+(/.+)?}')]
   public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
     $result= $this->repository->replace($id, [
       'parent'    => $attributes['parent'] ?? null,
@@ -35,7 +35,7 @@ class Entries {
     return $result->entry();
   }
 
-  #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
+  #[Put('/{id:.+(/.+)?}/images/{name}')]
   public function upload(#[Value] $user, string $id, string $name, #[Request] $req) {
 
     // Verify the (potentially unpublished) entry exists
@@ -79,7 +79,7 @@ class Entries {
     });
   }
 
-  #[Delete('/entries/{id:.+(/.+)?}/images/{name}')]
+  #[Delete('/{id:.+(/.+)?}/images/{name}')]
   public function remove(#[Value] $user, string $id, string $name) {
     $this->repository->modify($id, ['$pull' => ['images' => ['name' => $name]]]);
 
@@ -94,7 +94,7 @@ class Entries {
     return $deleted;
   }
 
-  #[Put('/entries/{id:.+(/.+)?}/published')]
+  #[Put('/{id:.+(/.+)?}/published')]
   public function publish(#[Value] $user, string $id, #[Entity] Date $date) {
     $this->repository->modify($id, ['$set' => ['published' => $date]]);
 
