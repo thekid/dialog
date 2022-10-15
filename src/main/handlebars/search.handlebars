@@ -18,15 +18,7 @@ parent: feed
         <div class="summary">Seite {{results.page}} von {{meta.count.lowerBound.number}} Ergebnissen in {{time}} Sekunden</div>
         {{#each .}}
           <section>
-            <h2>
-              {{#if is.journey}}
-                <a href="/journey/{{slug}}">Reise: {{title}}</a>
-              {{else if is.content}}
-                <a href="{{link slug parent}}">{{title}}</a>
-              {{else}}
-                {{title}}
-              {{/if}}
-            </h2>
+            <h2><a href="{{route this}}">{{#if is.journey}}Reise: {{/if}}{{title}}</a></h2>
 
             <div class="meta">
               {{date ./date format="d.m.Y"}} @

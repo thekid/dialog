@@ -21,13 +21,6 @@ class Search {
       'meta'    => $meta,
       'results' => $results,
       'time'    => sprintf('%.3f', $this->timer->elapsedTime()),
-      'link'    => function($node, $context, $options) {
-        if (isset($options[1])) {
-          return 'journey/'.strtr($options[0], ['/' => '#']);
-        } else {
-          return 'content/'.$options[0];
-        }
-      },
       'excerpt' => function($node, $context, $options) {
         foreach ($options[0]['meta']['highlights'] as $highlight) {
           if ($options[1] !== $highlight['path']) continue;

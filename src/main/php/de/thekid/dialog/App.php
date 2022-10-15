@@ -43,11 +43,23 @@ class App extends Application {
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
           new Assets($manifest),
-          ['range' => fn($node, $context, $options) => {
-            $from= date($options['format'], strtotime($options[0]));
-            $until= date($options['format'], strtotime($options[1]));
-            return $from === $until ? $from : $from.' - '.$until;
-          }]
+          [
+            'range' => fn($node, $context, $options) => {
+              $from= date($options['format'], strtotime($options[0]));
+              $until= date($options['format'], strtotime($options[1]));
+              return $from === $until ? $from : $from.' - '.$until;
+            },
+            'route' => fn($node, $context, $options) => {
+              $entry= $options[0];
+              if (isset($entry['is']['journey'])) {
+                return 'journey/'.$entry['slug'];
+              } else if (isset($entry['parent'])) {
+                return 'journey/'.strtr($entry['slug'], ['/' => '#']);
+              } else {
+                return 'content/'.$entry['slug'];
+              }
+            },
+          ]
         ])
       ),
     ];

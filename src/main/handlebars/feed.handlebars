@@ -22,15 +22,7 @@
     {{#with elements}}
       {{#each .}}
         <section>
-          <h2>
-            {{#if is.journey}}
-              <a href="/journey/{{slug}}">{{title}}</a>
-            {{else if is.content}}
-              <a href="/content/{{slug}}">{{title}}</a>
-            {{else}}
-              {{title}}
-            {{/if}}
-          </h2>
+          <h2><a href="{{route this}}">{{title}}</a></h2>
 
           <div class="meta">
             {{date ./date format="d.m.Y"}} @
