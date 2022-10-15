@@ -3,7 +3,7 @@
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
-use web\rest\{Async, Delete, Put, Resource, Request, Response};
+use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
 
 #[Resource('/api')]
 class Entries {
@@ -16,7 +16,7 @@ class Entries {
   }
 
   #[Put('/entries/{id:.+(/.+)?}')]
-  public function create(string $id, array<string, mixed> $attributes) {
+  public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
     $result= $this->repository->replace($id, [
       'parent'    => $attributes['parent'] ?? null,
       'date'      => new Date($attributes['date']),
@@ -36,7 +36,7 @@ class Entries {
   }
 
   #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
-  public function upload(string $id, string $name, #[Request] $req) {
+  public function upload(#[Value] $user, string $id, string $name, #[Request] $req) {
 
     // Verify the (potentially unpublished) entry exists
     if (null === $this->repository->entry($id, published: false)) {
@@ -80,7 +80,7 @@ class Entries {
   }
 
   #[Delete('/entries/{id:.+(/.+)?}/images/{name}')]
-  public function remove(string $id, string $name) {
+  public function remove(#[Value] $user, string $id, string $name) {
     $this->repository->modify($id, ['$pull' => ['images' => ['name' => $name]]]);
 
     $deleted= [];
@@ -95,7 +95,7 @@ class Entries {
   }
 
   #[Put('/entries/{id:.+(/.+)?}/published')]
-  public function publish(string $id, Date $date) {
+  public function publish(#[Value] $user, string $id, #[Entity] Date $date) {
     $this->repository->modify($id, ['$set' => ['published' => $date]]);
 
     return ['published' => $date];
