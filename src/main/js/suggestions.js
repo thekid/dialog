@@ -54,7 +54,7 @@ function suggestions($search) {
         $selected = $suggestions.querySelector('li.selected');
         if ($selected) {
           $selected.classList.remove('selected');
-          select($selected.nextSibling);
+          select($selected.nextSibling ?? $suggestions.querySelector('li:first-child'));
         } else {
           select($suggestions.querySelector('li:first-child'));
         }
@@ -65,7 +65,7 @@ function suggestions($search) {
         $selected = $suggestions.querySelector('li.selected');
         if ($selected) {
           $selected.classList.remove('selected');
-          select($selected.previousSibling);
+          select($selected.previousSibling ?? $suggestions.querySelector('li:last-child'));
         } else {
           select($suggestions.querySelector('li:last-child'));
         }
