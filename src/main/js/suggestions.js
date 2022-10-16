@@ -4,6 +4,7 @@ function suggestions($search) {
   const search = function() {
     const query = $input.value.trim();
     if (query.length < 2) {
+      $input.ariaExpanded = false;
       $search.classList.remove('suggesting');
       return;
     }
@@ -23,8 +24,10 @@ function suggestions($search) {
         $suggestions.innerHTML = html;
 
         if (html) {
+          $input.ariaExpanded = true;
           $search.classList.add('suggesting');
         } else {
+          $input.ariaExpanded = false;
           $search.classList.remove('suggesting');
         }
       })

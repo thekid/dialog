@@ -11,7 +11,7 @@ parent: feed
   {{/inline}}
   {{#*inline "main"}}
     <h1 class="title">Dialog - Suche</h1>
-    {{> partials/search}}
+    {{> partials/search owns='results'}}
 
     <div id="results">
       {{#with results.elements}}
