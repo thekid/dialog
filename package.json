@@ -6,7 +6,7 @@
     "vendor": {
       "ol": "ol.css | dist/ol.js",
       "fonts://display=swap": "Overpass",
-      ".": "src/main/js/lightbox.js"
+      ".": "src/main/js/lightbox.js | src/main/js/suggestions.js"
     }
   }
 }
