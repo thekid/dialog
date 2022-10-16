@@ -1,4 +1,4 @@
 <form id="search" method="GET" action="/search">
-  <input accesskey="s" autocomplete="off" type="text" name="q" value="{{request.params.q}}" placeholder="Suche nach Orten, Reisen und Erfahrungen…" aria-expanded="false" {{#with owns}}aria-owns="{{.}}"{{/with}}>
-  <ul class="suggestions" role="list"></ul>
+  <input accesskey="s" autocomplete="off" type="text" name="q" value="{{request.params.q}}" placeholder="Suche nach Orten, Reisen und Erfahrungen…" {{#with owns}}aria-owns="{{.}}"{{/with}}>
+  <ul class="suggestions" role="list" tabindex="-1"></ul>
 </form>
