@@ -1,9 +1,6 @@
 const lightbox = {
   $element : document.querySelector('#lightbox'),
   show     : function($link) {
-    if (window.innerWidth < 768) return true;
-
-    // Display image
     const $full = lightbox.$element.querySelector('img');
     $full.src = '';
     lightbox.$element.classList.add('open');
