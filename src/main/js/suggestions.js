@@ -2,15 +2,16 @@ function suggestions($search) {
   const $input = $search.querySelector('input[name="q"]');
   const $suggestions = $search.querySelector('.suggestions');
   const search = function() {
-    if ($input.value.length < 2) {
+    const query = $input.value.trim();
+    if (query.length < 2) {
       $search.classList.remove('suggesting');
       return;
     }
 
-    fetch('/api/suggestions?q=' + encodeURIComponent($input.value))
+    fetch('/api/suggestions?q=' + encodeURIComponent(query))
       .then(res => res.json())
       .then(suggestions => {
-        const pattern = new RegExp(`(${$input.value})`, 'i');
+        const pattern = new RegExp(`(${query})`, 'i');
 
         let html = '';
         for (const suggestion of suggestions) {
