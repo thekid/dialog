@@ -54,5 +54,45 @@ parent: feed
     </div>
   {{/inline}}
   {{#*inline "scripts"}}
+    <script type="module">
+      const $input = document.forms['search'].elements['q'];
+      const $search = document.querySelector('#search');
+      const $suggestions = document.querySelector('#suggestions');
+
+      function search() {
+        if ($input.value.length < 2) {
+          $search.classList.remove('suggestions');
+          return;
+        }
+
+        fetch('/api/suggestions?q=' + encodeURIComponent($input.value))
+          .then(res => res.json())
+          .then(suggestions => {
+            const pattern = new RegExp(`(${$input.value})`, 'i');
+
+            let html = '';
+            for (const suggestion of suggestions) {
+              html += `<li>
+                <a href="${suggestion.link}">${suggestion.title.replace(pattern, '<em>$1</em>')}</a>
+                <span class="date">${suggestion.date}</span>
+              </li>`;
+            }
+            $suggestions.innerHTML = html;
+
+            if (html) {
+              $search.classList.add('suggestions');
+            } else {
+              $search.classList.remove('suggestions');
+            }
+          })
+        ;
+      }
+
+      let debounce = null;
+      $input.addEventListener('input', e => {
+        if (debounce) clearTimeout(debounce);
+        debounce = setTimeout(search, 200);
+      });
+    </script>
   {{/inline}}
 {{/layout}}

@@ -133,6 +133,12 @@
       grid-template-columns: 1fr;
       box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .8);
       position: relative;
+      height: 2.75rem;
+    }
+
+    #search.suggestions {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
     #search::before {
@@ -151,6 +157,47 @@
       border: none;
       outline: none;
       background-color: transparent;
+      position: relative;
+    }
+
+    #suggestions {
+      position: absolute;
+      top: 1.75rem;
+      width: 100%;
+      background-color: white;
+      color: black;
+      border-bottom-right-radius: .35rem;
+      border-bottom-left-radius: .35rem;
+      scale: 0;
+      padding: 0;
+      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .8);
+    }
+
+    #suggestions li {
+      padding: .5rem;
+    }
+
+    #suggestions li:last-child {
+      border-bottom-right-radius: .35rem;
+      border-bottom-left-radius: .35rem;
+    }
+
+    #suggestions li:hover {
+      background-color: #efefef;
+    }
+
+    #suggestions li .date {
+      float: right;
+    }
+
+    #suggestions li em {
+      background-color: orange;
+      color: white;
+      font-style: normal;
+    }
+
+    #search.suggestions #suggestions {
+      scale: 1;
     }
 
     #results .summary {
