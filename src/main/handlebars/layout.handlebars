@@ -163,10 +163,12 @@
       color: black;
       border-bottom-right-radius: .35rem;
       border-bottom-left-radius: .35rem;
-      scale: 0;
       padding: 0;
       box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .8);
       z-index: 999;
+      transform: scale(1, 0);
+      transition: transform ease-in-out 150ms;
+      transform-origin: top;
     }
 
     .suggestions li {
@@ -187,9 +189,8 @@
     }
 
     .suggestions li em {
-      background-color: orange;
-      color: white;
       font-style: normal;
+      font-weight: 900;
     }
 
     #search.suggesting {
@@ -198,7 +199,7 @@
     }
 
     #search.suggesting .suggestions {
-      scale: 1;
+      transform: scale(1, 1);
     }
 
     #results .summary {
@@ -245,7 +246,7 @@
     }
 
     .card:hover {
-      scale: 1.05;
+      transform: scale(1.05, 1.05);
     }
 
     .card img {
@@ -494,6 +495,7 @@
       border: 1px solid #444;
       transform: scale(0, 0);
       transition: transform ease-in-out 300ms;
+      -webkit-backdrop-filter: blur(10px) brightness(.5);
       backdrop-filter: blur(10px) brightness(.5);
       padding: .5rem;
     }
@@ -522,14 +524,15 @@
       font-size: .9rem;
       display: flex;
       gap: 1px;
-      scale: 0;
-      transition: scale ease-in-out 70ms;
       justify-content: center;
       pointer-events: none;
+      transform: scale(1, 0);
+      transform-origin: bottom;
+      transition: transform ease-in-out 70ms;
     }
 
     #lightbox img:hover + .meta {
-      scale: 1;
+      transform: scale(1, 1);
     }
 
     #lightbox .meta div {
