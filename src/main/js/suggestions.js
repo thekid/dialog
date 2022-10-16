@@ -28,11 +28,59 @@ function suggestions($search) {
         }
       })
     ;
-  }
+  };
+  const select = function($target) {
+    if (null === $target) return;
 
+    $target.classList.add('selected');
+    $input.value = $target.querySelector('a').innerText;
+  };
+
+  // Set up input listener
   let debounce = null;
   $input.addEventListener('input', e => {
     if (debounce) clearTimeout(debounce);
     debounce = setTimeout(search, 200);
+  });
+
+  // Select suggestions by key
+  $input.addEventListener('keydown', e => {
+    let $selected;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        $selected = $suggestions.querySelector('li.selected');
+        if ($selected) {
+          $selected.classList.remove('selected');
+          select($selected.nextSibling);
+        } else {
+          select($suggestions.querySelector('li:first-child'));
+        }
+        break;
+
+      case 'ArrowUp':
+        e.preventDefault();
+        $selected = $suggestions.querySelector('li.selected');
+        if ($selected) {
+          $selected.classList.remove('selected');
+          select($selected.previousSibling);
+        } else {
+          select($suggestions.querySelector('li:last-child'));
+        }
+        break;
+
+      case 'Escape':
+        $search.classList.remove('suggesting');
+        break;
+
+      case 'Enter':
+        $selected = $suggestions.querySelector('li.selected');
+        if ($selected) {
+          e.preventDefault();
+          document.location.href = $selected.querySelector('a').href;
+        }
+        break;
+    }
   });
 }
