@@ -49,12 +49,13 @@ class Repository {
   }
 
   /** Returns search suggestions */
-  public function suggest(string $query): iterable {
+  public function suggest(string $query, int $limit= 10): iterable {
     return '' === $query ? [] : $this->database->collection('entries')->aggregate([
       ['$search' => ['index' => $this->database->name(), 'autocomplete' => [
         'query' => $query,
         'path'  => 'title',
       ]]],
+      ['$limit' => $limit],
     ]);
   }
 
