@@ -15,7 +15,7 @@ function suggestions($search) {
 
         let html = '';
         for (const suggestion of suggestions) {
-          html += `<li>
+          html += `<li role="option" aria-selected="false">
             <a href="${suggestion.link}">${suggestion.title.replace(pattern, '<em>$1</em>')}</a>
             <span class="date">${suggestion.date}</span>
           </li>`;
@@ -33,7 +33,7 @@ function suggestions($search) {
   const select = function($target) {
     if (null === $target) return;
 
-    $target.classList.add('selected');
+    $target.ariaSelected = true;
     $input.value = $target.querySelector('a').innerText;
   };
 
@@ -51,9 +51,9 @@ function suggestions($search) {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        $selected = $suggestions.querySelector('li.selected');
+        $selected = $suggestions.querySelector('li[aria-selected="true"]');
         if ($selected) {
-          $selected.classList.remove('selected');
+          $selected.ariaSelected = false;
           select($selected.nextSibling ?? $suggestions.querySelector('li:first-child'));
         } else {
           select($suggestions.querySelector('li:first-child'));
@@ -62,9 +62,9 @@ function suggestions($search) {
 
       case 'ArrowUp':
         e.preventDefault();
-        $selected = $suggestions.querySelector('li.selected');
+        $selected = $suggestions.querySelector('li[aria-selected="true"]');
         if ($selected) {
-          $selected.classList.remove('selected');
+          $selected.ariaSelected = false;
           select($selected.previousSibling ?? $suggestions.querySelector('li:last-child'));
         } else {
           select($suggestions.querySelector('li:last-child'));
@@ -76,7 +76,7 @@ function suggestions($search) {
         break;
 
       case 'Enter':
-        $selected = $suggestions.querySelector('li.selected');
+        $selected = $suggestions.querySelector('li[aria-selected="true"]');
         if ($selected) {
           e.preventDefault();
           document.location.href = $selected.querySelector('a').href;
