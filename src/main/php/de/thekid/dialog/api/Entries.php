@@ -18,13 +18,14 @@ class Entries {
   #[Put('/{id:.+(/.+)?}')]
   public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
     $result= $this->repository->replace($id, [
-      'parent'    => $attributes['parent'] ?? null,
-      'date'      => new Date($attributes['date']),
-      'title'     => $attributes['title'],
-      'keywords'  => $attributes['keywords'],
-      'locations' => $attributes['locations'],
-      'content'   => $attributes['content'],
-      'is'        => $attributes['is'],
+      'parent'      => $attributes['parent'] ?? null,
+      'date'        => new Date($attributes['date']),
+      'title'       => $attributes['title'],
+      'keywords'    => $attributes['keywords'],
+      'locations'   => $attributes['locations'],
+      'content'     => $attributes['content'],
+      'is'          => $attributes['is'],
+      '_searchable' => strip_tags(strtr($document['content'], ['<br>' => "\n", '</p><p>' => "\n"])),
     ]);
 
     // Ensure storage directory is created

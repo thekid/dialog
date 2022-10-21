@@ -23,6 +23,7 @@ class Repository {
   public function newest(int $limit): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+      ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
       ['$limit' => $limit],
     ]);
@@ -33,6 +34,7 @@ class Repository {
   public function journeys(): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
       ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
     ]);
     return $cursor->all();
@@ -42,6 +44,7 @@ class Repository {
   public function entries(Pagination $pagination, int $page): array<Document> {
     return $pagination->paginate($page, $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+      ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
       ['$skip'  => $pagination->skip($page)],
       ['$limit' => $pagination->limit()],
@@ -55,13 +58,14 @@ class Repository {
         'query' => $query,
         'path'  => 'title',
       ]]],
+      ['$unset' => '_searchable'],
       ['$limit' => $limit],
     ]);
   }
 
   /** Performs search */
   public function search(string $query, Pagination $pagination, int $page): array {
-    static $fields= ['title', 'keywords', 'content'];
+    static $fields= ['title', 'keywords', '_searchable'];
     static $fuzzy= ['fuzzy' => ['maxEdits' => 1]];
 
     // Handle egde case
@@ -94,8 +98,9 @@ class Repository {
       ['$search' => [
         'index'     => $this->database->name(),
         'compound'  => $search,
-        'highlight' => ['path' => 'content', 'maxNumPassages' => 3]
+        'highlight' => ['path' => '_searchable', 'maxNumPassages' => 3]
       ]],
+      ['$unset' => '_searchable'],
       ['$addFields' => ['meta' => ['highlights' => ['$meta' => 'searchHighlights']]]],
       ['$skip'  => $pagination->skip($page)],
       ['$limit' => $pagination->limit()],
@@ -115,6 +120,7 @@ class Repository {
   public function children(string $slug): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => $slug], 'published' => ['$lt' => Date::now()]]],
+      ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
     ]);
     return $cursor->all();
