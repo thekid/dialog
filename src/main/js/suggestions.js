@@ -51,6 +51,9 @@ function suggestions($search, fulltext) {
     if (debounce) clearTimeout(debounce);
     debounce = setTimeout(search, 200);
   });
+  $input.addEventListener('blur', e => {
+    $search.classList.remove('suggesting');
+  });
 
   // Select suggestions by key
   $input.addEventListener('keydown', e => {
