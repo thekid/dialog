@@ -12,7 +12,7 @@ class Suggestions {
   public function suggest(#[Param] $q) {
     foreach ($this->repository->suggest(trim($q)) as $suggestion) {
       yield [
-        'title' => htmlspecialchars($suggestion['title']),
+        'title' => $suggestion['title'],
         'date'  => $suggestion['date']->toString('d.m.Y'),
         'link'  => (isset($suggestion['is']['journey'])
           ? '/journey/'.$suggestion['slug']

@@ -1,6 +1,9 @@
 function suggestions($search, fulltext) {
   const $input = $search.querySelector('input[name="q"]');
   const $suggestions = $search.querySelector('.suggestions');
+  const html = function(input) {
+    return input.replace(/[<>&]/g, c => '&#' + c.charCodeAt(0) + ';');
+  };
   const search = function() {
     const query = $input.value.trim();
     if (query.length < 2) {
@@ -14,25 +17,22 @@ function suggestions($search, fulltext) {
       .then(suggestions => {
         const pattern = new RegExp(`(${query})`, 'i');
 
-        let html = '';
+        let list = '';
         for (const suggestion of suggestions) {
-          html += `<li role="option" aria-selected="false">
-            <a href="${suggestion.link}"><span class="query">${suggestion.title.replace(pattern, '<em>$1</em>')}</span></a>
+          list += `<li role="option" aria-selected="false">
+            <a href="${suggestion.link}"><span class="query">${html(suggestion.title).replace(pattern, '<em>$1</em>')}</span></a>
             <span class="date">${suggestion.date}</span>
           </li>`;
         }
 
         // Show fulltext option at end of search
         if (fulltext) {
-          const term = query.replace(/[<>&]/g, c => '&#' + c.charCodeAt(0) + ';');
-          html += `<li role="option" aria-selected="false">
-            <a class="fulltext" href="/search?q=${encoded}">${fulltext.replace('%s', '<span class="query"><em>' + term + '</em></span>')}</a>
+          list += `<li role="option" aria-selected="false">
+            <a class="fulltext" href="/search?q=${encoded}">${fulltext.replace('%s', '<span class="query"><em>' + html(query) + '</em></span>')}</a>
           </li>`;
         }
 
-        $suggestions.innerHTML = html;
-
-        if (html) {
+        if ($suggestions.innerHTML = list) {
           $search.classList.add('suggesting');
         } else {
           $search.classList.remove('suggesting');
