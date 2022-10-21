@@ -55,7 +55,7 @@ parent: feed
   {{/inline}}
   {{#*inline "scripts"}}
     <script type="module">
-      suggestions(document.querySelector('#search'));
+      suggestions(document.querySelector('#search'), 'Volltextsuche nach "%s"');
     </script>
   {{/inline}}
 {{/layout}}

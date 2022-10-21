@@ -1,4 +1,4 @@
-function suggestions($search) {
+function suggestions($search, fulltext) {
   const $input = $search.querySelector('input[name="q"]');
   const $suggestions = $search.querySelector('.suggestions');
   const search = function() {
@@ -20,6 +20,14 @@ function suggestions($search) {
             <span class="date">${suggestion.date}</span>
           </li>`;
         }
+
+        // Show fulltext option at end of search
+        if (fulltext) {
+          html += '<li role="option" aria-selected="false">' +
+            fulltext.replace('%s', `<a href="/search?q=${encodeURIComponent(query)}"><em>${query}</em></a>`) +
+          '</li>';
+        }
+
         $suggestions.innerHTML = html;
 
         if (html) {
