@@ -51,10 +51,10 @@ function suggestions($search, fulltext) {
   let debounce = null;
   $input.addEventListener('input', e => {
     if (debounce) clearTimeout(debounce);
-    debounce = setTimeout(search, 200);
+    debounce = setTimeout(search, 150);
   });
   $input.addEventListener('blur', e => {
-    $search.classList.remove('suggesting');
+    setTimeout(() => $search.classList.remove('suggesting'), 150);
   });
   $input.addEventListener('focus', e => {
     if ($suggestions.innerHTML) {
