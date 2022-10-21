@@ -2,7 +2,7 @@
 parent: feed
 ---
 {{#> layout}}
-  {{#*inline "title"}}{{request.params.q}} - Suche{{/inline}}
+  {{#*inline "title"}}{{#with request.params.q}}{{.}} - {{/with}}Suche{{/inline}}
   {{#*inline "meta"}}
     <meta property="og:url" content="{{request.uri}}">
     <meta property="og:type" content="website">
