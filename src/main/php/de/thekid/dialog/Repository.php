@@ -65,7 +65,7 @@ class Repository {
 
   /** Performs search */
   public function search(string $query, Pagination $pagination, int $page): array {
-    static $fields= ['title', 'keywords', '_searchable'];
+    static $fields= ['title', 'keywords', '_searchable.content'];
     static $fuzzy= ['fuzzy' => ['maxEdits' => 1]];
 
     // Handle egde case
@@ -80,7 +80,7 @@ class Repository {
       'should' => [
         ['text'   => ['query' => $query, 'path' => 'locations.name', 'score' => ['boost' => ['value' => 5.0]]]],
         ['phrase' => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 2.0]]]],
-        ['phrase' => ['query' => $query, 'path' => $fields]],
+        ['phrase' => ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['path' => '_searchable.boost']]]],
         ['text'   => $fuzzy + ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['value' => 0.2]]]],
       ],
       'mustNot' => [
@@ -98,7 +98,7 @@ class Repository {
       ['$search' => [
         'index'     => $this->database->name(),
         'compound'  => $search,
-        'highlight' => ['path' => '_searchable', 'maxNumPassages' => 3]
+        'highlight' => ['path' => '_searchable.content', 'maxNumPassages' => 3]
       ]],
       ['$unset' => '_searchable'],
       ['$addFields' => ['meta' => ['highlights' => ['$meta' => 'searchHighlights']]]],
