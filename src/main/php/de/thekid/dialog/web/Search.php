@@ -37,7 +37,7 @@ class Search {
         }
 
         // Fall back to field content
-        return strip_tags($options[0][$options[1]]);
+        return strip_tags($options[0][$options[2] ?? $options[1]]);
       }
     ]);
   }
