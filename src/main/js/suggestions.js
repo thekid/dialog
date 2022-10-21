@@ -8,7 +8,8 @@ function suggestions($search, fulltext) {
       return;
     }
 
-    fetch('/api/suggestions?q=' + encodeURIComponent(query))
+    const encoded = encodeURIComponent(query);
+    fetch('/api/suggestions?q=' + encoded)
       .then(res => res.json())
       .then(suggestions => {
         const pattern = new RegExp(`(${query})`, 'i');
@@ -16,16 +17,17 @@ function suggestions($search, fulltext) {
         let html = '';
         for (const suggestion of suggestions) {
           html += `<li role="option" aria-selected="false">
-            <a href="${suggestion.link}">${suggestion.title.replace(pattern, '<em>$1</em>')}</a>
+            <a href="${suggestion.link}"><span class="query">${suggestion.title.replace(pattern, '<em>$1</em>')}</span></a>
             <span class="date">${suggestion.date}</span>
           </li>`;
         }
 
         // Show fulltext option at end of search
         if (fulltext) {
-          html += '<li role="option" aria-selected="false">' +
-            fulltext.replace('%s', `<a href="/search?q=${encodeURIComponent(query)}"><em>${query}</em></a>`) +
-          '</li>';
+          const term = query.replace(/[<>&]/g, c => '&#' + c.charCodeAt(0) + ';');
+          html += `<li role="option" aria-selected="false">
+            <a class="fulltext" href="/search?q=${encoded}">${fulltext.replace('%s', '<span class="query"><em>' + term + '</em></span>')}</a>
+          </li>`;
         }
 
         $suggestions.innerHTML = html;
@@ -42,7 +44,7 @@ function suggestions($search, fulltext) {
     if (null === $target) return;
 
     $target.ariaSelected = true;
-    $input.value = $target.querySelector('a').innerText;
+    $input.value = $target.querySelector('a .query').innerText;
   };
 
   // Set up input listener
