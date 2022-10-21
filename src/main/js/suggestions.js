@@ -56,6 +56,11 @@ function suggestions($search, fulltext) {
   $input.addEventListener('blur', e => {
     $search.classList.remove('suggesting');
   });
+  $input.addEventListener('focus', e => {
+    if ($suggestions.innerHTML) {
+      $search.classList.add('suggesting');
+    }
+  });
 
   // Select suggestions by key
   $input.addEventListener('keydown', e => {
