@@ -25,7 +25,7 @@ class Entries {
       'locations'   => $attributes['locations'],
       'content'     => $attributes['content'],
       'is'          => $attributes['is'],
-      '_searchable' => strip_tags(strtr($document['content'], ['<br>' => "\n", '</p><p>' => "\n"])),
+      '_searchable' => strip_tags(strtr($attributes['content'], ['<br>' => "\n", '</p><p>' => "\n"])),
     ]);
 
     // Ensure storage directory is created
