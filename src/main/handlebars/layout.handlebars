@@ -173,6 +173,9 @@
 
     .suggestions li {
       padding: .5rem;
+      display: grid;
+      grid-template-areas: 'title date' 'locations empty';
+      grid-template-columns: 1fr max-content;
     }
 
     .suggestions li:last-child {
@@ -184,21 +187,31 @@
       background-color: #efefef;
     }
 
-    .suggestions li .date {
-      float: right;
-    }
-
     .suggestions li em {
       font-style: normal;
       font-weight: 900;
     }
 
     .suggestions a {
+      grid-area: title;
       text-decoration: none;
     }
 
     .suggestions a.fulltext {
+      grid-area: title;
       color: black;
+    }
+
+    .suggestions .date {
+      grid-area: date;
+    }
+
+    .suggestions .locations {
+      grid-area: locations;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #999;
     }
 
     #search.suggesting {

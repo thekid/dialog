@@ -21,6 +21,7 @@ function suggestions($search, fulltext) {
         for (const suggestion of suggestions) {
           list += `<li role="option" aria-selected="false">
             <a href="${suggestion.link}"><span class="query">${html(suggestion.title).replace(pattern, '<em>$1</em>')}</span></a>
+            <span class="locations">${html(suggestion.at.join(' / '))}</span>
             <span class="date">${suggestion.date}</span>
           </li>`;
         }
