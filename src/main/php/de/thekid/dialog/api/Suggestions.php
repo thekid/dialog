@@ -11,11 +11,13 @@ class Suggestions {
   #[Get]
   public function suggest(#[Param] $q) {
     foreach ($this->repository->suggest(trim($q)) as $suggestion) {
+      $kind= key($suggestion['is']);
       yield [
+        'kind'  => $kind,
         'title' => $suggestion['title'],
         'date'  => $suggestion['date']->toString('d.m.Y'),
         'at'    => $suggestion['at'],
-        'link'  => (isset($suggestion['is']['journey'])
+        'link'  => ('journey' === $kind
           ? '/journey/'.$suggestion['slug']
           : (isset($suggestion['parent']) 
             ? '/journey/'.strtr($suggestion['slug'], ['/' => '#'])
