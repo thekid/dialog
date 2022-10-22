@@ -112,10 +112,11 @@ class Repository {
 
   /** Returns a single entry */
   public function entry(string $slug, bool $published= true): ?Document {
-    return $this->database->collection('entries')
-      ->find(['slug' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : []))
-      ->first()
-    ;
+    $cursor= $this->database->collection('entries')->aggregate([
+      ['$match' => ['slug' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
+      ['$unset' => '_searchable'],
+    ]);
+    return $cursor->first();
   }
 
   /** Returns an entry's children */
