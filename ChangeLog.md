@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.3.0 / 2022-10-22
+
+* Merged PR #20: Implement search function using MongoDB Atlas Search
+  (@thekid)
 * Added small improvements to /feed and improved LightHouse score
   See issue #18
   (@thekid)
