@@ -58,6 +58,7 @@ class Repository {
         'query' => $query,
         'path'  => 'title',
       ]]],
+      ['$addFields' => ['at' => '$locations.name']],
       ['$unset' => '_searchable'],
       ['$limit' => $limit],
     ]);

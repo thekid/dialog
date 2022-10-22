@@ -14,6 +14,7 @@ class Suggestions {
       yield [
         'title' => $suggestion['title'],
         'date'  => $suggestion['date']->toString('d.m.Y'),
+        'at'    => $suggestion['at'],
         'link'  => (isset($suggestion['is']['journey'])
           ? '/journey/'.$suggestion['slug']
           : (isset($suggestion['parent']) 
