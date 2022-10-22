@@ -122,6 +122,138 @@
       display: inline-block;
     }
 
+    #search {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      background-color: white;
+      border-radius: .35rem;
+      border: 1px solid #ccc;
+      padding: .35rem 1rem .35rem 2.75rem;
+      display: grid;
+      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .8);
+      position: relative;
+      height: 2.75rem;
+    }
+
+    #search::before {
+      content: '';
+      position: absolute;
+      inset: .35rem .5rem;
+      width: 2rem;
+      background: no-repeat center / 1.5rem url(/static/search.png);
+    }
+
+    #search input[type='text'] {
+      font-size: 1.15rem;
+      font-family: inherit;
+      font-weight: 700;
+      padding: .25rem;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      position: relative;
+    }
+
+    .suggestions {
+      position: absolute;
+      left: -1px;
+      right: -1px;
+      top: calc(1.75rem - 1px);
+      width: calc(100% + 2px);
+      background-color: white;
+      color: black;
+      border: 1px solid #ccc;
+      border-top-color: #eee;
+      border-bottom-right-radius: .35rem;
+      border-bottom-left-radius: .35rem;
+      padding: 0;
+      box-shadow: .5rem .5rem 1rem -.5rem rgb(0 0 0 / .8);
+      z-index: 999;
+      transform: scale(1, 0);
+      transition: transform ease-in-out 150ms;
+      transform-origin: top;
+    }
+
+    .suggestions li {
+      padding: .5rem;
+    }
+
+    .suggestions li:last-child {
+      border-bottom-right-radius: .35rem;
+      border-bottom-left-radius: .35rem;
+    }
+
+    .suggestions li:hover, .suggestions li[aria-selected='true'] {
+      background-color: #efefef;
+    }
+
+    .suggestions li em {
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .suggestions a {
+      display: grid;
+      grid-template-areas: 'title date' 'locations empty';
+      grid-template-columns: 1fr max-content;
+      text-decoration: none;
+    }
+
+    .suggestions a.journey .title::before {
+      content: 'Reise: ';
+    }
+
+    .suggestions a.fulltext {
+      grid-area: title;
+      color: black;
+    }
+
+    .suggestions .title {
+      grid-area: title;
+    }
+
+    .suggestions .date {
+      grid-area: date;
+      color: black;
+    }
+
+    .suggestions .locations {
+      grid-area: locations;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #999;
+    }
+
+    #search.suggesting {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      border-bottom:  none;
+    }
+
+    #search.suggesting .suggestions {
+      transform: scale(1, 1);
+    }
+
+    #results .summary {
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    #results .excerpt {
+      overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    #results em {
+      font-style: normal;
+      font-weight: 900;
+      text-decoration: underline dotted orange;
+    }
+
     article.intro {
       font-size: 1.15rem;
     }
@@ -147,7 +279,7 @@
     }
 
     .card:hover {
-      scale: 1.05;
+      transform: scale(1.05, 1.05);
     }
 
     .card img {
@@ -382,6 +514,10 @@
       color: #aaa;
     }
 
+    .pagination .page {
+      padding: .25rem 0;
+    }
+
     #lightbox {
       position: fixed;
       z-index: 999;
@@ -392,6 +528,7 @@
       border: 1px solid #444;
       transform: scale(0, 0);
       transition: transform ease-in-out 300ms;
+      -webkit-backdrop-filter: blur(10px) brightness(.5);
       backdrop-filter: blur(10px) brightness(.5);
       padding: .5rem;
     }
@@ -420,14 +557,15 @@
       font-size: .9rem;
       display: flex;
       gap: 1px;
-      scale: 0;
-      transition: scale ease-in-out 70ms;
       justify-content: center;
       pointer-events: none;
+      transform: scale(1, 0);
+      transform-origin: bottom;
+      transition: transform ease-in-out 70ms;
     }
 
     #lightbox img:hover + .meta {
-      scale: 1;
+      transform: scale(1, 1);
     }
 
     #lightbox .meta div {
@@ -489,7 +627,7 @@
       }
 
       .card:hover {
-        scale: 1;
+        transform: scale(1, 1);
       }
     }
 

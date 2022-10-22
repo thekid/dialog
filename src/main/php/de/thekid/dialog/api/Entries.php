@@ -3,9 +3,9 @@
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
 use util\Date;
-use web\rest\{Async, Delete, Put, Resource, Request, Response};
+use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
 
-#[Resource('/api')]
+#[Resource('/api/entries')]
 class Entries {
 
   public function __construct(private Repository $repository, private Path $storage) { }
@@ -15,15 +15,20 @@ class Entries {
     return new Folder($this->storage, 'image', $entry);
   }
 
-  #[Put('/entries/{id:.+(/.+)?}')]
-  public function create(string $id, array<string, mixed> $attributes) {
+  #[Put('/{id:.+(/.+)?}')]
+  public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
     $result= $this->repository->replace($id, [
-      'parent'    => $attributes['parent'] ?? null,
-      'date'      => new Date($attributes['date']),
-      'title'     => $attributes['title'],
-      'locations' => $attributes['locations'],
-      'content'   => $attributes['content'],
-      'is'        => $attributes['is'],
+      'parent'      => $attributes['parent'] ?? null,
+      'date'        => new Date($attributes['date']),
+      'title'       => $attributes['title'],
+      'keywords'    => $attributes['keywords'],
+      'locations'   => $attributes['locations'],
+      'content'     => $attributes['content'],
+      'is'          => $attributes['is'],
+      '_searchable' => [
+        'boost'   => isset($attributes['is']['journey']) ? 2.0 : 1.0,
+        'content' => strip_tags(strtr($attributes['content'], ['<br>' => "\n", '</p><p>' => "\n"]))
+      ],
     ]);
 
     // Ensure storage directory is created
@@ -34,8 +39,8 @@ class Entries {
     return $result->entry();
   }
 
-  #[Put('/entries/{id:.+(/.+)?}/images/{name}')]
-  public function upload(string $id, string $name, #[Request] $req) {
+  #[Put('/{id:.+(/.+)?}/images/{name}')]
+  public function upload(#[Value] $user, string $id, string $name, #[Request] $req) {
 
     // Verify the (potentially unpublished) entry exists
     if (null === $this->repository->entry($id, published: false)) {
@@ -78,8 +83,8 @@ class Entries {
     });
   }
 
-  #[Delete('/entries/{id:.+(/.+)?}/images/{name}')]
-  public function remove(string $id, string $name) {
+  #[Delete('/{id:.+(/.+)?}/images/{name}')]
+  public function remove(#[Value] $user, string $id, string $name) {
     $this->repository->modify($id, ['$pull' => ['images' => ['name' => $name]]]);
 
     $deleted= [];
@@ -93,8 +98,8 @@ class Entries {
     return $deleted;
   }
 
-  #[Put('/entries/{id:.+(/.+)?}/published')]
-  public function publish(string $id, Date $date) {
+  #[Put('/{id:.+(/.+)?}/published')]
+  public function publish(#[Value] $user, string $id, #[Entity] Date $date) {
     $this->repository->modify($id, ['$set' => ['published' => $date]]);
 
     return ['published' => $date];

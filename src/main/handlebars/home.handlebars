@@ -23,6 +23,8 @@
       </article>
     {{/with}}
 
+    {{> partials/search}}
+
     <!-- Newest content -->
     <h2 class="news">Neueste Inhalte</h2>
     <div class="cards">
@@ -53,5 +55,9 @@
     &#187; <a href="/feed">Alle Inhalte im Feed</a>
   {{/inline}}
   {{#*inline "scripts"}}
+    <script type="module">
+      {{&use 'suggestions'}}
+      suggestions(document.querySelector('#search'), 'Volltextsuche nach "%s"');
+    </script>
   {{/inline}}
 {{/layout}}

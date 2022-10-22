@@ -16,6 +16,7 @@ abstract class Sources extends Enum {
           'slug'      => $origin->dirname,
           'date'      => $d->meta['date'],
           'title'     => $d->meta['title'],
+          'keywords'  => $d->meta['keywords'] ?? [],
           'locations' => isset($d->meta['location']) ? [$d->meta['location']] : $d->meta['locations'],
           'content'   => $d->content,
           'is'        => ['content' => true],
@@ -31,6 +32,7 @@ abstract class Sources extends Enum {
           'slug'      => $origin->dirname,
           'date'      => $d->meta['from'],
           'title'     => $d->meta['title'],
+          'keywords'  => $d->meta['keywords'] ?? [],
           'locations' => isset($d->meta['location']) ? [$d->meta['location']] : $d->meta['locations'],
           'content'   => $d->content,
           'is'        => [
@@ -59,6 +61,7 @@ abstract class Sources extends Enum {
           'parent'    => '~',
           'date'      => $d->meta['date'],
           'title'     => $d->meta['title'],
+          'keywords'  => $d->meta['keywords'] ?? [],
           'locations' => isset($d->meta['location']) ? [$d->meta['location']] : $d->meta['locations'],
           'content'   => $d->content,
           'is'        => ['content' => true],
