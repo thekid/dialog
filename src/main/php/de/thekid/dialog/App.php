@@ -43,7 +43,8 @@ class App extends Application {
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
           new Assets($manifest),
-          new Helpers()
+          new Helpers(),
+          new Scripts($this->environment->path('src/main/js'), 'dev' === $this->environment->profile()),
         ])
       ),
     ];
