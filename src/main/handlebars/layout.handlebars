@@ -130,7 +130,6 @@
       border: 1px solid #ccc;
       padding: .35rem 1rem .35rem 2.75rem;
       display: grid;
-      grid-template-columns: 1fr;
       box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .8);
       position: relative;
       height: 2.75rem;
@@ -177,9 +176,6 @@
 
     .suggestions li {
       padding: .5rem;
-      display: grid;
-      grid-template-areas: 'title date' 'locations empty';
-      grid-template-columns: 1fr max-content;
     }
 
     .suggestions li:last-child {
@@ -197,7 +193,9 @@
     }
 
     .suggestions a {
-      grid-area: title;
+      display: grid;
+      grid-template-areas: 'title date' 'locations empty';
+      grid-template-columns: 1fr max-content;
       text-decoration: none;
     }
 
@@ -206,8 +204,13 @@
       color: black;
     }
 
+    .suggestions .title {
+      grid-area: title;
+    }
+
     .suggestions .date {
       grid-area: date;
+      color: black;
     }
 
     .suggestions .locations {

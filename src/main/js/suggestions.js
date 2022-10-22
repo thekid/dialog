@@ -20,16 +20,20 @@ function suggestions($search, fulltext) {
         let list = '';
         for (const suggestion of suggestions) {
           list += `<li role="option" aria-selected="false">
-            <a href="${suggestion.link}"><span class="query">${html(suggestion.title).replace(pattern, '<em>$1</em>')}</span></a>
-            <span class="locations">${html(suggestion.at.join(' / '))}</span>
-            <span class="date">${suggestion.date}</span>
+            <a href="${suggestion.link}">
+              <span class="title"><span class="query">${html(suggestion.title).replace(pattern, '<em>$1</em>')}</span></span>
+              <span class="locations">${html(suggestion.at.join(' / '))}</span>
+              <span class="date">${suggestion.date}</span>
+            </a>
           </li>`;
         }
 
         // Show fulltext option at end of search
         if (fulltext) {
           list += `<li role="option" aria-selected="false">
-            <a class="fulltext" href="/search?q=${encoded}">${fulltext.replace('%s', '<span class="query"><em>' + html(query) + '</em></span>')}</a>
+            <a class="fulltext" href="/search?q=${encoded}">
+              <span class="title">${fulltext.replace('%s', '<span class="query"><em>' + html(query) + '</em></span>')}</span>
+            </a>
           </li>`;
         }
 
