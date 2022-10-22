@@ -61,6 +61,7 @@ class Repository {
       ['$search'    => ['index' => $this->database->name(), 'compound' => $autocomplete]],
       ['$addFields' => ['at' => '$locations.name']],
       ['$unset'     => '_searchable'],
+      ['$sort'      => ['date' => -1]],
       ['$limit'     => $limit],
     ]);
   }
