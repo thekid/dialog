@@ -14,12 +14,12 @@ class Search {
   #[Get]
   public function search(#[Param] $q, #[Param] $page= 1) {
     $this->timer->start();
-    [$meta, $results]= $this->repository->search(trim($q), $this->pagination, $page);
+    $result= $this->repository->search(trim($q), $this->pagination, $page);
     $this->timer->stop();
 
     return View::named('search')->with([
-      'meta'    => $meta,
-      'results' => $results,
+      'meta'    => $result->meta,
+      'results' => $result->documents,
       'time'    => sprintf('%.3f', $this->timer->elapsedTime()),
       'excerpt' => function($node, $context, $options) {
         foreach ($options[0]['meta']['highlights'] as $highlight) {

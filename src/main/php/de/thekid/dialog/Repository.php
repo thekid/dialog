@@ -66,12 +66,12 @@ class Repository {
   }
 
   /** Performs search */
-  public function search(string $query, Pagination $pagination, int $page): array {
+  public function search(string $query, Pagination $pagination, int $page): SearchResult {
     static $fields= ['title', 'keywords', '_searchable.content'];
     static $fuzzy= ['fuzzy' => ['maxEdits' => 1]];
 
     // Handle egde case
-    if ('' === $query) return [[], []];
+    if ('' === $query) return SearchResult::$EMPTY;
 
     // Rank as follows:
     // - A direct hit on a location name
@@ -107,7 +107,7 @@ class Repository {
       ['$skip'      => $pagination->skip($page)],
       ['$limit'     => $pagination->limit()],
     ]);
-    return [$meta->first(), $pagination->paginate($page, $cursor)];
+    return new SearchResult($meta->first(), $pagination->paginate($page, $cursor));
   }
 
   /** Returns a single entry */
