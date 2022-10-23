@@ -27,7 +27,12 @@ const markers = {
       $popup.style.display = 'none';
       let list = '';
       map.forEachFeatureAtPixel(event.pixel, feature => {
-        list += `<li><a href="${feature.get('link')}">${feature.get('name')}</a></li>`;
+        const link = feature.get('link');
+        if (null === link) {
+          list += `<li>${feature.get('name')}</li>`;
+        } else {
+          list += `<li><a href="${link}">${feature.get('name')}</a></li>`;
+        }
       })
       if (0 === list.length) return;
 
