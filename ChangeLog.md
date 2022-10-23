@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.4.0 / 2022-10-23
+
+* Merged PR #21: Extract mapping script to src/main/js - @thekid
+
 ## 1.3.0 / 2022-10-22
 
 * Merged PR #20: Implement search function using MongoDB Atlas Search
