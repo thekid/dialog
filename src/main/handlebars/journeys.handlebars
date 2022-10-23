@@ -29,19 +29,7 @@
   {{/inline}}
   {{#*inline "scripts"}}
     <script type="module">
-      const markers = {
-        style : new ol.style.Style({image: new ol.style.Icon(({src: '/static/marker.png'}))}),
-        list  : [],
-        add   : function(link, lon, lat, name) {
-          const marker = new ol.Feature({
-            geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
-            link     : link,
-            name     : name
-          });
-          marker.setStyle(markers.style);
-          markers.list.push(marker);
-        }
-      };
+      {{&use 'mapping'}}
 
       {{#each journeys}}
         {{#each locations}}
@@ -49,31 +37,7 @@
         {{/each}}
       {{/each}}
 
-      const source = new ol.source.Vector({features: markers.list});
-      const map = new ol.Map({
-        target: 'map',
-        layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
-      });
-      map.addLayer(new ol.layer.Vector({source: source}));
-      map.getView().fit(source.getExtent(), {padding: [24, 24, 24, 24], minResolution: 30});
-
-      const $popup = document.querySelector('#map .popup');
-      map.on('movestart', event => {
-        $popup.style.display = 'none';
-      });
-      map.on('click', event => {
-        $popup.style.display = 'none';
-        const items = [];
-        map.forEachFeatureAtPixel(event.pixel, feature => {
-          items.push(`<li><a href="${feature.get('link')}">${feature.get('name')}</a></li>`);
-        })
-        if (0 === items.length) return;
-
-        $popup.innerHTML = '<ul>' + items.join('') + '</ul>';
-        $popup.style.left = event.pixel[0] + 'px';
-        $popup.style.top = event.pixel[1] + 'px';
-        $popup.style.display = 'block';
-      });
+      markers.project(document.querySelector('#map'));
     </script>
   {{/inline}}
 {{/layout}}
