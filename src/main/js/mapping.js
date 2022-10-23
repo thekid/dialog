@@ -1,10 +1,10 @@
 const markers = {
   style   : new ol.style.Style({image: new ol.style.Icon(({src: '/static/marker.png'}))}),
   list    : [],
-  add     : function(slug, lon, lat, name) {
+  add     : function(link, lon, lat, name) {
     const marker = new ol.Feature({
       geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
-      slug     : slug,
+      link     : link,
       name     : name
     });
     marker.setStyle(markers.style);
@@ -27,7 +27,7 @@ const markers = {
       $popup.style.display = 'none';
       let list = '';
       map.forEachFeatureAtPixel(event.pixel, feature => {
-        list += `<li><a href="#${feature.get('slug')}">${feature.get('name')}</a></li>`;
+        list += `<li><a href="${feature.get('link')}">${feature.get('name')}</a></li>`;
       })
       if (0 === list.length) return;
 

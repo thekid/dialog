@@ -82,7 +82,7 @@ parent: feed
 
       {{#each itinerary}}
         {{#each locations}}
-          markers.add('{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
+          markers.add('#{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
         {{/each}}
       {{/each}}
 
