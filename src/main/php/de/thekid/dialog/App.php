@@ -32,13 +32,14 @@ class App extends Application {
     $manifest= new AssetsManifest($this->environment->path('src/main/webapp/assets/manifest.json'));
     $static= ['Cache-Control' => 'max-age=604800'];
     return [
-      '/image'  => new FilesFrom($this->environment->arguments()[0])->with($static),
-      '/static' => new FilesFrom($this->environment->path('src/main/webapp'))->with($static),
-      '/assets' => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
+      '/image'      => new FilesFrom($this->environment->arguments()[0])->with($static),
+      '/static'     => new FilesFrom($this->environment->path('src/main/webapp'))->with($static),
+      '/assets'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
         'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
       ]),
-      '/api'    => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $new))),
-      '/'       => new Frontend(
+      '/robots.txt' => fn($req, $res) => $res->send("User-agent: *\nDisallow: /api/\n", 'text/plain'),
+      '/api'        => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $new))),
+      '/'           => new Frontend(
         new HandlersIn('de.thekid.dialog.web', $new),
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
