@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        ini-values: date.timezone=Europe/Berlin
+
+    - name: Install dependencies
+      run: >
+        curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/e/entrypoint/xp-run-8.6.2.sh > xp-run &&
+        composer install --prefer-dist --no-scripts &&
+        echo "vendor/autoload.php" > composer.pth
+
+    - name: Bundle assets
+      run: sh /usr/bin/xp-run xp.frontend.BundleRunner -m src/main/webapp/assets/manifest.json src/main/webapp/assets
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: true
+        tags: thekid/dialog:latest
