@@ -18,6 +18,9 @@ class Home {
 
   #[Get('/journeys')]
   public function journeys() {
-    return View::named('journeys')->with(['journeys' => $this->repository->journeys()]);
+    return View::named('journeys')->with([
+      'journeys' => $this->repository->journeys(),
+      'top'      => fn($node, $context, $options) => $options[1] <= $options[0],
+    ]);
   }
 }
