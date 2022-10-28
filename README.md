@@ -42,7 +42,7 @@ $ composer up
 Now, Dialog can be run locally.
 
 ```bash
-$ export MONGO_URI=mongodb://localhost
+$ export MONGO_URI=mongodb+srv://[USER]:[PASSWORD]@[PROJECT].[ORG].mongodb.net
 $ xp serve
 # ...
 ```
