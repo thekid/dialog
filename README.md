@@ -23,7 +23,8 @@ First, create the import user:
 $ echo -n "secret-password-here" | sha256sum
 4323135e32ac4...
 
-$ mongosh mongodb://localhost
+# Copy the connection URI from MongoDB Atlas
+$ mongosh mongodb+srv://[USER]:[PASSWORD]@[PROJECT].[ORG].mongodb.net
 $ use dialog
 $ db.users.insert({handle: "import", pass: "4323135e32ac4..."});
 # ...
