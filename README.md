@@ -10,7 +10,7 @@ See https://dialog.sloppy.zone/
 
 ## Prerequisites
 
-* Install [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/) locally or create a [MongoDB Atlas account](https://account.mongodb.com/account/register)
+* Create a [MongoDB Atlas account](https://account.mongodb.com/account/register)
 * Install [XP runners](https://github.com/xp-runners/reference) and [Composer](https://getcomposer.org/).
 
 *The following assume a local MongoDB.*
