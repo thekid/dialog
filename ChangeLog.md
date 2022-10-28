@@ -3,6 +3,13 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.5.0 / 2022-10-28
+
+* Merged PR #23: Add robots.txt - be crawler-friendly, prevent 404s
+  (@thekid)
+* Merged PR #24: Replace search icon, add favicon from FontAwesome
+  (@thekid)
+
 ## 1.4.0 / 2022-10-23
 
 * Merged PR #21: Extract mapping script to src/main/js - @thekid
