@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.6.0 / 2022-10-29
+
 * Fixed issue #25: EXIF data on mobile - now displayed below lightbox
   (@thekid)
 * Add lazy loading for all but the first 3 cards in *journeys* overview
