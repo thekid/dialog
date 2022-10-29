@@ -49,9 +49,27 @@
 
     /* Dialog */
     body {
-      background-color: black;
-      color: white;
-      font-family: 'Overpass',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+      --page-color: black;
+      --nav-color: #111;
+      --main-color: #222;
+      --text-color: white;
+      --meta-color: #ccc;
+      --border-color: #ccc;
+      --button-color: #444;
+
+      background-color: var(--page-color);
+      color: var(--text-color);
+      font-family: 'Overpass',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji';
+    }
+
+    body.light {
+      --page-color: #ccc;
+      --nav-color: #eee;
+      --main-color: white;
+      --text-color: black;
+      --meta-color: #666;
+      --border-color: #ddd;
+      --button-color: #666;
     }
 
     h1 {
@@ -75,7 +93,7 @@
       margin: 0;
       padding: 0;
       list-style-type: none;
-      background-color: #111;
+      background-color: var(--nav-color);
     }
 
     nav li {
@@ -90,8 +108,18 @@
       border-bottom: .25rem solid #444;
     }
 
+    nav li.right {
+      margin-left: auto;
+    }
+
     nav li a {
       text-decoration: none;
+    }
+
+    nav li button {
+      background-color: inherit;
+      border: none;
+      cursor: pointer;
     }
 
     main {
@@ -99,11 +127,23 @@
       justify-content: center;
     }
 
+    #theme {
+      background-image: url(/static/theme.svg);
+      background-position: center;
+      background-repeat: no-repeat;
+      color: transparent;
+      transition: transform ease-in-out 200ms;
+    }
+
+    body.light #theme {
+      transform: rotate(180deg);
+    }
+
     .container {
       padding: 1rem;
       width: 1023px;
       max-width: 1023px;
-      background-color: #222;
+      background-color: var(--main-color);
       border-bottom-left-radius: .25rem;
       border-bottom-right-radius: .25rem;
     }
@@ -113,7 +153,7 @@
       background-size: cover;
       background-position: center;
       height: 50vh;
-      box-shadow: 0 .5rem 1rem rgb(0 0 0 / .4);
+      box-shadow: 0 .25rem .5rem rgb(0 0 0 / .4);
     }
 
     .cover h1 {
@@ -121,6 +161,7 @@
       margin: 1rem;
       letter-spacing: .25rem;
       display: inline-block;
+      color: white;
     }
 
     #search {
@@ -128,10 +169,10 @@
       margin-bottom: 1rem;
       background-color: white;
       border-radius: .35rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-color);
       padding: .35rem 1rem .35rem 2.75rem;
       display: grid;
-      box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .8);
+      box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
       position: relative;
       height: 2.75rem;
     }
@@ -163,7 +204,7 @@
       width: calc(100% + 2px);
       background-color: white;
       color: black;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-color);
       border-top-color: #eee;
       border-bottom-right-radius: .35rem;
       border-bottom-left-radius: .35rem;
@@ -346,7 +387,7 @@
     }
 
     section h2 a {
-      color: white;
+      color: var(--text-color);
     }
 
     section h2 .top {
@@ -355,7 +396,7 @@
     }
 
     .meta, .meta a {
-      color: #ccc;
+      color: var(--meta-color);
     }
 
     ul.locations {
@@ -503,7 +544,7 @@
     }
 
     .pagination a {
-      background-color: #444;
+      background-color: var(--button-color);
       border-radius: .125rem;
       padding: .25rem .5rem;
       width: 6rem;
@@ -680,12 +721,14 @@
   </style>
   <title>{{> title}} - Dialog - Timm Friebe</title>
 </head>
-<body>
+<body class="{{request.cookies.theme}}">
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <ul>
       <li {{#if (equals scope 'home')}}class="active"{{/if}}><a href="/">Home</a></li>
       <li {{#if (any (equals scope 'feed') (equals parent 'feed'))}}class="active"{{/if}}><a href="/feed">Feed</a></li>
       <li {{#if (equals scope 'journeys')}}class="active"{{/if}}><a href="/journeys">Reisen</a></li>
+      {{! Toggle theme }}
+      <li class="right"><button id="theme" aria-label="Change theme" onclick="theme()">...</button></li>
     </ul>
   </nav>
 
