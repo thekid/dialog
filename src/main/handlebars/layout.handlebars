@@ -633,22 +633,23 @@
     }
 
     @media (max-width: 619px) {
+      #lightbox {
+        padding: 0;
+      }
+
       #lightbox .meta {
         bottom: auto;
         grid-template-columns: repeat(3, max-content) 1fr;
         transform: scale(1, 1);
         gap: 0;
         background-color: white;
-        border: 2px solid #444;
-        border-top: none;
-        border-bottom-left-radius: .25rem;
-        border-bottom-right-radius: .25rem;
+        border: none;
+        border-radius: 0;
       }
 
       #lightbox img {
-        border-bottom: 1px solid #ccc;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
+        border: none;
+        border-radius: 0;
       }
 
       #lightbox .meta div:nth-child(2) {
