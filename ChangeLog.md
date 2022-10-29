@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Add lazy loading for all but the first 3 cards in *journeys* overview
+  (@thekid)
 * Use `xp-framework/networking` release version instead of development
   branch: https://github.com/xp-framework/networking/releases/tag/v10.4.0
   (@thekid)
