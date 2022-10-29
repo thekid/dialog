@@ -7,7 +7,7 @@
     "xp-framework/compiler": "^8.5",
     "xp-framework/imaging": "^10.1",
     "xp-framework/command": "^11.0",
-    "xp-framework/networking": "dev-refactor/async-server as 10.4.0",
+    "xp-framework/networking": "^10.4",
     "xp-forge/web": "^3.5",
     "xp-forge/web-auth": "^3.3",
     "xp-forge/frontend": "^3.8",

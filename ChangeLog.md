@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Use `xp-framework/networking` release version instead of development
+  branch: https://github.com/xp-framework/networking/releases/tag/v10.4.0
+  (@thekid)
+
 ## 1.5.0 / 2022-10-28
 
 * Merged PR #23: Add robots.txt - be crawler-friendly, prevent 404s
