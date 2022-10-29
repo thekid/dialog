@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.7.0 / 2022-10-30
+
+* Merged PR #28: Toggle light and dark modes with button, see issue #9
+  (@thekid)
+
 ## 1.6.1 / 2022-10-29
 
 * Upgraded `xp-forge/frontend` library to version 4, see issue #19
