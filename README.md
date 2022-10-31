@@ -28,6 +28,13 @@ $ db.users.insert({handle: "import", pass: "4323135e32ac4..."});
 # ...
 ```
 
+Store the connection string in a configuration file named *config.ini*:
+
+```ini
+[mongo]
+uri=mongodb+srv://[USER]:[PASSWORD]@[PROJECT].[ORG].mongodb.net
+```
+
 Then, run composer to install PHP and JavaScript dependencies.
 
 ```bash
@@ -40,7 +47,6 @@ $ composer up
 Now, Dialog can be run locally.
 
 ```bash
-$ export MONGO_URI=mongodb+srv://[USER]:[PASSWORD]@[PROJECT].[ORG].mongodb.net
 $ xp serve
 # ...
 ```

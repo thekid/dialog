@@ -15,8 +15,9 @@ class App extends Application {
 
   /** Returns routing for this web application */
   public function routes() {
-    $conn= new MongoConnection($this->environment->variable('MONGO_URI'));
-    $repository= new Repository($conn->database($this->environment->variable('MONGO_DB') ?? 'dialog'));
+    $preferences= new Preferences($this->environment, 'config');
+    $conn= new MongoConnection($preferences->get('mongo', 'uri'));
+    $repository= new Repository($conn->database($preferences->optional('mongo', 'db', 'dialog')));
     $storage= new Path($this->environment->arguments()[0]);
     $new= fn($class) => $class->newInstance($repository, $storage);
 
