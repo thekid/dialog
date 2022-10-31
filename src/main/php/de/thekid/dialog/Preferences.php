@@ -11,10 +11,9 @@ class Preferences {
   public function __construct(Environment $env, string $config) {
     $this->sources= ['env' => fn($section, $name) => $env->variable(strtoupper("{$section}_{$name}"))];
 
+    // If the properties file exists, use it as secondary source
     $prop= $env->properties($config);
-    if ($prop->exists()) {
-      $this->sources['config']= $prop->readString(...);
-    }
+    $prop->exists() && $this->sources['config']= $prop->readString(...);
   }
 
   /**
