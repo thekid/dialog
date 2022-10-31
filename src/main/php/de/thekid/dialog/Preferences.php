@@ -13,7 +13,7 @@ class Preferences {
 
     $prop= $env->properties($config);
     if ($prop->exists()) {
-      $this->sources['config']= fn($section, $name) => $prop->readString($section, $name, null);
+      $this->sources['config']= $prop->readString(...);
     }
   }
 
