@@ -32,7 +32,7 @@ Store the connection string in a configuration file named *config.ini*:
 
 ```ini
 [mongo]
-uri=mongodb+srv://[USER]:[PASSWORD]@[PROJECT].[ORG].mongodb.net
+uri=mongodb+srv://[USER]:[PASSWORD]@[PROJECT].[ORG].mongodb.net/?readPreference=nearest
 ```
 
 Then, run composer to install PHP and JavaScript dependencies.
