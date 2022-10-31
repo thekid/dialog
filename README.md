@@ -13,8 +13,6 @@ See https://dialog.sloppy.zone/
 * Create a [MongoDB Atlas account](https://account.mongodb.com/account/register)
 * Install [XP runners](https://github.com/xp-runners/reference) and [Composer](https://getcomposer.org/).
 
-*The following assume a local MongoDB.*
-
 ## Setup
 
 First, create the import user:
