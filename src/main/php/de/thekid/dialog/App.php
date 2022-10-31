@@ -15,8 +15,9 @@ class App extends Application {
 
   /** Returns routing for this web application */
   public function routes() {
-    $conn= new MongoConnection($this->environment->variable('MONGO_URI'));
-    $repository= new Repository($conn->database($this->environment->variable('MONGO_DB') ?? 'dialog'));
+    $preferences= new Preferences($this->environment, 'config');
+    $conn= new MongoConnection($preferences->get('mongo', 'uri'));
+    $repository= new Repository($conn->database($preferences->optional('mongo', 'db', 'dialog')));
     $storage= new Path($this->environment->arguments()[0]);
     $new= fn($class) => $class->newInstance($repository, $storage);
 
@@ -32,7 +33,7 @@ class App extends Application {
     $manifest= new AssetsManifest($this->environment->path('src/main/webapp/assets/manifest.json'));
     $static= ['Cache-Control' => 'max-age=604800'];
     return [
-      '/image'      => new FilesFrom($this->environment->arguments()[0])->with($static),
+      '/image'      => new FilesFrom($storage)->with($static),
       '/static'     => new FilesFrom($this->environment->path('src/main/webapp'))->with($static),
       '/assets'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
         'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
