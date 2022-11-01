@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #29: Read configuration from *config.ini* if available. See
+  feature request story "Installation wizard" in issue #27
+  (@thekid)
+
 ## 1.7.0 / 2022-10-30
 
 * Merged PR #28: Toggle light and dark modes with button, see issue #9
