@@ -1,1 +1,3 @@
 src/main/webapp/assets
+vendor
+config.ini
