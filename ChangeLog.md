@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.8.2 / 2022-11-02
+
+* Fixed issue #33: SVG mimetype - 'content-type' header charset value
+  should be 'utf-8'.
+  (@thekid)
+
 ## 1.8.1 / 2022-11-02
 
 * Fixed importing from local directory not populating suggest index for
