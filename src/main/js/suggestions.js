@@ -22,7 +22,7 @@ function suggestions($search, fulltext) {
           list += `<li role="option" aria-selected="false">
             <a class="${suggestion.kind}" href="${suggestion.link}">
               <span class="title"><span class="query">${html(suggestion.title).replace(pattern, '<em>$1</em>')}</span></span>
-              <span class="locations">${html(suggestion.at.join(' / '))}</span>
+              <span class="locations">${html(suggestion.at.join(' / ')).replace(pattern, '<em>$1</em>')}</span>
               <span class="date">${suggestion.date}</span>
             </a>
           </li>`;
