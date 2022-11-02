@@ -54,14 +54,16 @@ class Repository {
   /** Returns search suggestions */
   public function suggest(string $query, int $limit= 10): iterable {
     $autocomplete= [
-      'should'  => ['autocomplete' => ['query' => $query, 'path'  => 'title']],
-      'mustNot' => [['text' => ['path' => 'slug', 'query' => '@cover']]],
+      'should'  => [
+        ['autocomplete' => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 5.0]]]],
+        ['autocomplete' => ['query' => $query, 'path' => '_searchable.suggest', 'score' => ['boost' => ['path' => '_searchable.boost']]]],
+      ],
+      'mustNot' => ['text' => ['path' => 'slug', 'query' => '@cover']],
     ];
     return '' === $query ? [] : $this->database->collection('entries')->aggregate([
       ['$search'    => ['index' => $this->database->name(), 'compound' => $autocomplete]],
       ['$addFields' => ['at' => '$locations.name']],
       ['$unset'     => '_searchable'],
-      ['$sort'      => ['date' => -1]],
       ['$limit'     => $limit],
     ]);
   }

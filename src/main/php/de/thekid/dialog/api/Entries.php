@@ -17,6 +17,15 @@ class Entries {
 
   #[Put('/{id:.+(/.+)?}')]
   public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
+
+    // Include location names of toplevel entries for autocompletion
+    $suggest= $attributes['title'];
+    if (!isset($attributes['parent'])) {
+      foreach ($attributes['locations'] as $location) {
+        $suggest.= ' '.$location['name'];
+      }
+    }
+
     $result= $this->repository->replace($id, [
       'parent'      => $attributes['parent'] ?? null,
       'date'        => new Date($attributes['date']),
@@ -27,6 +36,7 @@ class Entries {
       'is'          => $attributes['is'],
       '_searchable' => [
         'boost'   => isset($attributes['is']['journey']) ? 2.0 : 1.0,
+        'suggest' => $suggest,
         'content' => strip_tags(strtr($attributes['content'], ['<br>' => "\n", '</p><p>' => "\n"]))
       ],
     ]);
