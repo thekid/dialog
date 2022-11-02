@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.8.1 / 2022-11-02
+
+* Fixed importing from local directory not populating suggest index for
+  all entries.
+  (@thekid)
+
 ## 1.8.0 / 2022-11-02
 
 * Merged PR #30: Include location names for autocompletion. Suggestions
