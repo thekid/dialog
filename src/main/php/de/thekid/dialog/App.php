@@ -34,7 +34,7 @@ class App extends Application {
     $static= ['Cache-Control' => 'max-age=604800'];
     return [
       '/image'      => new FilesFrom($storage)->with($static),
-      '/static'     => new FilesFrom($this->environment->path('src/main/webapp'))->with($static),
+      '/static'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with($static),
       '/assets'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
         'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
       ]),
