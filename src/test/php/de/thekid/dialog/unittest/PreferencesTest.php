@@ -7,17 +7,23 @@ use util\{Properties, RegisteredPropertySource};
 use web\Environment;
 
 class PreferencesTest {
-  private $config, $environment;
 
-  #[Before]
-  public function environment() {
-    $this->config= new class('testing') extends Properties {
-      public function use($sections) { $this->_data= $sections; }
-      public function exists(): bool { return null !== $this->_data; }
-    };
+  /**
+   * Returns an environment for testing
+   *
+   * @param  ?[:string] $config
+   * @return web.Environment
+   */
+  private function environment($config) {
+    if ($config) {
+      $p= new Properties('testing');
+      $p->_data= $config;
+      $sources= [new RegisteredPropertySource('config', $p)];
+    } else {
+      $sources= [];
+    }
 
-    $source= new RegisteredPropertySource('config', $this->config);
-    $this->environment= new class('test', '.', '.', [$source], [], []) extends Environment {
+    return new class('test', '.', '.', $sources, [], []) extends Environment {
       private $variables;
 
       public function export($variables) {
@@ -33,53 +39,47 @@ class PreferencesTest {
 
   #[Test]
   public function can_create() {
-    new Preferences($this->environment, 'config');
+    new Preferences($this->environment(null), 'config');
   }
 
   #[Test, Values(['get', 'optional'])]
   public function uses_environment($op) {
-    $this->config->use(null);
-    $fixture= new Preferences($this->environment->export(['MONGO_URI' => 'set']), 'config');
+    $fixture= new Preferences($this->environment(null)->export(['MONGO_URI' => 'set']), 'config');
 
     Assert::equals('set', $fixture->{$op}('mongo', 'uri'));
   }
 
   #[Test, Values(['get', 'optional'])]
   public function uses_properties($op) {
-    $this->config->use(['mongo' => ['uri' => 'configured']]);
-    $fixture= new Preferences($this->environment->export([]), 'config');
+    $fixture= new Preferences($this->environment(['mongo' => ['uri' => 'configured']])->export([]), 'config');
 
     Assert::equals('configured', $fixture->{$op}('mongo', 'uri'));
   }
 
   #[Test, Values(['get', 'optional'])]
   public function environment_has_precedence_over_configuration($op) {
-    $this->config->use(['mongo' => ['uri' => 'configured']]);
-    $fixture= new Preferences($this->environment->export(['MONGO_URI' => 'set']), 'config');
+    $fixture= new Preferences($this->environment(['mongo' => ['uri' => 'configured']])->export(['MONGO_URI' => 'set']), 'config');
 
     Assert::equals('set', $fixture->{$op}('mongo', 'uri'));
   }
 
   #[Test, Expect(class: NoSuchElementException::class, withMessage: '/Missing.+mongo::uri/')]
   public function get_raises_exception_if_not_found() {
-    $this->config->use(null);
-    $fixture= new Preferences($this->environment->export([]), 'config');
+    $fixture= new Preferences($this->environment(null)->export([]), 'config');
 
     $fixture->get('mongo', 'uri');
   }
 
   #[Test]
   public function optional_returns_null_if_not_found() {
-    $this->config->use(null);
-    $fixture= new Preferences($this->environment->export([]), 'config');
+    $fixture= new Preferences($this->environment(null)->export([]), 'config');
 
     Assert::null($fixture->optional('mongo', 'uri'));
   }
 
   #[Test]
   public function optional_can_return_default_if_not_found() {
-    $this->config->use(null);
-    $fixture= new Preferences($this->environment->export([]), 'config');
+    $fixture= new Preferences($this->environment(null)->export([]), 'config');
 
     Assert::equals('default', $fixture->optional('mongo', 'uri', 'default'));
   }
