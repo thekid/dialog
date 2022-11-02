@@ -3,6 +3,14 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.8.0 / 2022-11-02
+
+* Merged PR #30: Include location names for autocompletion. Suggestions
+  appear in the following order:
+  1. Direct matches in the title (*as before*)
+  2. Journeys with matches in the locations field
+  3. Other content with matches in the locations field
+  (@thekid)
 * Merged PR #29: Read configuration from *config.ini* if available. See
   feature request story "Installation wizard" in issue #27
   (@thekid)
