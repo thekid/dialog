@@ -7,6 +7,8 @@ use web\frontend\helpers\Extension;
  *
  * - range <from> <until>
  * - route <entry>
+ *
+ * @test  de.thekid.dialog.unittest.HelpersTest
  */ 
 class Helpers extends Extension {
 
