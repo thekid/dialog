@@ -3,6 +3,15 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.8.3 / 2022-11-03
+
+* Fixed errors in the browser console concerning REST API response
+  headers - see xp-forge/rest-api#21
+  (@thekid)
+* Fixed accessibility warnings in the browser console concerning
+  `role="list"` - first part of #35
+  (@thekid)
+
 ## 1.8.2 / 2022-11-02
 
 * Fixed issue #33: SVG mimetype - 'content-type' header charset value
