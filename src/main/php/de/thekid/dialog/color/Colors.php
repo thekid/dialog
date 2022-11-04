@@ -19,7 +19,7 @@ class Colors {
   const FRACT_BY_POPULATIONS= 0.75;
 
   /** Creates a new instance with a given quality */
-  public function __construct(private $quality= 10) { }
+  public function __construct(public int $quality= 10) { }
 
   /** Helper for quantize() */
   private function iterate(PriorityQueue $queue, float $target): void {
