@@ -87,7 +87,7 @@ class Box {
 
   /** Returns median boxes or NULL */
   public function median(): ?array<self> {
-    if (1 === $this->count()) return [$this->copy()];
+    if (1 === $this->count()) return [$this->copy(), null];
 
     // Cut using longest axis
     $r= $this->components[1] - $this->components[0];
