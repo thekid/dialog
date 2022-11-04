@@ -15,6 +15,7 @@ use lang\IllegalArgumentException;
  * @see   https://github.com/olivierlesnicki/quantize
  */
 class Colors {
+  const DOMINANT_PALETTE= 5;
   const MAX_ITERATIONS= 1000;
   const FRACT_BY_POPULATIONS= 0.75;
 
@@ -43,8 +44,18 @@ class Colors {
     } while ($iteration++ < self::MAX_ITERATIONS);
   }
 
-  /** Color quantization */
-  private function quantize(Histogram $histogram, int $colors): PriorityQueue {
+  /**
+   * Color quantization from a given histogram
+   *
+   * @throws lang.IllegalArgumentException if no palette can be computed
+   */
+  private function quantize(Histogram $histogram, int $colors): array<Color> {
+
+    // Check border case, e.g. for empty images
+    if ($histogram->empty()) {
+      throw new IllegalArgumentException('Cannot quantize using an empty histogram');
+    }
+
     $queue= new PriorityQueue();
     $queue->push(Box::from($histogram));
 
@@ -60,40 +71,49 @@ class Colors {
       $colors
     );
 
-    return $queue;
-  }
-
-  /**
-   * Returns palette for a given image
-   * 
-   * @throws lang.IllegalArgumentException if no palette can be computed
-   */
-  public function palette(Image $source, int $size= 10): array<Color> {
-
-    // Area to examine = complete image
-    $x= 0;
-    $y= 0;
-    $w= $source->getWidth();
-    $h= $source->getHeight();
-
-    // Create histogram
-    $histogram= new Histogram();
-    for ($i= 0, $n= $w * $h; $i < $n; $i+= $this->quality) {
-      $color= $source->colorAt($x + ($i % $w), (int)($y + $i / $w));
-      $histogram->add($color->red, $color->green, $color->blue);
-    }
-
-    // Check border case, e.g. for empty images
-    if ($histogram->empty()) {
-      throw new IllegalArgumentException('Cannot compute color palette');
-    }
-
-    // Quantize, then yield colors
-    $queue= $this->quantize($histogram, $size);
     $colors= [];
     while ($box= $queue->pop()) {
       $colors[]= new Color(...$box->average());
     }
     return $colors;
+  }
+
+  /**
+   * Returns histogram for a given image. Uses complete image by default
+   * but may be given a 4-element array as follows: `[x, y, w, h]`.
+   *
+   * The computed histogram for an image can be recycled to derive palette
+   * and dominant color.
+   */
+  public function histogram(Image $source, ?array $area= null): Histogram {
+    [$x, $y, $w, $h]= $area ?? [0, 0, ...$source->getDimensions()];
+
+    $histogram= new Histogram();
+    for ($i= 0, $n= $w * $h; $i < $n; $i+= $this->quality) {
+      $color= $source->colorAt($x + ($i % $w), (int)($y + $i / $w));
+      $histogram->add($color->red, $color->green, $color->blue);
+    }
+    return $histogram;
+  }
+
+  /**
+   * Returns the dominant color in an image or histogram
+   *
+   * @throws lang.IllegalArgumentException if palette is empty
+   */
+  public function color(Image|Histogram $source): ?Color {
+    return current($this->quantize(
+      $source instanceof Histogram ? $source : $this->histogram($source),
+      self::DOMINANT_PALETTE
+    ));
+  }
+
+  /**
+   * Returns a palette with a given size for an image or histogram
+   *
+   * @throws lang.IllegalArgumentException if palette is empty
+   */
+  public function palette(Image|Histogram $source, int $size= 10): array<Color> {
+    return $this->quantize($source instanceof Histogram ? $source : $this->histogram($source), $size);
   }
 }
