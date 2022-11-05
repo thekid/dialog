@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.8.4 / 2022-11-05
+
+* Fixed issue #37: Scroll links in light theme not readable - @thekid
+
 ## 1.8.3 / 2022-11-03
 
 * Fixed errors in the browser console concerning REST API response
