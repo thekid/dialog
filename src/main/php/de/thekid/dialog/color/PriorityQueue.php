@@ -1,12 +1,12 @@
 <?php namespace de\thekid\dialog\color;
 
 /** @test de.thekid.dialog.unittest.PriorityQueueTest */
-class PriorityQueue {
+class PriorityQueue<E> {
   private $elements= [];
   private $sorted= true;
   private $comparator= null;
 
-  public function comparing(function(mixed, mixed): int $comparator): self {
+  public function comparing(?function(E, E): int $comparator): self {
     $this->comparator= $comparator;
     return $this;
   }
@@ -17,13 +17,13 @@ class PriorityQueue {
   }
 
   /** Pushes an element */
-  public function push($element): void {
+  public function push(E $element): void {
     $this->elements[]= $element;
     $this->sorted= false;
   }
 
   /** Pops an element */
-  public function pop() {
+  public function pop(): ?E {
     if (!$this->sorted) {
       $this->comparator ? usort($this->elements, $this->comparator) : sort($this->elements);
       $this->sorted= true;
