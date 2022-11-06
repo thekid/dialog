@@ -23,7 +23,7 @@ class Colors {
   public function __construct(public int $quality= 10) { }
 
   /** Helper for quantize() */
-  private function iterate(PriorityQueue $queue, float $target): void {
+  private function iterate(PriorityQueuey<Box> $queue, float $target): void {
     $colors= $queue->size();
     $iteration= 0;
     do {
@@ -56,7 +56,7 @@ class Colors {
       throw new IllegalArgumentException('Cannot quantize using an empty histogram');
     }
 
-    $queue= new PriorityQueue();
+    $queue= new PriorityQueue<Box>();
     $queue->push(Box::from($histogram));
 
     // First set of colors, sorted by population
