@@ -17,6 +17,11 @@ class Mapping {
     this.#list.push(marker);
   }
 
+  /** Escape input for use in HTML */
+  html(input) {
+    return input.replace(/[<>&]/g, c => '&#' + c.charCodeAt(0) + ';');
+  }
+
   /** Project this map on to a given DOM element */
   project($element) {
     const source = new ol.source.Vector({features: this.#list});
@@ -37,9 +42,9 @@ class Mapping {
       map.forEachFeatureAtPixel(event.pixel, feature => {
         const link = feature.get('link');
         if (null === link) {
-          list += `<li>${feature.get('name')}</li>`;
+          list += `<li>${this.html(feature.get('name'))}</li>`;
         } else {
-          list += `<li><a href="${link}">${feature.get('name')}</a></li>`;
+          list += `<li><a href="${link}">${this.html(feature.get('name'))}</a></li>`;
         }
       })
       if (0 === list.length) return;
