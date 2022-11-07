@@ -79,14 +79,15 @@ parent: feed
   {{#*inline "scripts"}}
     <script type="module">
       {{&use 'mapping'}}
+      const mapping = new Mapping('/static/marker.png');
 
       {{#each itinerary}}
         {{#each locations}}
-          markers.add('#{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
+          mapping.mark('#{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
         {{/each}}
       {{/each}}
 
-      markers.project(document.querySelector('#map'));
+      mapping.project(document.querySelector('#map'));
     </script>
   {{/inline}}
 {{/layout}}

@@ -741,7 +741,7 @@
     </div>
   </main>
 
-  <div id="lightbox" onclick="lightbox.close()">
+  <div id="lightbox">
     <i>×</i>
     <div class="image">
       <img alt="Lightbox" width="100%">
@@ -762,5 +762,11 @@
 
   <script src="/assets/{{asset 'vendor.js'}}" defer></script>
   {{> scripts}}
+
+  <script type="module">
+    {{&use 'lightbox'}}
+    const lightbox = new Lightbox();
+    lightbox.attach(document.querySelectorAll('a[data-lightbox]'), document.querySelector('#lightbox'));
+  </script>
 </body>
 </html>

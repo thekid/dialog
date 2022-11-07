@@ -56,7 +56,10 @@ parent: feed
   {{#*inline "scripts"}}
     <script type="module">
       {{&use 'suggestions'}}
-      suggestions(document.querySelector('#search'), 'Volltextsuche nach "%s"');
+      new Suggestions('/api/suggestions?q=%s')
+        .default('/search?q=%s', 'Volltextsuche nach "%s"')
+        .attach(document.querySelector('#search'))
+      ;
     </script>
   {{/inline}}
 {{/layout}}
