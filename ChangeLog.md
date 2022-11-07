@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.9.0 / 2022-11-08
+
+* Merged PR #40: Migrate to JS classes. The JS code base is now much
+  cleaner and easier to maintain.
+  (@thekid)
+
 ## 1.8.5 / 2022-11-07
 
 * Fixed issue #39: Bullet points from autocompleter showing - @thekid
