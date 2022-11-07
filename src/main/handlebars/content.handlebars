@@ -39,12 +39,13 @@ parent: feed
   {{#*inline "scripts"}}
     <script type="module">
       {{&use 'mapping'}}
+      const mapping = new Mapping('/static/marker.png');
 
       {{#each item.locations}}
-        markers.add(null, {{lon}}, {{lat}}, `{{name}}`);
+        mapping.mark(null, {{lon}}, {{lat}}, `{{name}}`);
       {{/each}}
 
-      markers.project(document.querySelector('#map'));
+      mapping.project(document.querySelector('#map'));
     </script>
   {{/inline}}
 {{/layout}}

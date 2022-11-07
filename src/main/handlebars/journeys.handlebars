@@ -32,14 +32,15 @@
   {{#*inline "scripts"}}
     <script type="module">
       {{&use 'mapping'}}
+      const mapping = new Mapping('/static/marker.png');
 
       {{#each journeys}}
         {{#each locations}}
-          markers.add('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
+          mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
         {{/each}}
       {{/each}}
 
-      markers.project(document.querySelector('#map'));
+      mapping.project(document.querySelector('#map'));
     </script>
   {{/inline}}
 {{/layout}}

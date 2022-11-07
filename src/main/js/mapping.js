@@ -1,17 +1,25 @@
-const markers = {
-  style   : new ol.style.Style({image: new ol.style.Icon(({src: '/static/marker.png'}))}),
-  list    : [],
-  add     : function(link, lon, lat, name) {
+class Mapping {
+  #list = [];
+
+  /** Creates new map using given marker images */
+  constructor(image) {
+    this.style = new ol.style.Style({image: new ol.style.Icon(({src: image}))})
+  }
+
+  /** Add marker and link at a given position */
+  mark(link, lon, lat, name) {
     const marker = new ol.Feature({
       geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
       link     : link,
       name     : name
     });
-    marker.setStyle(markers.style);
-    markers.list.push(marker);
-  },
-  project : function($element) {
-    const source = new ol.source.Vector({features: markers.list});
+    marker.setStyle(this.style);
+    this.#list.push(marker);
+  }
+
+  /** Project this map on to a given DOM element */
+  project($element) {
+    const source = new ol.source.Vector({features: this.#list});
     const map = new ol.Map({
       target: $element,
       layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
@@ -42,4 +50,4 @@ const markers = {
       $popup.style.display = 'block';
     });
   }
-};
+}
