@@ -9,7 +9,7 @@ class Suggestions {
 
   /** Supply link and text for default item */
   default(link, text) {
-    this.defaults = {link, text};
+    this.#defaults = {link, text};
     return this;
   }
 
@@ -55,10 +55,10 @@ class Suggestions {
           }
 
           // Show default option at end of search
-          if (this.defaults) {
+          if (this.#defaults) {
             list += `<li role="option" aria-selected="false">
-              <a class="fulltext" href="${this.defaults.link.replace('%s', encoded)}">
-                <span class="title">${this.defaults.text.replace('%s', '<span class="query"><em>' + this.html(query) + '</em></span>')}</span>
+              <a class="fulltext" href="${this.#defaults.link.replace('%s', encoded)}">
+                <span class="title">${this.#defaults.text.replace('%s', '<span class="query"><em>' + this.html(query) + '</em></span>')}</span>
               </a>
             </li>`;
           }
