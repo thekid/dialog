@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.8.5 / 2022-11-07
+
+* Fixed issue #39: Bullet points from autocompleter showing - @thekid
+
 ## 1.8.4 / 2022-11-05
 
 * Fixed issue #37: Scroll links in light theme not readable - @thekid
