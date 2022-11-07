@@ -1,12 +1,15 @@
 class Suggestions {
-  constructor(api, delay = 150) {
+  delay = 150;
+  #defaults = null;
+
+  /** Creates suggestions based on API url as /api/suggestions?q=%s */
+  constructor(api) {
     this.api = api;
-    this.delay = delay;
   }
 
   /** Supply link and text for default item */
   default(link, text) {
-    this.default = {link, text};
+    this.defaults = {link, text};
     return this;
   }
 
@@ -52,10 +55,10 @@ class Suggestions {
           }
 
           // Show default option at end of search
-          if (this.default) {
+          if (this.defaults) {
             list += `<li role="option" aria-selected="false">
-              <a class="fulltext" href="${this.default.link.replace('%s', encoded)}">
-                <span class="title">${this.default.text.replace('%s', '<span class="query"><em>' + this.html(query) + '</em></span>')}</span>
+              <a class="fulltext" href="${this.defaults.link.replace('%s', encoded)}">
+                <span class="title">${this.defaults.text.replace('%s', '<span class="query"><em>' + this.html(query) + '</em></span>')}</span>
               </a>
             </li>`;
           }
