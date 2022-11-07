@@ -39,10 +39,3 @@ class Lightbox {
     }));
   }
 }
-
-document.onkeydown = function(e) {
-  switch (e.key) {
-    case 'ArrowRight': document.location.href = document.querySelector('a.next').href; break;
-    case 'ArrowLeft': document.location.href = document.querySelector('a.previous').href; break;
-  }
-};
