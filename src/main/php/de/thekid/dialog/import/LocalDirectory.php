@@ -1,11 +1,13 @@
 <?php namespace de\thekid\dialog\import;
 
+use de\thekid\dialog\color\Colors;
 use img\Image;
-use img\io\{StreamReader, WebpStreamWriter, MetaDataReader};
+use img\io\{JpegStreamReader, MetaDataReader};
 use io\streams\TextReader;
 use io\{Folder, File};
 use lang\{Enum, IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
+use text\json\Json;
 use util\cmd\{Command, Arg};
 use util\log\Logging;
 use util\{Date, TimeZone};
@@ -25,6 +27,7 @@ class LocalDirectory extends Command {
   private static $UTC= TimeZone::getByName('UTC');
   private $origin, $api;
   private $meta= new MetaDataReader();
+  private $colors= new Colors();
   private $force= false;
 
   /** Sets origin folder, e.g. `./imports/album` */
@@ -203,10 +206,20 @@ class LocalDirectory extends Command {
             }
           }
 
-          $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
-          foreach ($meta($source) as $key => $value) {
-            $upload->pass('meta['.$key.']', $value);
+          // Extract meta information, aggregating palette from preview image
+          $info= [...$meta($source)];
+          try {
+            $palette= $this->colors->palette(
+              Image::loadFrom(new JpegStreamReader($transfer['preview'])),
+              Colors::DOMINANT
+            );
+            $info['palette']= array_map(fn($c) => (int)hexdec($c->toHex()), $palette);
+          } catch ($e) {
+            // Ignore palette
           }
+
+          $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
+          $upload->pass('meta-inf', Json::of($info));
           foreach ($transfer as $kind => $file) {
             $upload->transfer($kind, $file->in(), $file->filename);
           }
