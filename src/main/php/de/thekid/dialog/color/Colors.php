@@ -101,7 +101,7 @@ class Colors {
    *
    * @throws lang.IllegalArgumentException if palette is empty
    */
-  public function color(Image|Histogram $source): ?Color {
+  public function dominant(Image|Histogram $source): ?Color {
     return current($this->quantize(
       $source instanceof Histogram ? $source : $this->histogram($source),
       self::DOMINANT_PALETTE
