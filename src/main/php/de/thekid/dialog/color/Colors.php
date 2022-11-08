@@ -15,7 +15,7 @@ use lang\IllegalArgumentException;
  * @see   https://github.com/olivierlesnicki/quantize
  */
 class Colors {
-  const DOMINANT_PALETTE= 5;
+  const DOMINANT= 5;
   const MAX_ITERATIONS= 1000;
   const FRACT_BY_POPULATIONS= 0.75;
 
@@ -104,7 +104,7 @@ class Colors {
   public function dominant(Image|Histogram $source): ?Color {
     return current($this->quantize(
       $source instanceof Histogram ? $source : $this->histogram($source),
-      self::DOMINANT_PALETTE
+      self::DOMINANT
     ));
   }
 
