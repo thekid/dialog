@@ -2,6 +2,7 @@
 
 use de\thekid\dialog\Repository;
 use io\{Path, Folder, File};
+use text\json\Json;
 use util\Date;
 use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
 
@@ -62,6 +63,7 @@ class Entries {
         foreach ($multipart->files() as $file) {
           yield from $file->transmit(new File($f, $file->name()));
         }
+        $meta= $req->param('meta') ?? Json::read($req->param('meta-inf', '{}'));
 
         // Fetch entry again, it might have changed in the meantime!
         $images= $this->repository->entry($id, published: false)['images'] ?? [];
@@ -71,7 +73,7 @@ class Entries {
         $image= [
           'name'     => $name,
           'modified' => time(),
-          'meta'     => (array)$req->param('meta') + ['dateTime' => gmdate('c')],
+          'meta'     => (array)$meta + ['dateTime' => gmdate('c')],
           'is'       => [$is => true]
         ];
         foreach ($images ?? [] as $i => $existing) {
