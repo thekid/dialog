@@ -138,6 +138,31 @@ class LocalDirectory extends Command {
     throw new IllegalStateException($p->getCommandLine().' exited with exit code '.$r);
   }
 
+  private function hsl($color) {
+    $r= $color->red / 255;
+    $g= $color->green / 255;
+    $b= $color->blue / 255;
+
+    $max= max($r, $g, $b);
+    $min= min($r, $g, $b);
+
+    $lum = ($max + $min) / 2;
+
+    if ($max === $min) {
+      $hue= $sat= 0;
+    } else {
+      $c= $max - $min;
+      $sat= $c / (1 - abs(2 * $lum - 1));
+      $hue= match ($max) {
+        $r => ($g - $b) / $c + ($g < $b ? 6 : 0),
+        $g => ($b - $r) / $c + 2,
+        $b => ($r - $g) / $c + 4,
+      };
+    }
+
+    return ['h' => round($hue * 60), 's' => round($sat * 100), 'l' => round($lum * 100)];
+  }
+
   /** Runs this command */
   public function run(): int {
     $publish= time();
@@ -207,13 +232,15 @@ class LocalDirectory extends Command {
           }
 
           // Extract meta information, aggregating palette from preview image
-          $info= [...$meta($source)];
+          $info= [...$meta($source)] + ['palette' => []];
           try {
             $palette= $this->colors->palette(
               Image::loadFrom(new JpegStreamReader($transfer['preview'])),
               Colors::DOMINANT
             );
-            $info['palette']= array_map(fn($c) => (int)hexdec($c->toHex()), $palette);
+            foreach ($palette as $color) {
+              $info['palette'][]= $this->hsl($color);
+            }
           } catch ($e) {
             // Ignore palette
           }
