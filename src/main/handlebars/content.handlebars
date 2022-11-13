@@ -51,7 +51,7 @@ parent: feed
       // Update statistics
       window.setTimeout(() => {
         fetch('/api/statistics/{{item.slug}}', {method: 'POST', body: '{{sign item.slug}}'});
-      }, 5000);
+      }, Math.min({{size item.images}} * 1500, 5000));
     </script>
   {{/inline}}
 {{/layout}}
