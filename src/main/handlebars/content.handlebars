@@ -23,6 +23,7 @@ parent: feed
             <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
           {{/each}}
         </ul>
+        {{count item.views '' '(Eine Ansicht)' ' (# Ansichten)'}}
       </div>
 
       <div id="map">
