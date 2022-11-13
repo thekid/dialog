@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.10.0 / 2022-11-13
+
+* Merged PR #41: Change lightbox to use HTML `<dialog>` element - @thekid
+
 ## 1.9.0 / 2022-11-08
 
 * Merged PR #40: Migrate to JS classes. The JS code base is now much
