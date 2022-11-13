@@ -4,7 +4,7 @@ class Lightbox {
   #open($target, $link) {
     const $full = $target.querySelector('img');
     $full.src = '';
-    $target.classList.add('open');
+    $target.showModal();
     $full.src = $link.href;
 
     // Overlay meta data if present
@@ -18,21 +18,9 @@ class Lightbox {
     }
   }
 
-  /** Closes the given lightbox */
-  #close($target) {
-    $target.classList.remove('open');
-  }
-
   /** Attach all of the given elements to open the lightbox specified by the given DOM element */
   attach(selector, $target) {
-    document.addEventListener('keydown', e => {
-      if ('Escape' === e.key) this.#close($target);
-    });
-
-    $target.addEventListener('click', e => {
-      this.#close($target);
-    });
-
+    $target.addEventListener('click', e => $target.close());
     selector.forEach($link => $link.addEventListener('click', e => {
       e.preventDefault();
       this.#open($target, $link);

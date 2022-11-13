@@ -565,7 +565,6 @@
 
     #lightbox {
       position: fixed;
-      z-index: 999;
       inset: 0;
       display: flex;
       align-items: center;
@@ -573,12 +572,17 @@
       border: 1px solid #444;
       transform: scale(0, 0);
       transition: transform ease-in-out 300ms;
-      -webkit-backdrop-filter: blur(10px) brightness(.5);
-      backdrop-filter: blur(10px) brightness(.5);
-      padding: .5rem;
+      padding: 0;
+      border: none;
+      background-color: transparent;
     }
 
-    #lightbox.open {
+    #lightbox[open]::backdrop {
+      -webkit-backdrop-filter: blur(10px) brightness(.5);
+      backdrop-filter: blur(10px) brightness(.5);
+    }
+
+    #lightbox[open] {
       transform: scale(1, 1);
     }
 
@@ -741,7 +745,7 @@
     </div>
   </main>
 
-  <div id="lightbox">
+  <dialog id="lightbox">
     <i>×</i>
     <div class="image">
       <img alt="Lightbox" width="100%">
@@ -754,7 +758,7 @@
         <div><output name="exposuretime"></output> s</div>
       </div>
     </div>
-  </div>
+  </dialog>
 
   <footer class="footer">
     With ❤️ by Timm Friebe 2005-{{date null format="Y"}}
