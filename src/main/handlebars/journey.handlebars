@@ -88,6 +88,11 @@ parent: feed
       {{/each}}
 
       mapping.project(document.querySelector('#map'));
+
+      // Update statistics
+      window.setTimeout(() => {
+        fetch('/api/statistics/{{journey.slug}}', {method: 'POST', body: '{{sign journey.slug}}'});
+      }, 10000);
     </script>
   {{/inline}}
 {{/layout}}

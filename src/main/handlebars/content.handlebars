@@ -46,6 +46,11 @@ parent: feed
       {{/each}}
 
       mapping.project(document.querySelector('#map'));
+
+      // Update statistics
+      window.setTimeout(() => {
+        fetch('/api/statistics/{{item.slug}}', {method: 'POST', body: '{{sign item.slug}}'});
+      }, 5000);
     </script>
   {{/inline}}
 {{/layout}}

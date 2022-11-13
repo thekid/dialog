@@ -2,11 +2,11 @@
 
 use com\mongodb\MongoConnection;
 use io\Path;
-use util\TimeZone;
+use util\{TimeZone, Secret};
 use web\Application;
 use web\auth\Basic;
 use web\filters\BehindProxy;
-use web\frontend\helpers\{Assets, Dates};
+use web\frontend\helpers\{Assets, Dates, Numbers};
 use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars};
 use web\handler\FilesFrom;
 use web\rest\{RestApi, ResourcesIn};
@@ -19,7 +19,8 @@ class App extends Application {
     $conn= new MongoConnection($preferences->get('mongo', 'uri'));
     $repository= new Repository($conn->database($preferences->optional('mongo', 'db', 'dialog')));
     $storage= new Path($this->environment->arguments()[0]);
-    $new= fn($class) => $class->newInstance($repository, $storage);
+    $signing= new Signing(new Secret($preferences->get('mongo', 'uri')))->tolerating(seconds: 30);
+    $new= fn($class) => $class->newInstance($repository, $storage, $signing);
 
     // Authenticate API users against MongoDB
     $auth= new Basic('API', $repository->authenticate(...));
@@ -44,8 +45,9 @@ class App extends Application {
         new HandlersIn('de.thekid.dialog.web', $new),
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
+          new Numbers(),
           new Assets($manifest),
-          new Helpers(),
+          new Helpers($signing),
           new Scripts($this->environment->path('src/main/js'), 'dev' === $this->environment->profile()),
         ])
       ),

@@ -31,6 +31,7 @@
                 <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
               {{/each}}
             </ul>
+            {{#with views}} {{count . '' '(Eine Ansicht)' ' (# Ansichten)'}}{{/with}}
           </div>
 
           {{> partials/images in=. first=@first}}
