@@ -613,7 +613,7 @@
       transition: transform ease-in-out 70ms;
     }
 
-    #lightbox img:hover + .meta {
+    #lightbox img:hover ~ .meta {
       transform: scale(1, 1);
     }
 
@@ -629,27 +629,6 @@
 
     #lightbox .meta div:where(:last-child) {
       border-top-right-radius: .25rem;
-    }
-
-    #lightbox i {
-      position: absolute;
-      top: .5rem;
-      right: .5rem;
-      background-color: #444;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      border: 1px solid #666;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      padding-top: 6px;
-      font-size: 1.75rem;
-      font-style: normal;
-      font-weight: 400;
-      cursor: pointer;
     }
 
     footer {
@@ -746,7 +725,6 @@
   </main>
 
   <dialog id="lightbox">
-    <i>×</i>
     <div class="image">
       <img alt="Lightbox" width="100%">
       <div class="meta">
