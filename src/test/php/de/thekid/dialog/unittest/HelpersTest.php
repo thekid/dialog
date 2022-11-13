@@ -24,4 +24,20 @@ class HelpersTest {
   public function route($entry, $expected) {
     Assert::equals($expected, $this->helpers['route'](null, null, [$entry]));
   }
+
+  #[Test]
+  public function dataset() {
+    Assert::equals(
+      ' data-string="value" data-yes="1" data-no="" data-number="2022"',
+      $this->helpers['dataset'](null, null, [[
+        'string' => 'value',
+        'yes'    => true,
+        'no'     => false,
+        'number' => 2022,
+        'array'  => ['ignored'],
+        'map'    => ['also' => 'ignored'],
+        'nulls'  => null,
+      ]])
+    );
+  }
 }
