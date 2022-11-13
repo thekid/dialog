@@ -7,6 +7,7 @@ use web\frontend\helpers\Extension;
  *
  * - range <from> <until>
  * - route <entry>
+ * - dataset <meta-inf>
  *
  * @test  de.thekid.dialog.unittest.HelpersTest
  */ 
@@ -28,6 +29,13 @@ class Helpers extends Extension {
       } else {
         return 'content/'.$entry['slug'];
       }
+    };
+    yield 'dataset' => function($node, $context, $options) {
+      $r= '';
+      foreach ($options[0] as $key => $value) {
+        is_scalar($value) && $r.= ' data-'.htmlspecialchars($key).'="'.htmlspecialchars($value).'"';
+      }
+      return $r;
     };
   }
 }
