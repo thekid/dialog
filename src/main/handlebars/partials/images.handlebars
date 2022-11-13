@@ -7,9 +7,15 @@
         </video>
       {{else}}
         <a href="/image/{{in.slug}}/full-{{name}}.webp" data-lightbox>
-          <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{#each meta}}data-{{@key}}="{{.}}"{{/each}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024">
+          <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{#each meta}}{{#unless (equals @key 'palette')}}data-{{@key}}="{{.}}"{{/unless}}{{/each}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024">
         </a>
       {{/if}}
+
+      <div class="palette">
+        {{#each meta.palette}}
+          <a href="/search?q=({{h}},{{s}},{{l}})" style="background-color: hsl({{h}} {{s}}% {{l}}%)"> </a>
+        {{/each}}
+      </div>
     </div>
   {{/each}}
 </div>

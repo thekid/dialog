@@ -501,10 +501,35 @@
       aspect-ratio: auto;
     }
 
+    .image {
+      position: relative;
+    }
+
     .image img, .image video {
       aspect-ratio: 15 / 10;
       object-fit: cover;
       border-radius: .25rem;
+      box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
+    }
+
+    .image .palette {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      display: flex;
+      gap: .5rem;
+      transform: scale(0, 0);
+      transition: transform ease-in-out 70ms;
+    }
+
+    .image:hover .palette {
+      transform: scale(1, 1);
+    }
+
+    .image .palette > * {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
       box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
     }
 

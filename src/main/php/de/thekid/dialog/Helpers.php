@@ -29,5 +29,14 @@ class Helpers extends Extension {
         return 'content/'.$entry['slug'];
       }
     };
+    yield 'color' => function($node, $context, $options) {
+      $input= $options[0];
+      return sprintf(
+        '#%02x%02x%02x', 
+        ($input >> 16) & 0xff,
+        ($input >> 8) & 0xff,
+        $input & 0xff,
+      );
+    };
   }
 }
