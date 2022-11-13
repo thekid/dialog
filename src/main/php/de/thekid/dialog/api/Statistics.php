@@ -17,7 +17,7 @@ class Statistics {
   public function update(string $id, #[Body] $signature) {
     return $this->signing->verify($id, $signature)
       ? $this->repository->modify($id, ['$inc' => ['views' => 1]])->modified()
-      : 0
+      : 0 // Silently ignore invalid requests
     ;
   }
 }
