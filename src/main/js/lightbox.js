@@ -3,12 +3,13 @@ class Lightbox {
   /** Opens the given lightbox, loading the image and filling in meta data */
   #open($target, $link) {
     const $full = $target.querySelector('img');
-    $full.src = '';
+    const $img = $link.querySelector('img');
+
+    // Use opening image...
+    $full.src = $img.src;
     $target.showModal();
-    $full.src = $link.href;
 
     // Overlay meta data if present
-    const $img = $link.querySelector('img');
     const $meta = $target.querySelector('.meta');
     if ('' !== ($img.dataset.make ?? '')) {
       $meta.querySelectorAll('output').forEach($o => $o.value = $img.dataset[$o.name]);
@@ -16,6 +17,9 @@ class Lightbox {
     } else {
       $meta.style.visibility = 'hidden';
     }
+
+    // ...then replace by larger version
+    $full.src = $link.href;
   }
 
   /** Attach all of the given elements to open the lightbox specified by the given DOM element */
