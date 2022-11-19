@@ -9,7 +9,6 @@ use web\auth\Basic;
 use web\filters\BehindProxy;
 use web\frontend\helpers\{Assets, Dates, Numbers};
 use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars};
-use web\handler\FilesFrom;
 use web\rest\{RestApi, ResourcesIn};
 
 class App extends Application {
