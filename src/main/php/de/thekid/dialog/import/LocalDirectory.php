@@ -1,14 +1,12 @@
 <?php namespace de\thekid\dialog\import;
 
-use img\Image;
-use img\io\{StreamReader, WebpStreamWriter, MetaDataReader};
+use de\thekid\dialog\processing\{Images, Videos, ResizeTo};
 use io\streams\TextReader;
 use io\{Folder, File};
-use lang\{Enum, IllegalArgumentException, IllegalStateException, FormatException, Process};
+use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
 use util\cmd\{Command, Arg};
 use util\log\Logging;
-use util\{Date, TimeZone};
 use webservices\rest\{Endpoint, RestUpload};
 
 /**
@@ -22,9 +20,7 @@ use webservices\rest\{Endpoint, RestUpload};
  * - cover.md: The image to use for the cover page
  */
 class LocalDirectory extends Command {
-  private static $UTC= TimeZone::getByName('UTC');
   private $origin, $api;
-  private $meta= new MetaDataReader();
   private $force= false;
 
   /** Sets origin folder, e.g. `./imports/album` */
@@ -51,82 +47,6 @@ class LocalDirectory extends Command {
     $this->api->setTrace(Logging::all()->toConsole());
   }
 
-  /** Returns image resizing targets */
-  private function imageFile(File $source): iterable {
-    foreach ([
-      'preview' => new ResizeTo(720, 'jpg'),
-      'thumb'   => new ResizeTo(1024, 'webp'),
-      'full'    => new ResizeTo(3840, 'webp')
-    ] as $kind => $target) {
-      yield $kind => $target->resize($source, $kind, $source->filename);
-    }
-  }
-
-  /** Returns image meta data */
-  private function imageMeta(File $source): iterable {
-    try {
-      $meta= $this->meta->read($source->in());
-      if ($exif= $meta?->exifData()) {
-        yield 'width' => $exif->width;
-        yield 'height' => $exif->height;
-        yield 'dateTime' => $exif->dateTime?->toString('c', self::$UTC) ?? gmdate('c');
-        yield 'make' => $exif->make;
-        yield 'model' => $exif->model;
-        yield 'apertureFNumber' => $exif->apertureFNumber;
-        yield 'exposureTime' => $exif->exposureTime;
-        yield 'isoSpeedRatings' => $exif->isoSpeedRatings;
-        yield 'focalLength' => $exif->focalLength;
-        yield 'flashUsed' => $exif->flashUsed();
-      }
-    } catch ($e) {
-      $this->err->writeLine('Cannot extract meta data from ', $source, ': ', $e);
-    } finally {
-      $source->close();
-    }
-  }
-
-  /** Returns video resizing targets */
-  private function videoFile(File $source): iterable {
-
-    // 1. Convert to web-optimized H.264 video, scaling to a width of 1920 pixels
-    $video= new File($source->path, 'video-'.$source->filename.'.mp4');
-    if (!$video->exists() || $source->lastModified() > $video->lastModified()) {
-      $this->execute('ffmpeg', [
-        '-y',       // Overwrite files without asking
-        '-i', $source->getURI(),
-        '-vcodec', 'libx264',
-        '-vf', 'scale=1920:-1',
-        '-acodec', 'aac',
-        '-g', '30', // Group of picture (GOP)
-        $video->getURI(),
-      ]);
-    }
-    yield 'video' => $video;
-
-    // 2. Extract screenshot and preview image using ffmpeg
-    $screen= new File($source->path, 'screen-'.$source->filename.'.jpg');
-    if (!$screen->exists() || $source->lastModified() > $screen->lastModified()) {
-      $this->execute('ffmpeg', [
-        '-y',
-        '-i', $source->getURI(),
-        '-ss', '00:00:03',
-        '-vsync', 'vfr',
-        '-frames:v', '1',
-        '-q:v', '1',
-        '-qscale:v', '1',
-        $screen->getURI(),
-      ]);
-    }
-
-    // 3. Convert and resize screenshot JPEG
-    foreach ([
-      'preview' => new ResizeTo(720, 'jpg'),
-      'thumb'   => new ResizeTo(1024, 'webp')
-    ] as $kind => $target) {
-      yield $kind => $target->resize($screen, $kind, $source->filename);
-    }
-  }
-
   /** Executes a given external command and returns its exit code */
   private function execute(string $command, array<string> $args, $redirect= null): void {
     $p= new Process($command, $args, null, null, [STDIN, $redirect ?? STDOUT, STDERR]);
@@ -137,8 +57,17 @@ class LocalDirectory extends Command {
 
   /** Runs this command */
   public function run(): int {
-    $publish= time();
+    $images= new Images()
+      ->targeting('preview', new ResizeTo(720, 'jpg'))
+      ->targeting('thumb', new ResizeTo(1024, 'webp'))
+      ->targeting('full', new ResizeTo(3840, 'webp'))
+    ;
+    $videos= new Videos()
+      ->targeting('preview', new ResizeTo(720, 'jpg'))
+      ->targeting('thumb', new ResizeTo(1024, 'webp'))
+    ;
 
+    $publish= time();
     foreach (Sources::in($this->origin) as $folder => $item) {
       $this->out->writeLine('[+] ', $item);
 
@@ -157,9 +86,9 @@ class LocalDirectory extends Command {
       // Fetch existing entry
       $document= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json')->value();
       $this->out->writeLine(' => ID<', $document['_id'], '>');
-      $images= [];
+      $media= [];
       foreach ($document['images'] ?? [] as $image) {
-        $images[$image['name']]= $image;
+        $media[$image['name']]= $media;
       }
 
       foreach ($folder->entries() as $entry) {
@@ -170,22 +99,20 @@ class LocalDirectory extends Command {
         $source= $entry->asFile();
         if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $name)) {
           $this->out->write(' => Processing image ', $name);
-          $targets= $this->imageFile(...);
-          $meta= $this->imageMeta(...);
+          $processing= $images;
         } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $name)) {
           $this->out->write(' => Processing video ', $name);
-          $targets= $this->videoFile(...);
-          $meta= fn() => [];
+          $processing= $video;
         } else {
           continue;
         }
 
         // Synchronize with server
-        $modified= $images[$name]['modified'] ?? null;
+        $modified= $media[$name]['modified'] ?? null;
         if ($this->force || null === $modified || $source->lastModified() > $modified) {
           $resource= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()]);
           $transfer= [];
-          foreach ($targets($source) as $kind => $target) {
+          foreach ($processing->targets($source) as $kind => $target) {
 
             // FIXME: Uploading files that take longer than ~30 seconds is, for some reason,
             // broken, and will result in a) the import tool crashing and b) the server ending
@@ -204,7 +131,7 @@ class LocalDirectory extends Command {
           }
 
           $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
-          foreach ($meta($source) as $key => $value) {
+          foreach ($processing->meta($source) as $key => $value) {
             $upload->pass('meta['.$key.']', $value);
           }
           foreach ($transfer as $kind => $file) {
@@ -217,11 +144,11 @@ class LocalDirectory extends Command {
         }
 
         // Mark image as processed
-        unset($images[$name]);
+        unset($media[$name]);
       }
 
       // Clean up images
-      foreach ($images as $name => $image) {
+      foreach ($media as $name => $_) {
         $r= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->delete();
         $this->out->writeLine(' => Deleted ', $r->value(), ' from ', $item['slug']);
       }
