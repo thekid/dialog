@@ -17,6 +17,7 @@
     "xp-forge/markdown": "^6.0",
     "xp-forge/yaml": "^6.0",
     "xp-forge/hashing": "^2.1",
+    "xp-forge/inject": "^5.4",
     "xp-forge/mongodb": "^1.6"
   },
 

@@ -1,17 +1,12 @@
 <?php namespace de\thekid\dialog\api;
 
 use de\thekid\dialog\{Repository, Signing};
-use io\Path;
 use web\rest\{Post, Resource, Body};
 
 #[Resource('/api/statistics')]
 class Statistics {
 
-  public function __construct(
-    private Repository $repository,
-    private Path $storage,
-    private Signing $signing
-  ) { }
+  public function __construct(private Repository $repository, private Signing $signing) { }
 
   #[Post('/{id:.+(/.+)?}')]
   public function update(string $id, #[Body] $signature) {
