@@ -98,9 +98,10 @@ class LocalDirectory extends Command {
 
         // Select processing method
         if (null === ($processing= $files->processing($name))) continue;
-        $source= $entry->asFile();
+        $this->out->write(' => Processing ', $processing->kind(), ' ', $name);
 
         // Synchronize with server
+        $source= $entry->asFile();
         $modified= $media[$name]['modified'] ?? null;
         if ($this->force || null === $modified || $source->lastModified() > $modified) {
           $resource= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()]);
