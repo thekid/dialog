@@ -5,6 +5,9 @@ use io\File;
 abstract class Processing {
   protected $targets= [];
 
+  /** Returns processing kind */
+  public abstract function kind(): string;
+
   /**
    * Adds a conversion target with a given prefix and conversion target.
    * Fluent interface.

@@ -8,6 +8,8 @@ class Images extends Processing {
   private static $UTC= TimeZone::getByName('UTC');
   private $meta= new MetaDataReader();
 
+  public function kind(): string { return 'image'; }
+
   public function meta(File $source): array<string, mixed> {
     $r= [];
     try {

@@ -7,6 +7,8 @@ class Videos extends Processing {
 
   public function __construct(private string $executable= 'ffmpeg') { }
 
+  public function kind(): string { return 'video'; }
+
   /** Executes a given external command and returns its exit code */
   private function execute(string $command, array<string> $args): void {
     $p= new Process($command, $args, null, null, [STDIN, STDOUT, STDERR]);
