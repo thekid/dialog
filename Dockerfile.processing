@@ -1,0 +1,32 @@
+FROM php:8.1-cli-alpine
+
+RUN apk add \
+  ffmpeg \
+  zlib zlib-dev \
+  freetype freetype-dev \
+  libjpeg-turbo libjpeg-turbo-dev \
+  libwebp libwebp-dev \
+  libpng libpng-dev \
+  && rm -f /var/cache/apk/*
+
+RUN docker-php-ext-configure gd --with-jpeg --with-webp
+
+RUN docker-php-ext-install -j$(nproc) bcmath gd
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+RUN sed -ri -e 's!memory_limit = .+!memory_limit = -1!g' "$PHP_INI_DIR/php.ini"
+
+RUN curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/e/entrypoint/xp-run-8.6.2.sh > /usr/bin/xp-run
+
+RUN mkdir /app
+
+COPY class.pth /app/
+
+COPY src/ /app/src/
+
+COPY vendor/ /app/vendor/
+
+WORKDIR /app
+
+CMD ["/bin/sh", "/usr/bin/xp-run", "xp.command.CmdRunner", "de.thekid.dialog.processing.Watch"]
