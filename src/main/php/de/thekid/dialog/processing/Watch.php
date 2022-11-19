@@ -52,7 +52,7 @@ class Watch extends Command {
       Collections::watching($collection)->each(function($item) use($files) {
         $this->out->writeLinef(
           '  [%s %d %.3fkB] %s',
-          date('r'),
+          date('Y-m-d H:i:s'),
           getmypid(),
           memory_get_usage() / 1024,
           Objects::stringOf($item, '  '),
