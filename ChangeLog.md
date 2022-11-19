@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #45: Extract image and video processing to *processing*
+  package - a prerequisite for being able to reuse it for #44.
+  (@thekid)
 * Merged PR #43: Refactor to use injection library - @thekid
 
 ## 1.11.0 / 2022-11-19
