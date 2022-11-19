@@ -87,7 +87,7 @@ class LocalDirectory extends Command {
       $this->out->writeLine(' => ID<', $document['_id'], '>');
       $media= [];
       foreach ($document['images'] ?? [] as $image) {
-        $media[$image['name']]= $media;
+        $media[$image['name']]= $image;
       }
 
       foreach ($folder->entries() as $entry) {
