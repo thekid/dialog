@@ -53,6 +53,15 @@ class SigningTest {
     Assert::false($s->verify($query, $signature));
   }
 
+  #[Test]
+  public function fiddling_with_time() {
+    $s= new Signing($this->secret);
+    $query= 'target=test';
+
+    [$hash, $time]= explode('.', $s->sign($query));
+    Assert::false($s->verify($query, sprintf('%s.%d', $hash, $time + 1)));
+  }
+
   #[Test, Values([-3600, -1, 1, 3600])]
   public function cannot_verify_links_after_expiration_window($window) {
     $s= new Signing($this->secret)->tolerating(0);

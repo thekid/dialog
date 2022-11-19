@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog\web;
 
 use de\thekid\dialog\Repository;
-use web\frontend\{Handler, Get, View};
+use web\frontend\{Handler, Get, Head, View};
 
 #[Handler('/')]
 class Home {
