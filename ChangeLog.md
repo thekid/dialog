@@ -3,6 +3,13 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.11.0 / 2022-11-19
+
+* Merged PR #42: Collect statistics on views. Users must look at pages
+  for a certain time before we count a view - a more honest statistic
+  that also doesn't include web crawlers, for instance.
+  (@thekid)
+
 ## 1.10.0 / 2022-11-13
 
 * Merged PR #41: Change lightbox to use HTML `<dialog>` element - @thekid
