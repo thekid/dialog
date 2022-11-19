@@ -1,6 +1,7 @@
 <?php namespace de\thekid\dialog;
 
 use com\mongodb\MongoConnection;
+use inject\{Bindings, Injector};
 use io\Path;
 use util\{TimeZone, Secret};
 use web\Application;
@@ -18,9 +19,12 @@ class App extends Application {
     $preferences= new Preferences($this->environment, 'config');
     $conn= new MongoConnection($preferences->get('mongo', 'uri'));
     $repository= new Repository($conn->database($preferences->optional('mongo', 'db', 'dialog')));
-    $storage= new Path($this->environment->arguments()[0]);
-    $signing= new Signing(new Secret($preferences->get('mongo', 'uri')))->tolerating(seconds: 30);
-    $new= fn($class) => $class->newInstance($repository, $storage, $signing);
+    $storage= new Storage($this->environment->arguments()[0]);
+    $inject= new Injector(Bindings::using()
+      ->instance($repository)
+      ->instance($storage)
+      ->instance(new Signing(new Secret($preferences->get('mongo', 'uri')))->tolerating(seconds: 30))
+    );
 
     // Authenticate API users against MongoDB
     $auth= new Basic('API', $repository->authenticate(...));
@@ -34,20 +38,20 @@ class App extends Application {
     $manifest= new AssetsManifest($this->environment->path('src/main/webapp/assets/manifest.json'));
     $static= ['Cache-Control' => 'max-age=604800'];
     return [
-      '/image'      => new FilesFrom($storage)->with($static),
+      '/image'      => $storage->with($static),
       '/static'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with($static),
       '/assets'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
         'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
       ]),
       '/robots.txt' => fn($req, $res) => $res->send("User-agent: *\nDisallow: /api/\n", 'text/plain'),
-      '/api'        => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $new))),
+      '/api'        => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $inject->get(...)))),
       '/'           => new Frontend(
-        new HandlersIn('de.thekid.dialog.web', $new),
+        new HandlersIn('de.thekid.dialog.web', $inject->get(...)),
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
           new Numbers(),
           new Assets($manifest),
-          new Helpers($signing),
+          $inject->get(Helpers::class),
           new Scripts($this->environment->path('src/main/js'), 'dev' === $this->environment->profile()),
         ])
       ),
