@@ -15,14 +15,15 @@ class Videos extends Processing {
     throw new IllegalStateException($p->getCommandLine().' exited with exit code '.$r);
   }
 
-  public function meta(File $source): iterable {
+  public function meta(File $source): array<string, mixed> {
     return [];
   }
 
-  public function targets(File $source): iterable {
+  public function targets(File $source, ?string $filename= null): iterable {
+    $filename??= $source->filename;
 
     // 1. Convert to web-optimized H.264 video, scaling to a width of 1920 pixels
-    $video= new File($source->path, 'video-'.$source->filename.'.mp4');
+    $video= new File($source->path, 'video-'.$filename.'.mp4');
     if (!$video->exists() || $source->lastModified() > $video->lastModified()) {
       $this->execute($this->executable, [
         '-y',       // Overwrite files without asking
@@ -37,7 +38,7 @@ class Videos extends Processing {
     yield 'video' => $video;
 
     // 2. Extract screenshot and preview image using ffmpeg
-    $screen= new File($source->path, 'screen-'.$source->filename.'.jpg');
+    $screen= new File($source->path, 'screen-'.$filename.'.jpg');
     if (!$screen->exists() || $source->lastModified() > $screen->lastModified()) {
       $this->execute($this->executable, [
         '-y',
@@ -53,7 +54,7 @@ class Videos extends Processing {
 
     // 3. Convert and resize screenshot JPEG
     foreach ($this->targets as $kind => $target) {
-      yield $kind => $target->resize($screen, $kind, $source->filename);
+      yield $kind => $target->resize($screen, $kind, $filename);
     }
   }
 }
