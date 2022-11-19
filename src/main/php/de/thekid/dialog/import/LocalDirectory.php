@@ -1,7 +1,6 @@
 <?php namespace de\thekid\dialog\import;
 
 use de\thekid\dialog\processing\{Images, Videos, ResizeTo};
-use io\streams\TextReader;
 use io\{Folder, File};
 use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
