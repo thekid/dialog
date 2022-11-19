@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\import;
 
-use de\thekid\dialog\processing\{Images, Videos, ResizeTo};
+use de\thekid\dialog\processing\{Files, Images, Videos, ResizeTo};
 use io\{Folder, File};
 use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
@@ -56,14 +56,16 @@ class LocalDirectory extends Command {
 
   /** Runs this command */
   public function run(): int {
-    $images= new Images()
-      ->targeting('preview', new ResizeTo(720, 'jpg'))
-      ->targeting('thumb', new ResizeTo(1024, 'webp'))
-      ->targeting('full', new ResizeTo(3840, 'webp'))
-    ;
-    $videos= new Videos()
-      ->targeting('preview', new ResizeTo(720, 'jpg'))
-      ->targeting('thumb', new ResizeTo(1024, 'webp'))
+    $files= new Files()
+      ->matching(['.jpg', '.jpeg', '.png', '.webp'], new Images()
+        ->targeting('preview', new ResizeTo(720, 'jpg'))
+        ->targeting('thumb', new ResizeTo(1024, 'webp'))
+        ->targeting('full', new ResizeTo(3840, 'webp'))
+      )
+      ->matching(['.mp4', '.mpeg', '.mov'], new Videos()
+        ->targeting('preview', new ResizeTo(720, 'jpg'))
+        ->targeting('thumb', new ResizeTo(1024, 'webp'))
+      )
     ;
 
     $publish= time();
@@ -95,16 +97,8 @@ class LocalDirectory extends Command {
         if (!$entry->isFile() || preg_match('/^(thumb|preview|full|video|screen)-/', $name)) continue;
 
         // Select processing method
+        if (null === ($processing= $files->processing($name))) continue;
         $source= $entry->asFile();
-        if (preg_match('/(.jpg|.jpeg|.png|.webp)$/i', $name)) {
-          $this->out->write(' => Processing image ', $name);
-          $processing= $images;
-        } else if (preg_match('/(.mp4|.mpeg|.mov)$/i', $name)) {
-          $this->out->write(' => Processing video ', $name);
-          $processing= $video;
-        } else {
-          continue;
-        }
 
         // Synchronize with server
         $modified= $media[$name]['modified'] ?? null;
