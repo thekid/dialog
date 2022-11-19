@@ -23,6 +23,7 @@ parent: feed
             <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
           {{/each}}
         </ul>
+        {{count item.views '' '(Eine Ansicht)' '(# Ansichten)'}}
       </div>
 
       <div id="map">
@@ -46,6 +47,11 @@ parent: feed
       {{/each}}
 
       mapping.project(document.querySelector('#map'));
+
+      // Update statistics
+      window.setTimeout(() => {
+        fetch('/api/statistics/{{item.slug}}', {method: 'POST', body: '{{sign item.slug}}'});
+      }, Math.min({{size item.images}} * 1500, 5000));
     </script>
   {{/inline}}
 {{/layout}}

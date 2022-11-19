@@ -13,6 +13,8 @@ use web\frontend\helpers\Extension;
  */ 
 class Helpers extends Extension {
 
+  public function __construct(private ?Signing $signing= null) { }
+
   /** @return iterable */
   public function helpers() {
     yield 'range' => function($node, $context, $options) {
@@ -36,6 +38,9 @@ class Helpers extends Extension {
         is_scalar($value) && $r.= ' data-'.htmlspecialchars($key).'="'.htmlspecialchars($value).'"';
       }
       return $r;
+    };
+    yield 'sign' => function($node, $context, $options) {
+      return $this->signing?->sign($options[0]);
     };
   }
 }
