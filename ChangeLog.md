@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #43: Refactor to use injection library - @thekid
+
 ## 1.11.0 / 2022-11-19
 
 * Merged PR #42: Collect statistics on views. Users must look at pages
