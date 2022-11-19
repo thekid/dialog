@@ -48,9 +48,8 @@ class SigningTest {
     $s= new Signing($this->secret);
     $query= 'target=test';
 
-    $signature= $s->sign($query);
-    [$signature[0], $signature[1]]= [$signature[1], $signature[0]];
-    Assert::false($s->verify($query, $signature));
+    [$hash, $time]= explode('.', $s->sign($query));
+    Assert::false($s->verify($query, sprintf('%s.%d', str_repeat('a', strlen($hash)), $time + 1)));
   }
 
   #[Test]
