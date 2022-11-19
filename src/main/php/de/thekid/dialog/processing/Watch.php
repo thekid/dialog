@@ -47,6 +47,7 @@ class Watch extends Command {
     ;
 
     process: $this->out->writeLine('> Processing ', $collection);
+    $this->out->writeLine('  ', date('r'), ' - PID ', getmypid(), '; press Ctrl+C to exit');
     $this->out->writeLine();
     try {
       Collections::watching($collection)->each(function($item) use($files) {
