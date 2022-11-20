@@ -46,10 +46,10 @@ class Watch extends Command {
       ->collection('processing')
     ;
 
-    process: $this->out->writeLine('> Processing ', $collection);
+    $this->out->writeLine('> Processing ', $collection);
     $this->out->writeLine('  ', date('r'), ' - PID ', getmypid(), '; press Ctrl+C to exit');
     $this->out->writeLine();
-    try {
+    process: try {
       Collections::watching($collection)->each(function($item) use($files) {
         $this->out->writeLinef(
           '  [%s %d %.3fkB] %s',
