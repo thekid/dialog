@@ -17,6 +17,8 @@ use webservices\rest\{Endpoint, RestUpload};
  * @see   https://github.com/thekid/dialog/issues/44
  */
 class Watch extends Command {
+  use ProcessingDefaults;
+
   private const WAIT_BEFORE_RETRYING= 10;
   private $api;
 
@@ -28,18 +30,6 @@ class Watch extends Command {
 
   /** Runs forever, consuming the change stream */
   public function run(): int {
-    $files= new Files()
-      ->matching(['.jpg', '.jpeg', '.png', '.webp'], new Images()
-        ->targeting('preview', new ResizeTo(720, 'jpg'))
-        ->targeting('thumb', new ResizeTo(1024, 'webp'))
-        ->targeting('full', new ResizeTo(3840, 'webp'))
-      )
-      ->matching(['.mp4', '.mpeg', '.mov'], new Videos()
-        ->targeting('preview', new ResizeTo(720, 'jpg'))
-        ->targeting('thumb', new ResizeTo(1024, 'webp'))
-      )
-    ;
-
     $preferences= new Preferences(new Environment('console'), 'config');
     $collection= new MongoConnection($preferences->get('mongo', 'uri'))
       ->database($preferences->optional('mongo', 'db', 'dialog'))
@@ -49,6 +39,8 @@ class Watch extends Command {
     $this->out->writeLine('> Processing ', $collection);
     $this->out->writeLine('  ', date('r'), ' - PID ', getmypid(), '; press Ctrl+C to exit');
     $this->out->writeLine();
+
+    $files= $this->files();
     process: try {
       Collections::watching($collection)->each(function($item) use($files) {
         $this->out->writeLinef(

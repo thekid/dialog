@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog\import;
 
-use de\thekid\dialog\processing\{Files, Images, Videos, ResizeTo};
+use de\thekid\dialog\processing\ProcessingDefaults;
 use io\{Folder, File};
 use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
@@ -19,6 +19,8 @@ use webservices\rest\{Endpoint, RestUpload};
  * - cover.md: The image to use for the cover page
  */
 class LocalDirectory extends Command {
+  use ProcessingDefaults;
+
   private $origin, $api;
   private $force= false;
 
@@ -56,19 +58,9 @@ class LocalDirectory extends Command {
 
   /** Runs this command */
   public function run(): int {
-    $files= new Files()
-      ->matching(['.jpg', '.jpeg', '.png', '.webp'], new Images()
-        ->targeting('preview', new ResizeTo(720, 'jpg'))
-        ->targeting('thumb', new ResizeTo(1024, 'webp'))
-        ->targeting('full', new ResizeTo(3840, 'webp'))
-      )
-      ->matching(['.mp4', '.mpeg', '.mov'], new Videos()
-        ->targeting('preview', new ResizeTo(720, 'jpg'))
-        ->targeting('thumb', new ResizeTo(1024, 'webp'))
-      )
-    ;
-
+    $files= $this->files();
     $publish= time();
+
     foreach (Sources::in($this->origin) as $folder => $item) {
       $this->out->writeLine('[+] ', $item);
 
