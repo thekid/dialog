@@ -2,7 +2,8 @@ FROM php:8.1-cli-alpine
 
 RUN apk add \
   ffmpeg \
-  freetype freetype-dev \
+  zlib zlib-dev \
+  libpng libpng-dev \
   libjpeg-turbo libjpeg-turbo-dev \
   libwebp libwebp-dev \
   && rm -f /var/cache/apk/*
