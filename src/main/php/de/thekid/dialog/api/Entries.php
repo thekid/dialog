@@ -42,6 +42,16 @@ class Entries {
     return $result->entry();
   }
 
+  #[Get('/{id:.+(/.+)?}/images/{name}')]
+  public function media(#[Value] $user, string $id, string $name) {
+    $f= new File($this->storage->folder($id), $name);
+    if ($f->exists()) {
+      return Response::ok()->stream($f->in(), $f->size());
+    } else {
+      return Response::error(404, 'No media named "'.$name.'" in '.$id);
+    }
+  }
+
   #[Put('/{id:.+(/.+)?}/images/{name}')]
   public function upload(#[Value] $user, string $id, string $name, #[Request] $req) {
 
