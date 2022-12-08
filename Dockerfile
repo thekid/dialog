@@ -1,4 +1,4 @@
-FROM php:8.1-cli-alpine
+FROM php:8.2-cli-alpine
 
 RUN docker-php-ext-install -j$(nproc) bcmath
 
