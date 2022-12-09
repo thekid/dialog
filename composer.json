@@ -13,12 +13,14 @@
     "xp-forge/frontend": "^4.0",
     "xp-forge/rest-api": "^3.4",
     "xp-forge/rest-client": "^5.3",
-    "xp-forge/handlebars-templates": "^2.1",
+    "xp-forge/handlebars-templates": "^2.2",
     "xp-forge/markdown": "^6.0",
     "xp-forge/yaml": "^6.0",
     "xp-forge/hashing": "^2.1",
     "xp-forge/mongodb": "^1.6",
-    "xp-lang/xp-generics": "^0.4"
+    "xp-lang/xp-generics": "^0.4",
+    "xp-forge/inject": "^5.4",
+    "xp-forge/mongodb": "^1.6"
   },
 
   "require-dev": {

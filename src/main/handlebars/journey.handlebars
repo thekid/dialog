@@ -24,6 +24,7 @@ parent: feed
             <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
           {{/each}}
         </ul>
+        {{count journey.views '' '(Eine Ansicht)' '(# Ansichten)'}}
       </div>
       {{> partials/images in=journey first='true' style='overview'}}
 
@@ -88,6 +89,11 @@ parent: feed
       {{/each}}
 
       mapping.project(document.querySelector('#map'));
+
+      // Update statistics
+      window.setTimeout(() => {
+        fetch('/api/statistics/{{journey.slug}}', {method: 'POST', body: '{{sign journey.slug}}'});
+      }, 10000);
     </script>
   {{/inline}}
 {{/layout}}

@@ -3,6 +3,26 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.12.0 / 2022-12-09
+
+* Upgrade to [PHP 8.2](https://www.php.net/archive/2022.php#2022-12-08-1)
+  (@thekid)
+* Merged PR #45: Extract image and video processing to *processing*
+  package - a prerequisite for being able to reuse it for #44.
+  (@thekid)
+* Merged PR #43: Refactor to use injection library - @thekid
+
+## 1.11.0 / 2022-11-19
+
+* Merged PR #42: Collect statistics on views. Users must look at pages
+  for a certain time before we count a view - a more honest statistic
+  that also doesn't include web crawlers, for instance.
+  (@thekid)
+
+## 1.10.0 / 2022-11-13
+
+* Merged PR #41: Change lightbox to use HTML `<dialog>` element - @thekid
+
 ## 1.9.0 / 2022-11-08
 
 * Merged PR #40: Migrate to JS classes. The JS code base is now much

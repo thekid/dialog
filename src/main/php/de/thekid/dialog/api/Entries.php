@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog\api;
 
-use de\thekid\dialog\Repository;
-use io\{Path, Folder, File};
+use de\thekid\dialog\{Repository, Storage};
+use io\File;
 use text\json\Json;
 use util\Date;
 use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
@@ -9,12 +9,7 @@ use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
 #[Resource('/api/entries')]
 class Entries {
 
-  public function __construct(private Repository $repository, private Path $storage) { }
-
-  /** Returns folder for a given entry */
-  private function folder(string $entry): Folder {
-    return new Folder($this->storage, 'image', $entry);
-  }
+  public function __construct(private Repository $repository, private Storage $storage) { }
 
   #[Put('/{id:.+(/.+)?}')]
   public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
@@ -42,7 +37,7 @@ class Entries {
 
     // Ensure storage directory is created
     if ($result->created()) {
-      $this->folder($id)->create();
+      $this->storage->folder($id)->create();
     }
 
     return $result->entry();
@@ -59,7 +54,7 @@ class Entries {
     // Asynchronously process uploads
     return new Async(function() use($id, $name, $req) {
       if ($multipart= $req->multipart()) {
-        $f= $this->folder($id);
+        $f= $this->storage->folder($id);
         foreach ($multipart->files() as $file) {
           yield from $file->transmit(new File($f, $file->name()));
         }
@@ -99,7 +94,7 @@ class Entries {
 
     $deleted= [];
     $pattern= '/^(.+)-('.$name.')\.(webp|jpg|mp4)$/';
-    foreach ($this->folder($id)->entries() as $entry) {
+    foreach ($this->storage->folder($id)->entries() as $entry) {
       if (preg_match($pattern, $entry->name())) {
         $entry->asFile()->unlink();
         $deleted[]= $entry->name();

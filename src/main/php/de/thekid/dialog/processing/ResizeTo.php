@@ -1,4 +1,4 @@
-<?php namespace de\thekid\dialog\import;
+<?php namespace de\thekid\dialog\processing;
 
 use img\Image;
 use img\io\{StreamReader, WebpStreamWriter, JpegStreamWriter, PngStreamWriter};
