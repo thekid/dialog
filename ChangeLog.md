@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgrade to [PHP 8.2](https://www.php.net/archive/2022.php#2022-12-08-1)
+  (@thekid)
 * Merged PR #45: Extract image and video processing to *processing*
   package - a prerequisite for being able to reuse it for #44.
   (@thekid)
