@@ -154,7 +154,7 @@ class LocalDirectory extends Command {
           }
 
           // Extract meta information, aggregating palette from preview image
-          $info= [...$meta($source)] + ['palette' => []];
+          $info= [...$processing->meta($source)] + ['palette' => []];
           try {
             $palette= $this->colors->palette(
               Image::loadFrom(new JpegStreamReader($transfer['preview'])),
