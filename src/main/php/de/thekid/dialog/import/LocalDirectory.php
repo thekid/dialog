@@ -1,5 +1,6 @@
 <?php namespace de\thekid\dialog\import;
 
+use de\thekid\dialog\colors\Colors;
 use de\thekid\dialog\processing\{Files, Images, Videos, ResizeTo};
 use io\{Folder, File};
 use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
