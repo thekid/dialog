@@ -34,17 +34,21 @@ class App extends Application {
     }
 
     // Cache static content for one week, immutable fingerprinted assets for one year
+    $caching= ['Cache-Control' => 'max-age=604800'];
     $manifest= new AssetsManifest($this->environment->path('src/main/webapp/assets/manifest.json'));
-    $static= ['Cache-Control' => 'max-age=604800'];
+    $static= new AssetsFrom($this->environment->path('src/main/webapp'))->with($caching);
+    $assets= new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
+      'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
+    ]);
+
     return [
-      '/image'      => $storage->with($static),
-      '/static'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with($static),
-      '/assets'     => new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
-        'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
-      ]),
-      '/robots.txt' => fn($req, $res) => $res->send("User-agent: *\nDisallow: /api/\n", 'text/plain'),
-      '/api'        => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $inject->get(...)))),
-      '/'           => new Frontend(
+      '/static'      => $static,
+      '/favicon.ico' => $static,
+      '/robots.txt'  => $static,
+      '/assets'      => $assets,
+      '/image'       => $storage->with($caching),
+      '/api'         => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $inject->get(...)))),
+      '/'            => new Frontend(
         new HandlersIn('de.thekid.dialog.web', $inject->get(...)),
         new Handlebars($this->environment->path('src/main/handlebars'), [
           new Dates(TimeZone::getByName('Europe/Berlin')),
