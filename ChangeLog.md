@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.13.0 / 2022-12-10
+
+* Merged PR #47: Serve favicon, some bots seem to request them regardless
+  of meta property
+  (@thekid)
+
 ## 1.12.0 / 2022-12-09
 
 * Upgrade to [PHP 8.2](https://www.php.net/archive/2022.php#2022-12-08-1)
