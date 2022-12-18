@@ -8,6 +8,8 @@ on:
 
 jobs:
   tests:
+    name: Default configuratin (PHP 8.2, MongoDB 5.0, Ubuntu)
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
