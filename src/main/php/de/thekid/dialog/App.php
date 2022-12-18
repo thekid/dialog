@@ -12,17 +12,31 @@ use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars};
 use web\rest\{RestApi, ResourcesIn};
 
 class App extends Application {
+  private $conn= null;
+  private $storage= null;
+
+  /** Passes MongoDB connection to use */
+  public function connecting(MongoConnection $conn): self {
+    $this->conn= $conn;
+    return $this;
+  }
+
+  /** Passes storage to use */
+  public function serving(Storage $storage): self {
+    $this->storage= $storage;
+    return $this;
+  }
 
   /** Returns routing for this web application */
   public function routes() {
     $preferences= new Preferences($this->environment, 'config');
-    $conn= new MongoConnection($preferences->get('mongo', 'uri'));
-    $repository= new Repository($conn->database($preferences->optional('mongo', 'db', 'dialog')));
-    $storage= new Storage($this->environment->arguments()[0]);
+    $this->conn??= new MongoConnection($preferences->get('mongo', 'uri'));
+    $this->storage??= new Storage($this->environment->arguments()[0]);
+    $repository= new Repository($this->conn->database($preferences->optional('mongo', 'db', 'dialog')));
     $inject= new Injector(Bindings::using()
       ->instance($repository)
-      ->instance($storage)
-      ->instance(new Signing(new Secret($preferences->get('mongo', 'uri')))->tolerating(seconds: 30))
+      ->instance($this->storage)
+      ->instance(new Signing(new Secret($this->conn->protocol()->dsn(password: true)))->tolerating(seconds: 30))
     );
 
     // Authenticate API users against MongoDB
@@ -46,7 +60,7 @@ class App extends Application {
       '/favicon.ico' => $static,
       '/robots.txt'  => $static,
       '/assets'      => $assets,
-      '/image'       => $storage->with($caching),
+      '/image'       => $this->storage->with($caching),
       '/api'         => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $inject->get(...)))),
       '/'            => new Frontend(
         new HandlersIn('de.thekid.dialog.web', $inject->get(...)),

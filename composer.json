@@ -18,7 +18,7 @@
     "xp-forge/yaml": "^6.0",
     "xp-forge/hashing": "^2.1",
     "xp-forge/inject": "^5.4",
-    "xp-forge/mongodb": "^1.6"
+    "xp-forge/mongodb": "dev-feature/protocol-accessor as 1.9.0"
   },
 
   "require-dev": {
