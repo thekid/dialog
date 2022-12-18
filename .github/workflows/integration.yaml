@@ -37,12 +37,8 @@ jobs:
         composer install --prefer-dist --no-scripts &&
         echo "vendor/autoload.php" > composer.pth
 
-    - name: Start MongoDB
-      run: docker run --name mongo --rm -p 27017:27017 -d mongo:5 && docker inspect mongo
-
     - name: Run tests
-      run: sh xp-run xp.unittest.TestRunner src/it/php -a mongodb://[::1]:27017
-
-    - name: Stop MongoDB
-      run:
-        docker stop mongo
+      run: >
+        docker run --name mongo --rm -p 27017:27017 -d mongo:5 && docker inspect mongo &&
+        sh xp-run xp.unittest.TestRunner src/it/php -a mongodb://[::1]:27017 ;
+        docker logs mongo ; docker stop mongo
