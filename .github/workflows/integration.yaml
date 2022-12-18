@@ -43,4 +43,4 @@ jobs:
         mongodb-version: 5.0
 
     - name: Run tests
-      run: sh xp-run xp.unittest.TestRunner src/it/php -a mongodb://localhost:27017
+      run: sh xp-run xp.unittest.TestRunner src/it/php -a mongodb://mongodb:27017
