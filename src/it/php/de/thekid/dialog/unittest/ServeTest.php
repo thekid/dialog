@@ -3,7 +3,6 @@
 use com\mongodb\{MongoConnection, Document};
 use de\thekid\dialog\{App, Storage};
 use io\Path;
-use lang\Throwable;
 use unittest\{Assert};
 use util\Date;
 use web\Environment;
@@ -19,8 +18,8 @@ class ServeTest {
   }
 
   /** Serves a request */
-  private function serve(string $method, string $uri, array<string, string> $headers= []): Response {
-    $req= new Request(new TestInput($method, $uri, $headers));
+  private function serve(string $method, string $uri, array<string, string> $headers= [], string $body= ''): Response {
+    $req= new Request(new TestInput($method, $uri, $headers, $body));
     $res= new Response(new TestOutput());
     foreach ($this->routing->handle($req, $res) ?? [] as $_) { }
     return $res;
@@ -28,16 +27,11 @@ class ServeTest {
 
   #[Before]
   public function setup() {
-    try {
-      $this->routing= new App(new Environment('test', '.'))
-        ->connecting($this->conn)
-        ->serving(new Storage('.'))
-        ->routing()
-      ;
-    } catch ($e) {
-      Throwable::wrap($e)->printStackTrace();
-      throw $e;
-    }
+    $this->routing= new App(new Environment('test', '.'))
+      ->connecting($this->conn)
+      ->serving(new Storage('.'))
+      ->routing()
+    ;
   }
 
   #[Test]
@@ -62,5 +56,18 @@ class ServeTest {
   public function type_ahead_api_publicly_accessible() {
     $res= $this->serve('GET', '/api/suggestions?q=');
     Assert::equals([200, 'application/json; charset=utf-8'], [$res->status(), $res->headers()['Content-Type']]);
+  }
+
+  #[Test]
+  public function upload_api_needs_authentication() {
+    $res= $this->serve('PUT', '/api/entries/test', ['Content-Type' => 'application/json; charset=utf-8'], '{
+      "title"    : "Test",
+      "date"     : "2022-12-18 20:17:35+0100",
+      "keywords" : [],
+      "locations": [],
+      "content"  : "...",
+      "is"       : {"content": true}
+    }');
+    Assert::equals([400, 'application/json; charset=utf-8'], [$res->status(), $res->headers()['Content-Type']]);
   }
 }
