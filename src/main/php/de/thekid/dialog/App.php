@@ -11,6 +11,7 @@ use web\frontend\helpers\{Assets, Dates, Numbers};
 use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars};
 use web\rest\{RestApi, ResourcesIn};
 
+/** @test de.thekid.dialog.unittest.ServeTest */
 class App extends Application {
   private $conn= null;
   private $storage= null;
