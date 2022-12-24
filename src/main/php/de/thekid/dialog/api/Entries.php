@@ -109,8 +109,8 @@ class Entries {
     // time new content is added.
     $entry= $this->repository->entry($id, published: false);
     if (empty($entry['images'])) {
-      $first= $this->repository->children($id)->first();
-      $preview= empty($first['images']) ? null : ['slug' => $first['slug'], ...$first['images'][0]];
+      $latest= $this->repository->children($id)->first();
+      $preview= empty($latest['images']) ? null : ['slug' => $latest['slug'], ...$latest['images'][0]];
     } else {
       $preview= ['slug' => $id, ...$entry['images'][0]];
     }
