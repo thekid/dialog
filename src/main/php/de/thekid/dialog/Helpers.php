@@ -27,7 +27,7 @@ class Helpers extends Extension {
     yield 'range-rel' => function($node, $context, $options) {
       $from= strtotime($options[0]);
       $until= strtotime($options[1]);
-      $time= time();
+      $time= isset($options[2]) ? strtotime($options[2]) : time();
       if ($time < $from) return 'future';
       if ($time > $until) return 'passed';
       return 'current';
