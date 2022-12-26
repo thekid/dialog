@@ -369,6 +369,17 @@
       padding: .125rem .4rem;
     }
 
+    .card .current.date {
+      background-color: orange;
+    }
+
+    .card .current.date::before {
+      content: 'LIVE';
+      margin-right: .25rem;
+      padding-right: .25rem;
+      border-right: 1px solid white;
+    }
+
     .card h3 {
       position: absolute;
       inset: auto 1rem 1rem 1rem;
