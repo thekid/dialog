@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog;
 
-use com\mongodb\result\Update;
+use com\mongodb\result\{Cursor, Update};
 use com\mongodb\{Database, Document};
 use text\hash\Hashing;
 use util\{Date, Secret};
@@ -122,14 +122,13 @@ class Repository {
     return $cursor->first();
   }
 
-  /** Returns an entry's children */
-  public function children(string $slug): array<Document> {
-    $cursor= $this->database->collection('entries')->aggregate([
+  /** Returns an entry's children, latest first */
+  public function children(string $slug): Cursor {
+    return $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => $slug], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
     ]);
-    return $cursor->all();
   }
 
   /** Replace an entry identified by a given slug with a given entity */

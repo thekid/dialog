@@ -103,7 +103,18 @@ class Entries {
 
   #[Put('/{id:.+(/.+)?}/published')]
   public function publish(#[Value] $user, string $id, #[Entity] Date $date) {
-    $this->repository->modify($id, ['$set' => ['published' => $date]]);
+
+    // If this entry does not contain any images, use the first image of the latest
+    // child element as the preview image. This will update the preview image every
+    // time new content is added.
+    $entry= $this->repository->entry($id, published: false);
+    if (empty($entry['images'])) {
+      $latest= $this->repository->children($id)->first();
+      $preview= empty($latest['images']) ? null : ['slug' => $latest['slug'], ...$latest['images'][0]];
+    } else {
+      $preview= ['slug' => $id, ...$entry['images'][0]];
+    }
+    $this->repository->modify($id, ['$set' => ['published' => $date, 'preview' => $preview]]);
 
     return ['published' => $date];
   }
