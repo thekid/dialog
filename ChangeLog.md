@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #49: Select preview image from latest child element if none
+  available instead of leaving it empt. This will update the preview image
+  every time new content is added.
+  (@thekid)
+* Fixed card display when no preview images are available - @thekid
+
 ## 1.13.0 / 2022-12-10
 
 * Merged PR #47: Serve favicon, some bots seem to request them regardless
