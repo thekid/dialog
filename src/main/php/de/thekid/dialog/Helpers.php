@@ -6,8 +6,10 @@ use web\frontend\helpers\Extension;
  * Dialog handlebars helpers
  *
  * - range <from> <until>
+ * - range-rel <from> <until>
  * - route <entry>
  * - dataset <meta-inf>
+ * - sign <link>
  *
  * @test  de.thekid.dialog.unittest.HelpersTest
  */ 
@@ -21,6 +23,14 @@ class Helpers extends Extension {
       $from= date($options['format'], strtotime($options[0]));
       $until= date($options['format'], strtotime($options[1]));
       return $from === $until ? $from : $from.' - '.$until;
+    };
+    yield 'range-rel' => function($node, $context, $options) {
+      $from= strtotime($options[0]);
+      $until= strtotime($options[1]);
+      $time= isset($options[2]) ? strtotime($options[2]) : time();
+      if ($time < $from) return 'future';
+      if ($time > $until) return 'passed';
+      return 'current';
     };
     yield 'route' => function($node, $context, $options) {
       $entry= $options[0];
