@@ -3,6 +3,7 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #50: Display "LIVE" on card if journey is current - @thekid
 * Merged PR #49: Select preview image from latest child element if none
   available instead of leaving it empt. This will update the preview image
   every time new content is added.
