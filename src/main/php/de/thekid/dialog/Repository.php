@@ -48,6 +48,18 @@ class Repository {
       ['$sort'  => ['date' => -1]],
       ['$skip'  => $pagination->skip($page)],
       ['$limit' => $pagination->limit()],
+
+      // Add newest children. Use $reverseArray instead of $sortArray as the latter
+      // is not available until 5.2, and MongoDB Atlas currently runs 5.0
+      ['$lookup' => [
+        'from'         => 'entries',
+        'localField'   => 'slug',
+        'foreignField' => 'parent',
+        'as'           => 'children',
+      ]],
+      ['$addFields' => [
+        'children' => ['$reverseArray' => ['$slice' => ['$children', -6, 6]]]
+      ]],
     ]));
   }
 

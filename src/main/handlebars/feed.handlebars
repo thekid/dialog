@@ -34,7 +34,30 @@
             {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
           </div>
 
-          {{> partials/images in=. first=@first}}
+          {{#if images}}
+            {{> partials/images in=. first=@first}}
+          {{else}}
+            <div class="cards">
+              {{#each children}}
+                {{#if @last}}
+                  <div class="continue card">
+                    <a title="...und mehr" href="{{route this}}">
+                      {{#with preview}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{name}}.webp">{{else}}<div class="without-preview"></div>{{/with}}
+                      <div class="next">&#187;</div>
+                    </a>
+                  </div>
+                {{else}}
+                  <div class="card">
+                    <div class="date">{{date ./date format='d.m.Y'}}</div>
+                    <a title="{{title}}" href="{{route this}}">
+                      {{#with preview}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{name}}.webp">{{else}}<div class="without-preview"></div>{{/with}}
+                      <h3>{{title}}</h3>
+                    </a>
+                  </div>
+                {{/if}}
+              {{/each}}
+            </div>
+          {{/if}}
 
           <div class="content">
             {{& content}}
