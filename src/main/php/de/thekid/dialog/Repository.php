@@ -41,26 +41,34 @@ class Repository {
   }
 
   /** Returns paginated (top-level) entries */
-  public function entries(Pagination $pagination, int $page): array<Document> {
-    return $pagination->paginate($page, $this->database->collection('entries')->aggregate([
+  public function entries(Pagination $pagination, int $page, int $children= 6): array<Document> {
+    $entries= $this->database->collection('entries');
+    $cursor= $entries->aggregate([
       ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
       ['$skip'  => $pagination->skip($page)],
       ['$limit' => $pagination->limit()],
+    ]);
 
-      // Add newest children. Use $reverseArray instead of $sortArray as the latter
-      // is not available until 5.2, and MongoDB Atlas currently runs 5.0
-      ['$lookup' => [
-        'from'         => 'entries',
-        'localField'   => 'slug',
-        'foreignField' => 'parent',
-        'as'           => 'children',
-      ]],
-      ['$addFields' => [
-        'children' => ['$reverseArray' => ['$slice' => ['$children', -6, 6]]]
-      ]],
-    ]));
+    // We could use $lookup here but would then not have the children sorted
+    // properly - $sortArray is not available until 5.2, and Atlas free tier
+    // currently runs 5.0. TODO: Change this once prerequisites are fully met!
+    $results= [];
+    foreach ($cursor as $entry) {
+      if (empty($entry['images'])) {
+        $children= $entries->aggregate([
+          ['$match' => ['parent' => $entry['slug']]],
+          ['$unset' => '_searchable'],
+          ['$sort'  => ['date' => -1]],
+          ['$limit' => $children],
+        ]);
+        $entry['children']= $children->all();
+      }
+      $results[]= $entry;
+    }
+
+    return $pagination->paginate($page, $results);
   }
 
   /** Returns search suggestions */
