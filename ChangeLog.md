@@ -3,10 +3,14 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.14.0 / 2023-01-15
+
+* Merged PR #51: Display newest children as cards if no images are given
+  (@thekid)
 * Merged PR #50: Display "LIVE" on card if journey is current - @thekid
 * Merged PR #49: Select preview image from latest child element if none
-  available instead of leaving it empt. This will update the preview image
-  every time new content is added.
+  available instead of leaving it empty. This will update the preview
+  image every time new content is added.
   (@thekid)
 * Fixed card display when no preview images are available - @thekid
 
