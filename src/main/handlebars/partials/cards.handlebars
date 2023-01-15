@@ -1,0 +1,24 @@
+<div class="cards">
+  {{#each in}}
+    {{#if @last}}
+      <div class="continue card">
+        <a title="...und mehr" href="{{#if continue}}{{continue}}{{else}}{{route this}}{{/if}}">
+          {{#with preview}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{name}}.webp">{{else}}<div class="without-preview"></div>{{/with}}
+          <div class="next">&#187;</div>
+        </a>
+      </div>
+    {{else}}
+      <div class="card">
+        {{#if is.content}}
+          <div class="date">{{date ./date format='d.m.Y'}}</div>
+        {{else if is.journey}}
+          <div class="{{range-rel is.from is.until}} date">{{range is.from is.until format="M Y"}}</div>
+        {{/if}}
+        <a title="{{title}}" href="{{route this}}">
+          {{#with preview}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{name}}.webp">{{else}}<div class="without-preview"></div>{{/with}}
+          <h3>{{title}}</h3>
+        </a>
+      </div>
+    {{/if}}
+  {{/each}}
+</div>

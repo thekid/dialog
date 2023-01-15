@@ -34,7 +34,11 @@
             {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
           </div>
 
-          {{> partials/images in=. first=@first}}
+          {{#if images}}
+            {{> partials/images in=. first=@first}}
+          {{else}}
+            {{> partials/cards in=children}}
+          {{/if}}
 
           <div class="content">
             {{& content}}
