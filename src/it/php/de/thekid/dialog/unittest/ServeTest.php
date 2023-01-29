@@ -3,12 +3,13 @@
 use com\mongodb\{Document, MongoConnection};
 use de\thekid\dialog\{App, Storage};
 use io\Path;
-use test\Assert;
+use test\{Args, Assert, Before, Test};
 use util\Date;
 use web\Environment;
 use web\io\{TestInput, TestOutput};
 use web\{Request, Response};
 
+#[Args]
 class ServeTest {
   private $conn, $routing;
 
