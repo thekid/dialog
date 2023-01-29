@@ -16,7 +16,7 @@ class DescriptionsTest {
     new Descriptions();
   }
 
-  #[Test, Expect(FormatException::class), Values(list: ['', 'Content'])]
+  #[Test, Expect(FormatException::class), Values(['', 'Content'])]
   public function parse_input_without_yfm($input) {
     $this->parse($input);
   }
