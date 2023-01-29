@@ -9,7 +9,7 @@ use web\Environment;
 use web\io\{TestInput, TestOutput};
 use web\{Request, Response};
 
-#[Args]
+#[Args('dsn')]
 class ServeTest {
   private $conn, $routing;
 
