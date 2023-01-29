@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog\unittest;
 
 use de\thekid\dialog\processing\{Files, Images};
-use unittest\{Assert, Expect, Test, Values};
+use test\{Assert, Expect, Test, Values};
 
 class FilesTest {
 

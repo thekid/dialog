@@ -1,9 +1,9 @@
 <?php namespace de\thekid\dialog\unittest;
 
-use com\mongodb\{MongoConnection, Document};
+use com\mongodb\{Document, MongoConnection};
 use de\thekid\dialog\{App, Storage};
 use io\Path;
-use unittest\{Assert};
+use test\Assert;
 use util\Date;
 use web\Environment;
 use web\io\{TestInput, TestOutput};

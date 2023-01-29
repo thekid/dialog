@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog\unittest;
 
 use de\thekid\dialog\Preferences;
-use unittest\{Assert, Before, Expect, Test, Values};
+use test\{Assert, Before, Expect, Test, Values};
 use util\NoSuchElementException;
 use util\{Properties, RegisteredPropertySource};
 use web\Environment;
