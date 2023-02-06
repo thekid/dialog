@@ -63,7 +63,7 @@ class PreferencesTest {
     Assert::equals('set', $fixture->{$op}('mongo', 'uri'));
   }
 
-  #[Test, Expect(class: NoSuchElementException::class, withMessage: '/Missing.+mongo::uri/')]
+  #[Test, Expect(class: NoSuchElementException::class, message: '/Missing.+mongo::uri/')]
   public function get_raises_exception_if_not_found() {
     $fixture= new Preferences($this->environment(null)->export([]), 'config');
 
