@@ -22,7 +22,7 @@
   },
 
   "require-dev": {
-    "xp-framework/test": "dev-main"
+    "xp-framework/test": "^1.0"
   },
 
   "scripts": {
