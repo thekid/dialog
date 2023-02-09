@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #53: Migrate to new testing library - @thekid
+
 ## 1.14.0 / 2023-01-15
 
 * Merged PR #51: Display newest children as cards if no images are given
