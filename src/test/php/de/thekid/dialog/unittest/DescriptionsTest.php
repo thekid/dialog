@@ -3,7 +3,7 @@
 use de\thekid\dialog\import\{Description, Descriptions};
 use io\streams\MemoryInputStream;
 use lang\FormatException;
-use unittest\{Assert, Expect, Test, Values};
+use test\{Assert, Expect, Test, Values};
 
 class DescriptionsTest {
 

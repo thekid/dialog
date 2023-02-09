@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog\unittest;
 
 use de\thekid\dialog\Helpers;
-use unittest\{Assert, Test, Values};
+use test\{Assert, Test, Values};
 
 class HelpersTest {
   private $helpers= [...new Helpers()->helpers()];

@@ -1,14 +1,15 @@
 <?php namespace de\thekid\dialog\unittest;
 
-use com\mongodb\{MongoConnection, Document};
+use com\mongodb\{Document, MongoConnection};
 use de\thekid\dialog\{App, Storage};
 use io\Path;
-use unittest\{Assert};
+use test\{Args, Assert, Before, Test};
 use util\Date;
 use web\Environment;
 use web\io\{TestInput, TestOutput};
 use web\{Request, Response};
 
+#[Args('dsn')]
 class ServeTest {
   private $conn, $routing;
 

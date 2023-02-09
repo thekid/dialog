@@ -2,7 +2,7 @@
 
 use de\thekid\dialog\Storage;
 use io\Folder;
-use unittest\{Assert, Test};
+use test\{Assert, Test};
 
 class StorageTest {
   private $base= new Folder('.');
