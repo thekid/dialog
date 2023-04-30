@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.15.0 / 2023-04-30
+
 * Merged PR #54: Instead of manually aggregating children, use MongoDB 5.2+
   features, implementing #52 now that Atlas free tier is finally at 6.0
   (@thekid)
