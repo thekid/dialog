@@ -44,31 +44,33 @@ class Repository {
   public function entries(Pagination $pagination, int $page, int $children= 6): array<Document> {
     $entries= $this->database->collection('entries');
     $cursor= $entries->aggregate([
-      ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
-      ['$unset' => '_searchable'],
-      ['$sort'  => ['date' => -1]],
-      ['$skip'  => $pagination->skip($page)],
-      ['$limit' => $pagination->limit()],
+      ['$match'  => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+      ['$unset'  => '_searchable'],
+      ['$sort'   => ['date' => -1]],
+      ['$skip'   => $pagination->skip($page)],
+      ['$limit'  => $pagination->limit()],
+
+      // If no preview images are set, aggregate children
+      ['$lookup' => [
+        'from'     => 'entries',
+        'let'      => ['parent' => '$slug', 'images' => ['$size' => '$images']],
+        'pipeline' => [
+          ['$match' => ['$expr' => ['$cond' => [
+            ['$eq' => ['$$images', 0]],
+            ['$eq' => ['$parent', '$$parent']],
+            ['$eq' => ['$_id', null]],
+          ]]]]
+        ],
+        'as'       => 'children',
+      ]],
+      ['$addFields' => ['children' => ['$map' => [
+        'input' => ['$sortArray' => ['input'  => '$children', 'sortBy' => ['date' => -1]]],
+        'as'    => 'it',
+        'in'    => ['$unsetField' => ['input' => '$$it', 'field' => '_searchable']],
+      ]]]],
     ]);
 
-    // We could use $lookup here but would then not have the children sorted
-    // properly - $sortArray is not available until 5.2, and Atlas free tier
-    // currently runs 5.0. TODO: Change this once prerequisites are fully met!
-    $results= [];
-    foreach ($cursor as $entry) {
-      if (empty($entry['images'])) {
-        $children= $entries->aggregate([
-          ['$match' => ['parent' => $entry['slug']]],
-          ['$unset' => '_searchable'],
-          ['$sort'  => ['date' => -1]],
-          ['$limit' => $children],
-        ]);
-        $entry['children']= $children->all();
-      }
-      $results[]= $entry;
-    }
-
-    return $pagination->paginate($page, $results);
+    return $pagination->paginate($page, $cursor);
   }
 
   /** Returns search suggestions */
