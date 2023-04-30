@@ -49,11 +49,19 @@ class Repository {
       ['$sort'   => ['date' => -1]],
       ['$skip'   => $pagination->skip($page)],
       ['$limit'  => $pagination->limit()],
+
+      // If no preview images are set, aggregate children
       ['$lookup' => [
-        'from'         => 'entries',
-        'localField'   => 'slug',
-        'foreignField' => 'parent',
-        'as'           => 'children',
+        'from'     => 'entries',
+        'let'      => ['parent' => '$slug', 'images' => ['$size' => '$images']],
+        'pipeline' => [
+          ['$match' => ['$expr' => ['$cond' => [
+            ['$eq' => ['$$images', 0]],
+            ['$eq' => ['$parent', '$$parent']],
+            ['$eq' => ['$_id', null]],
+          ]]]]
+        ],
+        'as'       => 'children',
       ]],
       ['$addFields' => ['children' => ['$map' => [
         'input' => ['$sortArray' => ['input'  => '$children', 'sortBy' => ['date' => -1]]],
