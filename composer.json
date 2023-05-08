@@ -8,7 +8,7 @@
     "xp-framework/imaging": "^10.1",
     "xp-framework/command": "^11.0",
     "xp-framework/networking": "^10.4",
-    "xp-forge/web": "^3.6",
+    "xp-forge/web": "^3.8",
     "xp-forge/web-auth": "^3.3",
     "xp-forge/frontend": "^4.0",
     "xp-forge/rest-api": "^3.4",
