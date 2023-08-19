@@ -27,7 +27,6 @@ class Entries {
       'locations'   => $attributes['locations'],
       'content'     => $attributes['content'],
       'is'          => $attributes['is'],
-      'images'      => [],
       '_searchable' => [
         'boost'   => isset($attributes['is']['journey']) ? 2.0 : 1.0,
         'suggest' => trim($suggest),
@@ -60,7 +59,7 @@ class Entries {
         }
 
         // Fetch entry again, it might have changed in the meantime!
-        $images= $this->repository->entry($id, published: false)['images'];
+        $images= $this->repository->entry($id, published: false)['images'] ?? [];
 
         // Modify existing image, appending it if not existant
         $is= preg_match('/\.(mp4|mov|webm)$/i', $name) ? 'video' : 'image';
@@ -70,7 +69,7 @@ class Entries {
           'meta'     => (array)$req->param('meta') + ['dateTime' => gmdate('c')],
           'is'       => [$is => true]
         ];
-        foreach ($images ?? [] as $i => $existing) {
+        foreach ($images as $i => $existing) {
           if ($name === $existing['name']) {
             $images[$i]= $image;
             goto set;
