@@ -32,9 +32,9 @@ class Videos extends Processing {
 
       // FIXME: This needs to support more than just Apple!
       if (isset($meta['mdta:com.apple.quicktime.software'])) {
-        var_dump($meta);
+        $local= preg_replace('/[+-][0-9]{4}$/', '', $meta['mdta:com.apple.quicktime.creationdate'][0]);
         return [
-          'dateTime' => new Date($meta['mdta:com.apple.quicktime.creationdate'][0])->toString('c', self::$UTC),
+          'dateTime' => new Date($local)->toString('c', self::$UTC),
           'make'     => $meta['mdta:com.apple.quicktime.make'][0],
           'model'    => $meta['mdta:com.apple.quicktime.model'][0],
         ];
