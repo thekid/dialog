@@ -18,6 +18,25 @@ class Videos extends Processing {
   }
 
   public function meta(File $source): array<string, mixed> {
+    if (preg_match('/\.(mov|mp4)$/', $source->getFileName())) {
+      $meta= [];
+      foreach (new Atoms()->in($source) as $name => $atom) {
+        if ('moov.meta.keys' === $name) {
+          $meta= $atom['value'];
+        } else if ('moov.meta.ilst' === $name) {
+          $meta= array_combine($meta, $atom['value']);
+        }
+      }
+
+      // FIXME: This needs to support more than just Apple!
+      if (isset($meta['mdta:com.apple.quicktime.software'])) {
+        return [
+          'dateTime' => new Date($meta['mdta:com.apple.quicktime.creationdate'][0])->toString('c'),
+          'make'     => $meta['mdta:com.apple.quicktime.make'][0],
+          'model'    => $meta['mdta:com.apple.quicktime.model'][0],
+        ];
+      }
+    }
     return [];
   }
 
