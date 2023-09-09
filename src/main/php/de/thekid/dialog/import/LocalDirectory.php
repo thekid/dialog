@@ -75,13 +75,18 @@ class LocalDirectory extends Command {
       // Aggregate coordinates from Google Maps links
       foreach ($item['locations'] as &$location) {
         $r= new HttpConnection($location['link'])->get();
-        if (!preg_match('#/maps/place/[^/]+/@([0-9.-]+),([0-9.-]+),([0-9.]+)z#', $r->header('Location')[0], $m)) {
+
+        if (preg_match('#/maps/place/[^/]+/@([0-9.-]+),([0-9.-]+),([0-9.]+)z#', $r->header('Location')[0], $m)) {
+          $location['lat']= (float)$m[1];
+          $location['lon']= (float)$m[2];
+          $location['zoom']= (float)$m[3];
+        } else if (preg_match('#/maps/search/([0-9.-]+),.([0-9.-]+)#', $r->header('Location')[0], $m)) {
+          $location['lat']= (float)$m[1];
+          $location['lon']= (float)$m[2];
+          $location['zoom']= 1.0;
+        } else {
           throw new FormatException('Cannot resolve '.$location['link'].': '.$r->toString());
         }
-
-        $location['lat']= (float)$m[1];
-        $location['lon']= (float)$m[2];
-        $location['zoom']= (float)$m[3];
       }
 
       // Fetch existing entry
