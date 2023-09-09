@@ -5,7 +5,7 @@ Dialog change log
 
 ## 1.15.2 / 2023-09-09
 
-* Fixed support for unknown places on Google Maps - @thekid
+* Fixed support for unnamed places on Google Maps - @thekid
 
 ## 1.15.1 / 2023-08-19
 
