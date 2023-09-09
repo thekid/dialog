@@ -2,8 +2,10 @@
 
 use io\File;
 use lang\{Process, IllegalStateException};
+use util\Date;
 
 class Videos extends Processing {
+  private $atoms= new Atoms();
 
   public function __construct(private string $executable= 'ffmpeg') { }
 
@@ -18,9 +20,9 @@ class Videos extends Processing {
   }
 
   public function meta(File $source): array<string, mixed> {
-    if (preg_match('/\.(mov|mp4)$/', $source->getFileName())) {
+    if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
       $meta= [];
-      foreach (new Atoms()->in($source) as $name => $atom) {
+      foreach ($this->atoms->in($source) as $name => $atom) {
         if ('moov.meta.keys' === $name) {
           $meta= $atom['value'];
         } else if ('moov.meta.ilst' === $name) {
@@ -30,8 +32,9 @@ class Videos extends Processing {
 
       // FIXME: This needs to support more than just Apple!
       if (isset($meta['mdta:com.apple.quicktime.software'])) {
+        var_dump($meta);
         return [
-          'dateTime' => new Date($meta['mdta:com.apple.quicktime.creationdate'][0])->toString('c'),
+          'dateTime' => new Date($meta['mdta:com.apple.quicktime.creationdate'][0])->toString('c', self::$UTC),
           'make'     => $meta['mdta:com.apple.quicktime.make'][0],
           'model'    => $meta['mdta:com.apple.quicktime.model'][0],
         ];
