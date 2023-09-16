@@ -48,9 +48,8 @@ class Videos extends Processing {
       }
 
       // Prefer original creation date from iOS, converting it to local time
-      if (isset($meta['mdta:com.apple.quicktime.software'])) {
-        $local= preg_replace('/[+-][0-9]{4}$/', '', $meta['mdta:com.apple.quicktime.creationdate'][0]);
-        $r['dateTime']= new Date($local)->toString('c', self::$UTC);
+      if ($date= $meta['mdta:com.apple.quicktime.creationdate'][0] ?? null) {
+        $r['dateTime']= new Date(preg_replace('/[+-][0-9]{4}$/', '', $date))->toString('c', self::$UTC);
       }
 
       // Aggregate information from movie header: Duration and creation time
