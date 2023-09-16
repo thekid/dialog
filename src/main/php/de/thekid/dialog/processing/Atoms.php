@@ -46,13 +46,15 @@ class Atoms {
         preg_match_all('/[+-][0-9.]+/', $f->read($entry['size'] - 1), $c);
         return $c[0];
       },
-      'moov.udta.mcvr' => function($f, $atom) {
-        $out= new File('cover.jpeg');
-        $out->open(File::WRITE);
-        $out->write($f->read($atom['length'] - 8));
-        $out->close();
-        return $out;
-      },
+
+      // TODO: Convert to io.streams.InputStream instance
+      // 'moov.udta.mcvr' => function($f, $atom) {
+      //   $out= new File('cover.jpeg');
+      //   $out->open(File::WRITE);
+      //   $out->write($f->read($atom['length'] - 8));
+      //   $out->close();
+      //   return $out;
+      // },
     ];
   }
 
