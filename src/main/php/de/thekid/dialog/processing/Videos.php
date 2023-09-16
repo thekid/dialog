@@ -20,6 +20,13 @@ class Videos extends Processing {
   }
 
   public function meta(File $source): array<string, mixed> {
+    static $MAP= [
+      'mdta:com.apple.quicktime.make'  => 'make',
+      'mdta:com.apple.quicktime.model' => 'model',
+      'mdta:com.android.manufacturer'  => 'make',
+      'mdta:com.android.model'         => 'model',
+    ];
+
     if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
       $r= $meta= [];
       foreach ($this->atoms->in($source) as $name => $atom) {
@@ -33,18 +40,16 @@ class Videos extends Processing {
       }
 
       // Normalize meta data from iOS and Android devices
+      foreach ($meta as $key => $value) {
+        if ($mapped= $MAP[$key] ?? null) {
+          $r[$mapped]= $value[0];
+        }
+      }
+
+      // Prefer original creation date from iOS, converting it to local time
       if (isset($meta['mdta:com.apple.quicktime.software'])) {
         $local= preg_replace('/[+-][0-9]{4}$/', '', $meta['mdta:com.apple.quicktime.creationdate'][0]);
-        $r= [
-          'dateTime' => new Date($local)->toString('c', self::$UTC),
-          'make'     => $meta['mdta:com.apple.quicktime.make'][0],
-          'model'    => $meta['mdta:com.apple.quicktime.model'][0],
-        ];
-      } else if (isset($meta['mdta:com.android.version'])) {
-        $r= [
-          'make'  => $meta['mdta:com.android.manufacturer'][0],
-          'model' => $meta['mdta:com.android.model'][0],
-        ];
+        $r['dateTime']= new Date($local)->toString('c', self::$UTC);
       }
 
       // Aggregate information from movie header: Duration and creation time

@@ -47,6 +47,11 @@ class Atoms {
         return $c[0];
       },
 
+      // DEBUG
+      // 'moov.udta.*' => function($f, $atom) {
+      //   return new Bytes($f->read($atom['length'] - 8));
+      // },
+
       // TODO: Convert to io.streams.InputStream instance
       // 'moov.udta.mcvr' => function($f, $atom) {
       //   $out= new File('cover.jpeg');
