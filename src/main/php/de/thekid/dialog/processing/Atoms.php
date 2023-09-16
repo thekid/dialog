@@ -9,6 +9,11 @@ class Atoms {
 
   public function __construct() {
     $this->parsers= [
+      'moov.mvhd' => function($f, $atom) {
+
+        // See https://developer.apple.com/documentation/quicktime-file-format/movie_header_atom
+        return unpack('cversion/c3flags/Ncreated/Nmodified/Nscale/Nduration', $f->read(20));
+      },
       'moov.meta.keys' => function($f, $atom) {
         $r= [];
         $info= unpack('cversion/c3flags/Ncount', $f->read(8));
