@@ -53,14 +53,6 @@ class Atoms {
         $out->close();
         return $out;
       },
-      'moov.udta.meta' => function($f, $atom) {
-        return new Bytes($f->read(4)); // FIXME: ???
-      },
-      'moov.udta.*' => function($f, $atom) {
-        // $entry= unpack('nsize/ntype', $f->read(4));
-        // var_dump($atom, $entry);
-        return new Bytes($f->read($atom['length'] - 8));
-      },
     ];
   }
 
