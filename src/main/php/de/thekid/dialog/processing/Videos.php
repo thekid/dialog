@@ -28,7 +28,7 @@ class Videos extends Processing {
     ];
 
     if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
-      $r= $meta= [];
+      $meta= [];
       foreach ($this->atoms->in($source) as $name => $atom) {
         if ('moov.meta.keys' === $name) {
           $keys= $atom['value'];
@@ -40,6 +40,7 @@ class Videos extends Processing {
       }
 
       // Normalize meta data from iOS and Android devices
+      $r= [];
       foreach ($meta as $key => $value) {
         if ($mapped= $MAP[$key] ?? null) {
           $r[$mapped]= $value[0];
