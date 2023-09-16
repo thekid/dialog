@@ -2,10 +2,8 @@
 
 use img\io\MetaDataReader;
 use io\File;
-use util\TimeZone;
 
 class Images extends Processing {
-  private static $UTC= TimeZone::getByName('UTC');
   private $meta= new MetaDataReader();
 
   public function kind(): string { return 'image'; }
