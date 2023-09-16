@@ -24,9 +24,9 @@ class Videos extends Processing {
       $r= $meta= [];
       foreach ($this->atoms->in($source) as $name => $atom) {
         if ('moov.meta.keys' === $name) {
-          $meta= $atom['value'];
+          $keys= $atom['value'];
         } else if ('moov.meta.ilst' === $name) {
-          $meta= array_combine($meta, $atom['value']);
+          $meta= array_combine($keys, $atom['value']);
         } else if ('moov.mvhd' === $name) {
           $meta['mvhd']= $atom['value'];
         }
