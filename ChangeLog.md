@@ -3,6 +3,13 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.16.0 / 2023-09-16
+
+* Merged PR #55: Extract meta data from MP4 / MOV atoms, making it
+  possible to mix videos and images in albums and have them sorted
+  correctly by date and time.
+  (@thekid)
+
 ## 1.15.2 / 2023-09-09
 
 * Fixed support for unnamed places on Google Maps - @thekid
