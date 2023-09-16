@@ -21,24 +21,40 @@ class Videos extends Processing {
 
   public function meta(File $source): array<string, mixed> {
     if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
-      $meta= [];
+      $r= $meta= [];
       foreach ($this->atoms->in($source) as $name => $atom) {
         if ('moov.meta.keys' === $name) {
           $meta= $atom['value'];
         } else if ('moov.meta.ilst' === $name) {
           $meta= array_combine($meta, $atom['value']);
+        } else if ('moov.mvhd' === $name) {
+          $meta['mvhd']= $atom['value'];
         }
       }
 
-      // FIXME: This needs to support more than just Apple!
+      // Normalize meta data from iOS and Android devices
       if (isset($meta['mdta:com.apple.quicktime.software'])) {
         $local= preg_replace('/[+-][0-9]{4}$/', '', $meta['mdta:com.apple.quicktime.creationdate'][0]);
-        return [
+        $r= [
           'dateTime' => new Date($local)->toString('c', self::$UTC),
           'make'     => $meta['mdta:com.apple.quicktime.make'][0],
           'model'    => $meta['mdta:com.apple.quicktime.model'][0],
         ];
+      } else if (isset($meta['mdta:com.android.version'])) {
+        $r= [
+          'make'  => $meta['mdta:com.android.manufacturer'][0],
+          'model' => $meta['mdta:com.android.model'][0],
+        ];
       }
+
+      // Aggregate information from movie header: Duration and creation time
+      // Time info is the number of seconds since 1904-01-01 00:00:00 UTC
+      if (isset($meta['mvhd'])) {
+        $r['duration']= round($meta['mvhd']['duration'] / $meta['mvhd']['scale'], 3);
+        $r['dateTime']??= new Date($meta['mvhd']['created'] - 2082844800)->toString('c', self::$UTC);
+      }
+
+      return $r;
     }
     return [];
   }
