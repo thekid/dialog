@@ -32,7 +32,7 @@ class Atoms {
             $entry= unpack('Ntype/a4locale', $f->read(8));
             $bytes= $f->read($data['length'] - 16);
 
-            // See https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/Metadata/Metadata.html#//apple_ref/doc/uid/TP40000939-CH1-SW34
+            // See https://developer.apple.com/documentation/quicktime-file-format/value_atom
             $r[$index][]= match ($entry['type']) {
               1       => $bytes,    // yield utf-8 as-is
               default => new Bytes($bytes)
@@ -46,20 +46,9 @@ class Atoms {
         preg_match_all('/[+-][0-9.]+/', $f->read($entry['size'] - 1), $c);
         return $c[0];
       },
-
-      // DEBUG
-      // 'moov.udta.*' => function($f, $atom) {
-      //   return new Bytes($f->read($atom['length'] - 8));
-      // },
-
-      // TODO: Convert to io.streams.InputStream instance
-      // 'moov.udta.mcvr' => function($f, $atom) {
-      //   $out= new File('cover.jpeg');
-      //   $out->open(File::WRITE);
-      //   $out->write($f->read($atom['length'] - 8));
-      //   $out->close();
-      //   return $out;
-      // },
+      'moov.udta.*' => function($f, $atom) {
+        return new Data($f, $atom['offset'] + 8, $atom['length'] - 8);
+      },
     ];
   }
 
@@ -79,17 +68,18 @@ class Atoms {
   }
 
   private function atoms($f, $parent) {
-    static $CONTAINERS= ['moov' => 1, 'udta' => 1, 'ilst' => 1, 'meta' => 1];
+    static $CONTAINERS= ['moov' => 1, 'moov.udta' => 1, 'moov.meta' => 1];
 
     $limit= $parent ? $parent['offset'] + $parent['length'] : $f->size();
     $base= $parent ? $parent['path'].$parent['name'].'.' : '';
 
     while (($offset= $f->tell()) < $limit) {
       $atom= $this->atom($f, $base);
-      yield $atom['path'].$atom['name'] => $atom;
+      $path= $atom['path'].$atom['name'];
+      yield $path => $atom;
 
       $end= $atom['offset'] + $atom['length'];
-      if (isset($CONTAINERS[$atom['name']])) {
+      if (isset($CONTAINERS[$path])) {
         yield from $this->atoms($f, $atom);
       }
 
