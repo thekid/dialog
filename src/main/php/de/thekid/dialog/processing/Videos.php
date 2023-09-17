@@ -4,6 +4,13 @@ use io\File;
 use lang\{Process, IllegalStateException};
 use util\Date;
 
+/**
+ * Processes videos with the help of `ffmpeg`, extracting meta information
+ * from MP4, MOV and MPEG files by parsing their header and meta data atoms.
+ *
+ * @see  https://ffmpeg.org/
+ * @test de.thekid.dialog.unittest.VideoMetaTest
+ */
 class Videos extends Processing {
   private $atoms= new Atoms();
 
@@ -26,6 +33,7 @@ class Videos extends Processing {
       'mdta:com.android.manufacturer'  => 'make',
       'mdta:com.android.model'         => 'model',
     ];
+
 
     if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
       $meta= [];
