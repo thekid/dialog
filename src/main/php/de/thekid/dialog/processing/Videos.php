@@ -34,7 +34,6 @@ class Videos extends Processing {
       'mdta:com.android.model'         => 'model',
     ];
 
-
     if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
       $meta= [];
       foreach ($this->atoms->in($source) as $name => $atom) {
