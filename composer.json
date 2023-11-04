@@ -5,7 +5,7 @@
 
   "require": {
     "xp-framework/compiler": "^8.6",
-    "xp-framework/imaging": "^10.1",
+    "xp-framework/imaging": "^10.2",
     "xp-framework/command": "^11.0",
     "xp-framework/networking": "^10.4",
     "xp-forge/web": "^3.8",
