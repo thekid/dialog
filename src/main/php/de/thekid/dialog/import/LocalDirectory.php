@@ -1,9 +1,11 @@
 <?php namespace de\thekid\dialog\import;
 
+use de\thekid\dialog\colors\Colors;
 use de\thekid\dialog\processing\{Files, Images, Videos, ResizeTo};
 use io\{Folder, File};
 use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
 use peer\http\HttpConnection;
+use text\json\Json;
 use util\cmd\{Command, Arg};
 use util\log\Logging;
 use webservices\rest\{Endpoint, RestUpload};
@@ -20,6 +22,8 @@ use webservices\rest\{Endpoint, RestUpload};
  */
 class LocalDirectory extends Command {
   private $origin, $api;
+  private $meta= new MetaDataReader();
+  private $colors= new Colors();
   private $force= false;
 
   /** Sets origin folder, e.g. `./imports/album` */
@@ -52,6 +56,31 @@ class LocalDirectory extends Command {
     if (0 === ($r= $p->close())) return;
 
     throw new IllegalStateException($p->getCommandLine().' exited with exit code '.$r);
+  }
+
+  private function hsl($color) {
+    $r= $color->red / 255;
+    $g= $color->green / 255;
+    $b= $color->blue / 255;
+
+    $max= max($r, $g, $b);
+    $min= min($r, $g, $b);
+
+    $lum = ($max + $min) / 2;
+
+    if ($max === $min) {
+      $hue= $sat= 0;
+    } else {
+      $c= $max - $min;
+      $sat= $c / (1 - abs(2 * $lum - 1));
+      $hue= match ($max) {
+        $r => ($g - $b) / $c + ($g < $b ? 6 : 0),
+        $g => ($b - $r) / $c + 2,
+        $b => ($r - $g) / $c + 4,
+      };
+    }
+
+    return ['h' => round($hue * 60), 's' => round($sat * 100), 'l' => round($lum * 100)];
   }
 
   /** Runs this command */
@@ -129,10 +158,22 @@ class LocalDirectory extends Command {
             }
           }
 
-          $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
-          foreach ($processing->meta($source) as $key => $value) {
-            $upload->pass('meta['.$key.']', $value);
+          // Extract meta information, aggregating palette from preview image
+          $info= [...$processing->meta($source)] + ['palette' => []];
+          try {
+            $palette= $this->colors->palette(
+              Image::loadFrom(new JpegStreamReader($transfer['preview'])),
+              Colors::DOMINANT
+            );
+            foreach ($palette as $color) {
+              $info['palette'][]= $this->hsl($color);
+            }
+          } catch ($e) {
+            // Ignore palette
           }
+
+          $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
+          $upload->pass('meta-inf', Json::of($info));
           foreach ($transfer as $kind => $file) {
             $upload->transfer($kind, $file->in(), $file->filename);
           }

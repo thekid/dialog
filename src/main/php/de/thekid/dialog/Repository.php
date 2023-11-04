@@ -8,7 +8,7 @@ use util\{Date, Secret};
 class Repository {
   private $passwords= Hashing::sha256();
 
-  public function __construct(private Database $database) { }
+  public function __construct(public readonly Database $database) { }
 
   /** Authenticates a given user, returning NULL on failure */
   public function authenticate(string $user, Secret $secret): ?Document {

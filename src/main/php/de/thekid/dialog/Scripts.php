@@ -12,7 +12,7 @@ use web\frontend\helpers\Extension;
  * ```html
  * <script type="module">
  *   {{&use 'suggestions'}}
- *   suggestions(document.querySelector('#search'));
+ *   const suggestions = new Suggestions('/api/suggestions?q=%s');
  * </script>
  * ```
  */ 

@@ -4,8 +4,8 @@
   "license": "bsd",
 
   "require": {
-    "xp-framework/compiler": "^8.5",
-    "xp-framework/imaging": "^10.1",
+    "xp-framework/compiler": "^8.6",
+    "xp-framework/imaging": "^10.2",
     "xp-framework/command": "^11.0",
     "xp-framework/networking": "^10.4",
     "xp-forge/web": "^3.8",
@@ -17,6 +17,8 @@
     "xp-forge/markdown": "^7.0",
     "xp-forge/yaml": "^6.0",
     "xp-forge/hashing": "^2.1",
+    "xp-forge/mongodb": "^1.6",
+    "xp-lang/xp-generics": "^0.7",
     "xp-forge/inject": "^5.4",
     "xp-forge/mongodb": "^2.0"
   },
