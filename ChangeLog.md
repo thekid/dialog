@@ -3,6 +3,45 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.16.0 / 2023-09-16
+
+* Merged PR #55: Extract meta data from MP4 / MOV atoms, making it
+  possible to mix videos and images in albums and have them sorted
+  correctly by date and time.
+  (@thekid)
+
+## 1.15.2 / 2023-09-09
+
+* Fixed support for unnamed places on Google Maps - @thekid
+
+## 1.15.1 / 2023-08-19
+
+* Fixed images being re-uploaded every time - @thekid
+
+## 1.15.0 / 2023-04-30
+
+* Merged PR #54: Instead of manually aggregating children, use MongoDB 5.2+
+  features, implementing #52 now that Atlas free tier is finally at 6.0
+  (@thekid)
+* Merged PR #53: Migrate to new testing library - @thekid
+
+## 1.14.0 / 2023-01-15
+
+* Merged PR #51: Display newest children as cards if no images are given
+  (@thekid)
+* Merged PR #50: Display "LIVE" on card if journey is current - @thekid
+* Merged PR #49: Select preview image from latest child element if none
+  available instead of leaving it empty. This will update the preview
+  image every time new content is added.
+  (@thekid)
+* Fixed card display when no preview images are available - @thekid
+
+## 1.13.0 / 2022-12-10
+
+* Merged PR #47: Serve favicon, some bots seem to request them regardless
+  of meta property
+  (@thekid)
+
 ## 1.12.0 / 2022-12-09
 
 * Upgrade to [PHP 8.2](https://www.php.net/archive/2022.php#2022-12-08-1)

@@ -2,7 +2,7 @@
 
 use de\thekid\dialog\Pagination;
 use lang\IllegalArgumentException;
-use unittest\{Assert, Expect, Test, Values};
+use test\{Assert, Expect, Test, Values};
 
 class PaginationTest {
   private const PAGED = 5;

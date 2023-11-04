@@ -2,7 +2,7 @@
 
 use de\thekid\dialog\Signing;
 use text\hash\Hashing;
-use unittest\{Assert, Before, Test};
+use test\{Assert, Before, Test, Values};
 use util\Secret;
 
 class SigningTest {

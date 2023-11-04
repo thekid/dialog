@@ -18,11 +18,9 @@
     <div class="cards">
       {{#each journeys}}
         <div class="card">
-          <div class="date">{{range is.from is.until format="M Y"}}</div>
+          <div class="{{range-rel is.from is.until}} date">{{range is.from is.until format="M Y"}}</div>
           <a title="{{title}}" href="/journey/{{slug}}">
-            {{#with images.0}}
-              <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless (top 3 @index)}}loading="lazy"{{/unless}} src="/image/{{slug}}/thumb-{{.}}.webp">
-            {{/with}}
+            {{#with preview}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless (top 3 @index)}}loading="lazy"{{/unless}} src="/image/{{slug}}/thumb-{{name}}.webp">{{else}}<div class="without-preview"></div>{{/with}}
             <h3>{{title}}</h3>
           </a>
         </div>

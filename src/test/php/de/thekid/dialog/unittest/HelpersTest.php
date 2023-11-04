@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog\unittest;
 
 use de\thekid\dialog\Helpers;
-use unittest\{Assert, Test, Values};
+use test\{Assert, Test, Values};
 
 class HelpersTest {
   private $helpers= [...new Helpers()->helpers()];
@@ -14,6 +14,17 @@ class HelpersTest {
   ])]
   public function range($options, $expected) {
     Assert::equals($expected, $this->helpers['range'](null, null, $options));
+  }
+
+  #[Test, Values([
+    [['2022-12-20', '2023-01-13', '2022-12-14'], 'future'],
+    [['2022-12-20', '2023-01-13', '2022-12-20'], 'current'],
+    [['2022-12-20', '2023-01-13', '2022-12-24'], 'current'],
+    [['2022-12-20', '2023-01-13', '2023-01-13'], 'current'],
+    [['2022-12-20', '2023-01-13', '2023-02-10'], 'passed'],
+  ])]
+  public function range_rel($options, $expected) {
+    Assert::equals($expected, $this->helpers['range-rel'](null, null, $options));
   }
 
   #[Test, Values([

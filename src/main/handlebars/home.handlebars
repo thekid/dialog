@@ -27,31 +27,8 @@
 
     <!-- Newest content -->
     <h2 class="news">Neueste Inhalte</h2>
-    <div class="cards">
-      {{#each newest}}
-        {{#if @last}}
-          <div class="continue card">
-            <a title="Seite 2" href="/feed?page=2">
-              {{#with images.0}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
-              <div class="next">&#187;</div>
-            </a>
-          </div>
-        {{else}}
-          <div class="card">
-            {{#if is.content}}
-              <div class="date">{{date ./date format='d.m.Y'}}</div>
-              <a title="{{title}}" href="/content/{{slug}}">
-            {{else if is.journey}}
-              <div class="date">{{range is.from is.until format="M Y"}}</div>
-              <a title="{{title}}" href="/journey/{{slug}}">
-            {{/if}}
-              {{#with images.0}}<img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" src="/image/{{slug}}/thumb-{{.}}.webp">{{/with}}
-              <h3>{{title}}</h3>
-            </a>
-          </div>
-        {{/if}}
-      {{/each}}
-    </div>
+    {{> partials/cards in=newest continue='/feed?page=2'}}
+
     &#187; <a href="/feed">Alle Inhalte im Feed</a>
   {{/inline}}
   {{#*inline "scripts"}}

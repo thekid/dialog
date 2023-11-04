@@ -1,8 +1,10 @@
 <?php namespace de\thekid\dialog\processing;
 
 use io\File;
+use util\TimeZone;
 
 abstract class Processing {
+  protected static $UTC= TimeZone::getByName('UTC');
   protected $targets= [];
 
   /** Returns processing kind */

@@ -2,8 +2,17 @@
 
 use io\File;
 use lang\{Process, IllegalStateException};
+use util\Date;
 
+/**
+ * Processes videos with the help of `ffmpeg`, extracting meta information
+ * from MP4, MOV and MPEG files by parsing their header and meta data atoms.
+ *
+ * @see  https://ffmpeg.org/
+ * @test de.thekid.dialog.unittest.VideoMetaTest
+ */
 class Videos extends Processing {
+  private $atoms= new Atoms();
 
   public function __construct(private string $executable= 'ffmpeg') { }
 
@@ -18,6 +27,47 @@ class Videos extends Processing {
   }
 
   public function meta(File $source): array<string, mixed> {
+    static $MAP= [
+      'mdta:com.apple.quicktime.make'  => 'make',
+      'mdta:com.apple.quicktime.model' => 'model',
+      'mdta:com.android.manufacturer'  => 'make',
+      'mdta:com.android.model'         => 'model',
+    ];
+
+    if (preg_match('/\.(mov|mp4|mpeg)$/i', $source->getFileName())) {
+      $meta= [];
+      foreach ($this->atoms->in($source) as $name => $atom) {
+        if ('moov.meta.keys' === $name) {
+          $keys= $atom['value'];
+        } else if ('moov.meta.ilst' === $name) {
+          $meta+= array_combine($keys, $atom['value']);
+        } else if ('moov.mvhd' === $name) {
+          $meta['mvhd']= $atom['value'];
+        }
+      }
+
+      // Normalize meta data from iOS and Android devices
+      $r= [];
+      foreach ($meta as $key => $value) {
+        if ($mapped= $MAP[$key] ?? null) {
+          $r[$mapped]= $value[0];
+        }
+      }
+
+      // Prefer original creation date from iOS, converting it to local time
+      if ($date= $meta['mdta:com.apple.quicktime.creationdate'][0] ?? null) {
+        $r['dateTime']= new Date(preg_replace('/[+-][0-9]{4}$/', '', $date))->toString('c', self::$UTC);
+      }
+
+      // Aggregate information from movie header: Duration and creation time
+      // Time info is the number of seconds since 1904-01-01 00:00:00 UTC
+      if (isset($meta['mvhd'])) {
+        $r['duration']= round($meta['mvhd']['duration'] / $meta['mvhd']['scale'], 3);
+        $r['dateTime']??= new Date($meta['mvhd']['created'] - 2082844800)->toString('c', self::$UTC);
+      }
+
+      return $r;
+    }
     return [];
   }
 

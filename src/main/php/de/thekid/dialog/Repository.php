@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog;
 
-use com\mongodb\result\Update;
+use com\mongodb\result\{Cursor, Update};
 use com\mongodb\{Database, Document};
 use text\hash\Hashing;
 use util\{Date, Secret};
@@ -41,14 +41,36 @@ class Repository {
   }
 
   /** Returns paginated (top-level) entries */
-  public function entries(Pagination $pagination, int $page): array<Document> {
-    return $pagination->paginate($page, $this->database->collection('entries')->aggregate([
-      ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
-      ['$unset' => '_searchable'],
-      ['$sort'  => ['date' => -1]],
-      ['$skip'  => $pagination->skip($page)],
-      ['$limit' => $pagination->limit()],
-    ]));
+  public function entries(Pagination $pagination, int $page, int $children= 6): array<Document> {
+    $entries= $this->database->collection('entries');
+    $cursor= $entries->aggregate([
+      ['$match'  => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+      ['$unset'  => '_searchable'],
+      ['$sort'   => ['date' => -1]],
+      ['$skip'   => $pagination->skip($page)],
+      ['$limit'  => $pagination->limit()],
+
+      // If no preview images are set, aggregate children
+      ['$lookup' => [
+        'from'     => 'entries',
+        'let'      => ['parent' => '$slug', 'images' => ['$size' => '$images']],
+        'pipeline' => [
+          ['$match' => ['$expr' => ['$cond' => [
+            ['$eq' => ['$$images', 0]],
+            ['$eq' => ['$parent', '$$parent']],
+            ['$eq' => ['$_id', null]],
+          ]]]]
+        ],
+        'as'       => 'children',
+      ]],
+      ['$addFields' => ['children' => ['$map' => [
+        'input' => ['$sortArray' => ['input'  => '$children', 'sortBy' => ['date' => -1]]],
+        'as'    => 'it',
+        'in'    => ['$unsetField' => ['input' => '$$it', 'field' => '_searchable']],
+      ]]]],
+    ]);
+
+    return $pagination->paginate($page, $cursor);
   }
 
   /** Returns search suggestions */
@@ -122,14 +144,13 @@ class Repository {
     return $cursor->first();
   }
 
-  /** Returns an entry's children */
-  public function children(string $slug): array<Document> {
-    $cursor= $this->database->collection('entries')->aggregate([
+  /** Returns an entry's children, latest first */
+  public function children(string $slug): Cursor {
+    return $this->database->collection('entries')->aggregate([
       ['$match' => ['parent' => ['$eq' => $slug], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
     ]);
-    return $cursor->all();
   }
 
   /** Replace an entry identified by a given slug with a given entity */
