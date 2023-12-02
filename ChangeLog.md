@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgrade to PHP 8.3 and XP 8.8 - @thekid
+
 ## 1.16.0 / 2023-09-16
 
 * Merged PR #55: Extract meta data from MP4 / MOV atoms, making it
