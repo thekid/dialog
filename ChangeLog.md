@@ -3,7 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
-* Upgrade to PHP 8.3 and XP 8.8 - @thekid
+* Upgraded `xp-forge/web` and `xp-forge/frontend` libraries - @thekid
+* Upgraded to PHP 8.3 and XP 8.8 - @thekid
 
 ## 1.16.0 / 2023-09-16
 
