@@ -32,6 +32,15 @@ class Helpers extends Extension {
       if ($time > $until) return 'passed';
       return 'current';
     };
+    yield 'size-class' => function($node, $context, $options) {
+      $s= (int)$options[0];
+      return match {
+        0 === $s => 'empty',
+        1 === $s => 'single',
+        1 === $s % 2 => 'odd',
+        default => 'even',
+      };
+    };
     yield 'route' => function($node, $context, $options) {
       $entry= $options[0];
       if (isset($entry['is']['journey'])) {

@@ -514,15 +514,15 @@
       grid-template-columns: 1fr;
     }
 
-    .images.size-1 {
+    .images.is-single {
       grid-template-columns: 1fr;
     }
 
-    .images.size-1 video {
+    .images.is-single video {
       aspect-ratio: auto;
     }
 
-    .images:where(.size-3, .size-5, .size-7) .image:first-child {
+    .images:where(.is-odd) .image:first-child {
       grid-column: 1 / 3;
     }
 
