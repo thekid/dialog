@@ -11,47 +11,49 @@ parent: feed
   {{/inline}}
   {{#*inline "main"}}
     <h1 class="title">Dialog - Suche</h1>
-    {{> partials/search owns='results'}}
+    <search>
+      {{> partials/search owns='results'}}
 
-    <div id="results">
-      {{#with results.elements}}
-        <div class="summary">Seite {{results.page}} von {{meta.count.lowerBound.number}} Ergebnissen in {{time}} Sekunden</div>
-        {{#each .}}
-          <section>
-            <h2><a href="{{route this}}">{{#if is.journey}}Reise: {{/if}}{{title}}</a></h2>
+      <div id="results">
+        {{#with results.elements}}
+          <div class="summary">Seite {{results.page}} von {{meta.count.lowerBound.number}} Ergebnissen in {{time}} Sekunden</div>
+          {{#each .}}
+            <section>
+              <h2><a href="{{route this}}">{{#if is.journey}}Reise: {{/if}}{{title}}</a></h2>
 
-            <div class="meta">
-              {{date ./date format="d.m.Y"}} @
-              <ul class="locations" role="list">
-                {{#each locations}}
-                  <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
-                {{/each}}
-              </ul>
-            </div>
+              <div class="meta">
+                {{date ./date format="d.m.Y"}} @
+                <ul class="locations" role="list">
+                  {{#each locations}}
+                    <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
+                  {{/each}}
+                </ul>
+              </div>
 
-            {{#if is.journey}}
-              {{> partials/images in=. first=@first style='overview'}}
-            {{/if}}
+              {{#if is.journey}}
+                {{> partials/images in=. first=@first style='overview'}}
+              {{/if}}
 
-            <div class="excerpt">
-              {{&excerpt . '_searchable.content' 'content'}}
-            </div>
+              <div class="excerpt">
+                {{&excerpt . '_searchable.content' 'content'}}
+              </div>
+            </section>
+          {{/each}}
+
+          <div class="pagination">
+            <a class="previous" href={{#if results.previous}}"/search?q={{encode request.params.q}}&amp;page={{results.previous}}"{{else}}"#" aria-disabled="true"{{/if}}>Vorherige</a>
+            <span class="page">Seite {{results.page}}</span>
+            <a class="next" href={{#if results.next}}"/search?q={{encode request.params.q}}&amp;page={{results.next}}"{{else}}"#" aria-disabled="true"{{/if}}>Nächste</a>
+          </div>
+
+        {{else}}
+          <section class="empty">
+            <h2>Keine Ergebnisse</h2>
+            <p>Suche nach etwas anderem...</p>
           </section>
-        {{/each}}
-
-        <div class="pagination">
-          <a class="previous" href={{#if results.previous}}"/search?q={{encode request.params.q}}&amp;page={{results.previous}}"{{else}}"#" aria-disabled="true"{{/if}}>Vorherige</a>
-          <span class="page">Seite {{results.page}}</span>
-          <a class="next" href={{#if results.next}}"/search?q={{encode request.params.q}}&amp;page={{results.next}}"{{else}}"#" aria-disabled="true"{{/if}}>Nächste</a>
-        </div>
-
-      {{else}}
-        <section class="empty">
-          <h2>Keine Ergebnisse</h2>
-          <p>Suche nach etwas anderem...</p>
-        </section>
-      {{/with}}
-    </div>
+        {{/with}}
+      </div>
+    </search>
   {{/inline}}
   {{#*inline "scripts"}}
     <script type="module">
