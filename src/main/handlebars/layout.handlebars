@@ -685,30 +685,30 @@
         margin-left: 0;
         margin-right: 0;
         max-width: 100%;
-      }
 
-      #lightbox .meta {
-        grid-template-columns: repeat(3, max-content) 1fr;
-        transform: scale(1, 1);
-        gap: 0;
-        background-color: white;
-        border: none;
-        border-radius: 0;
-        position: unset;
-      }
+        & .meta {
+          grid-template-columns: repeat(3, max-content) 1fr;
+          transform: scale(1, 1);
+          gap: 0;
+          background-color: white;
+          border: none;
+          border-radius: 0;
+          position: unset;
+        }
 
-      #lightbox img {
-        border: none;
-        border-radius: 0;
-      }
+        & img {
+          border: none;
+          border-radius: 0;
+        }
 
-      #lightbox .meta div:nth-child(2) {
-        grid-column: span 3;
-      }
+        & .meta div:nth-child(2) {
+          grid-column: span 3;
+        }
 
-      #lightbox .meta div {
-        border-radius: unset;
-        background-color: unset;
+        & .meta div {
+          border-radius: unset;
+          background-color: unset;
+        }
       }
     }
 
