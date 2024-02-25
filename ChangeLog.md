@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.17.0 / 2024-02-25
+
+* Merged PR #56: Use semantic HTML `<search>` element, see here:
+  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search
+  (@thekid)
 * Upgraded `xp-forge/web`, `xp-forge/frontend` and `xp-forge/yaml`
   libraries
   (@thekid)
