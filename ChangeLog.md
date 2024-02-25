@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #58: Balance layout for odd number of preview images
+  (@thekid)
+
 ## 1.17.0 / 2024-02-25
 
 * Merged PR #56: Use semantic HTML `<search>` element, see here:

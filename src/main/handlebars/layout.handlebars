@@ -511,11 +511,15 @@
         padding-bottom: 1rem;
       }
 
-      &.all, &.size-1 {
+      &.all, &.is-single {
         grid-template-columns: 1fr;
       }
 
-      &.size-1 video {
+      &:where(.is-odd) .image:first-child {
+        grid-column: 1 / 3;
+      }
+
+      &.is-single video {
         aspect-ratio: auto;
       }
 
@@ -661,6 +665,10 @@
     @media (max-width: 767px) {
       .images {
         grid-template-columns: 1fr;
+      }
+
+      .images .image:first-child {
+        grid-column: 1;
       }
 
       .images.overview {
