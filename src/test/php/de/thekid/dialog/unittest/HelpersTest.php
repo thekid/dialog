@@ -51,4 +51,9 @@ class HelpersTest {
       ]])
     );
   }
+
+  #[Test, Values([[0, 'empty'], [1, 'single'], [2, 'even'], [3, 'odd']])]
+  public function size_class($size, $expected) {
+    Assert::equals($expected, $this->helpers['size-class'](null, null, [$size]));
+  }
 }
