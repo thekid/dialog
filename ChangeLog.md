@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #59: Use `Collection::modify()` instead of invoking
+  "findAndModify"
+  (@thekid)
+
 ## 1.18.0 / 2024-03-02
 
 * Upgraded `xp-forge/markdown` and `xp-forge/web-auth` libraries
