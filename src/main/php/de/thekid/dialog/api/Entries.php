@@ -35,11 +35,11 @@ class Entries {
     ]);
 
     // Ensure storage directory is created
-    if ($result->created()) {
+    if ($result->upserted()) {
       $this->storage->folder($id)->create();
     }
 
-    return $result->entry();
+    return $result->document();
   }
 
   #[Put('/{id:.+(/.+)?}/images/{name}')]
