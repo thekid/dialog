@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 1.18.0 / 2024-03-02
+
 * Upgraded `xp-forge/markdown` and `xp-forge/web-auth` libraries
   (@thekid)
 * Merged PR #58: Balance layout for odd number of preview images
