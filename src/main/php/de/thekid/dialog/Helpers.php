@@ -7,6 +7,7 @@ use web\frontend\helpers\Extension;
  *
  * - range <from> <until>
  * - range-rel <from> <until>
+ * - size-class <size>
  * - route <entry>
  * - dataset <meta-inf>
  * - sign <link>
