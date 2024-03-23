@@ -4,7 +4,7 @@
   "license": "bsd",
 
   "require": {
-    "xp-framework/compiler": "^8.5",
+    "xp-framework/compiler": "^9.0",
     "xp-framework/imaging": "^10.1",
     "xp-framework/command": "^11.0",
     "xp-framework/networking": "^10.4",
@@ -22,7 +22,7 @@
   },
 
   "require-dev": {
-    "xp-framework/test": "^1.0"
+    "xp-framework/test": "^2.0"
   },
 
   "scripts": {
