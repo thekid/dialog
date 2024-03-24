@@ -5,6 +5,9 @@ Dialog change log
 
 ## 2.0.0 / 2024-03-24
 
+* Changed main font from *Overpass* to *Barlow* - its rounded edges
+  fit better with the rest of the design
+  (@thekid)
 * Upgraded XP Compiler & Core - dropping support for PHP 7.0 - 7.3
   (@thekid)
 * Merged PR #59: Use `Collection::modify()` instead of invoking
