@@ -36,13 +36,13 @@ class LocalDirectory extends Command {
 
   /** Transfers images even if they have not been changed */
   #[Arg]
-  public function setForce() {
+  public function useForce() {
     $this->force= true;
   }
 
   /** Add verbose logging for API calls */
   #[Arg]
-  public function setVerbose() {
+  public function useVerbose() {
     $this->api->setTrace(Logging::all()->toConsole());
   }
 

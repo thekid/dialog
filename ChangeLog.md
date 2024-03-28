@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgraded `xp-framework/command` library, being able to adjust the
+  argument methods' prefixes to the much nicer *use*.
+  (@thekid)
+
 ## 2.0.0 / 2024-03-24
 
 * Changed main font from *Overpass* to *Barlow* - its rounded edges
