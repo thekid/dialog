@@ -5,11 +5,11 @@
 
   "require": {
     "xp-framework/compiler": "^9.0",
-    "xp-framework/imaging": "^10.1",
+    "xp-framework/imaging": "^11.0",
     "xp-framework/command": "^12.0",
     "xp-framework/networking": "^10.4",
     "xp-forge/web": "^4.0",
-    "xp-forge/web-auth": "^4.0",
+    "xp-forge/web-auth": "^5.0",
     "xp-forge/frontend": "^6.0",
     "xp-forge/rest-api": "^4.0",
     "xp-forge/rest-client": "^5.3",

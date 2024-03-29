@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgraded `xp-framework/imaging` and `xp-forge/web-auth` libraries,
+  removing dependency on the XML library
+  (@thekid)
 * Upgraded `xp-framework/command` library, being able to adjust the
   argument methods' prefixes to the much nicer *use*.
   (@thekid)
