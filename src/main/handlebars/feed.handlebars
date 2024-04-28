@@ -22,7 +22,7 @@
     {{#with elements}}
       {{#each .}}
         <section>
-          <h2><a href="{{route this}}">{{title}}</a></h2>
+          <h2 class="{{range-rel is.from is.until}} date"><a href="{{route this}}">{{title}}</a></h2>
 
           <div class="meta">
             {{date ./date format="d.m.Y"}} @
