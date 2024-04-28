@@ -53,7 +53,7 @@ class Repository {
       // If no preview images are set, aggregate children
       ['$lookup' => [
         'from'     => 'entries',
-        'let'      => ['parent' => '$slug', 'images' => ['$size' => '$images']],
+        'let'      => ['parent' => '$slug', 'images' => ['$size' => ['$ifNull' => ['$images', []]]]],
         'pipeline' => [
           ['$match' => ['$expr' => ['$cond' => [
             ['$eq' => ['$$images', 0]],
