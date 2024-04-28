@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.1.0 / 2024-04-28
+
+* Added *LIVE* display inside feed, fixed query problem when images
+  are not set yet
+  (@thekid)
 * Upgraded `xp-framework/imaging` and `xp-forge/web-auth` libraries,
   removing dependency on the XML library
   (@thekid)
