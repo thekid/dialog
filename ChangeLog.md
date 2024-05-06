@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.1.1 / 2024-05-06
+
+* Fixed [descenders](https://en.wikipedia.org/wiki/Descender) being
+  cut off on cards
+  (@thekid)
+
 ## 2.1.0 / 2024-04-28
 
 * Added *LIVE* display inside feed, fixed query problem when images
