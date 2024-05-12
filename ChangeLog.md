@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.1.2 / 2024-05-12
+
+* Fixed the `video` elements in having an unwanted bottom "margin".
+  Use *display: block* to prevent this, just like with images.
+  (@thekid)
+
 ## 2.1.1 / 2024-05-06
 
 * Fixed [descenders](https://en.wikipedia.org/wiki/Descender) being
