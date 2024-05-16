@@ -3,6 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.2.0 / 2024-05-16
+
+* Updated the *OpenLayers* JavaScript library to version 9.2, see
+  https://github.com/openlayers/openlayers/releases
+  (@thekid)
+
 ## 2.1.2 / 2024-05-12
 
 * Fixed the `video` elements in having an unwanted bottom "margin".
