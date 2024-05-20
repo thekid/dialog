@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.3.0 / 2024-05-20
+
 * Preload the cover image, increasing the LightHouse score on the
   home page to 99. See #18
   (@thekid)
