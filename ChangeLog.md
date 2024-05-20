@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Preload the cover image, increasing the LightHouse score on the
+  home page to 99. See #18
+  (@thekid)
+
 ## 2.2.0 / 2024-05-16
 
 * Updated the *OpenLayers* JavaScript library to version 9.2, see
