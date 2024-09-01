@@ -3,11 +3,11 @@
 use com\mongodb\Document;
 
 /** @see de.thekid.dialog.Repository::search */
-class SearchResult {
+readonly class SearchResult {
   public static $EMPTY= new self(new Document(), []);
 
   public function __construct(
-    public readonly Document $meta,
-    public readonly iterable $documents,
+    public Document $meta,
+    public iterable $documents,
   ) { }
 }

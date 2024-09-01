@@ -1,8 +1,8 @@
 <?php namespace de\thekid\dialog\import;
 
-class Description {
+readonly class Description {
   public function __construct(
-    public readonly array<string, mixed> $meta,
-    public readonly string $content
+    public array<string, mixed> $meta,
+    public string $content
   ) { }
 }
