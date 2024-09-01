@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Updated the *OpenLayers* JavaScript library to version 10.1, see
+  https://github.com/openlayers/openlayers/releases
+  (@thekid)
+
 ## 2.3.0 / 2024-05-20
 
 * Preload the cover image, increasing the LightHouse score on the
