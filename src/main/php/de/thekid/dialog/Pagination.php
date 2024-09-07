@@ -6,7 +6,7 @@ use lang\IllegalArgumentException;
 class Pagination {
 
   /** @throws lang.IllegalArgumentException */
-  public function __construct(public readonly int $paged) {
+  public function __construct(public private(set) int $paged) {
     if ($paged < 1) {
       throw new IllegalArgumentException('Paged must be greater than 0');
     }

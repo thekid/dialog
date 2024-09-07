@@ -7,7 +7,7 @@ class SearchResult {
   public static $EMPTY= new self(new Document(), []);
 
   public function __construct(
-    public readonly Document $meta,
-    public readonly iterable $documents,
+    public private(set) Document $meta,
+    public private(set) iterable $documents,
   ) { }
 }
