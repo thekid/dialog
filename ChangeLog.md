@@ -3,6 +3,10 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.4.0 / 2024-09-15
+
+* Merged PR #61: Refactor to make use of asymmetric visibility
+  (@thekid)
 * Updated the *OpenLayers* JavaScript library to version 10.1, see
   https://github.com/openlayers/openlayers/releases
   (@thekid)
