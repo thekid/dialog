@@ -2,7 +2,7 @@
 
 class Description {
   public function __construct(
-    public readonly array<string, mixed> $meta,
-    public readonly string $content
+    public private(set) array<string, mixed> $meta,
+    public private(set) string $content
   ) { }
 }

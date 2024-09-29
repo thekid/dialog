@@ -10,12 +10,15 @@
         <meta property="og:image" content="{{request.uri.base}}/image/{{cover.slug}}/preview-{{.}}.jpg">
       {{/with}}
     {{/with}}
+    {{#with cover}}
+      <link rel="preload" href="/image/{{slug}}/full-{{images.0.name}}.webp" as="image">
+    {{/with}}
   {{/inline}}
   {{#*inline "main"}}
 
     <!-- About me -->
     {{#with cover}}
-      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{#with images.0}}{{.}}{{/with}}.webp)">
+      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{images.0.name}}.webp)">
         <h1>{{title}}</h1>
       </div>
       <article class="intro">

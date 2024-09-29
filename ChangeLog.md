@@ -3,6 +3,65 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.4.0 / 2024-09-15
+
+* Merged PR #61: Refactor to make use of asymmetric visibility
+  (@thekid)
+* Updated the *OpenLayers* JavaScript library to version 10.1, see
+  https://github.com/openlayers/openlayers/releases
+  (@thekid)
+
+## 2.3.0 / 2024-05-20
+
+* Preload the cover image, increasing the LightHouse score on the
+  home page to 99. See #18
+  (@thekid)
+
+## 2.2.0 / 2024-05-16
+
+* Updated the *OpenLayers* JavaScript library to version 9.2, see
+  https://github.com/openlayers/openlayers/releases
+  (@thekid)
+
+## 2.1.2 / 2024-05-12
+
+* Fixed the `video` elements in having an unwanted bottom "margin".
+  Use *display: block* to prevent this, just like with images.
+  (@thekid)
+
+## 2.1.1 / 2024-05-06
+
+* Fixed [descenders](https://en.wikipedia.org/wiki/Descender) being
+  cut off on cards
+  (@thekid)
+
+## 2.1.0 / 2024-04-28
+
+* Added *LIVE* display inside feed, fixed query problem when images
+  are not set yet
+  (@thekid)
+* Upgraded `xp-framework/imaging` and `xp-forge/web-auth` libraries,
+  removing dependency on the XML library
+  (@thekid)
+* Upgraded `xp-framework/command` library, being able to adjust the
+  argument methods' prefixes to the much nicer *use*.
+  (@thekid)
+
+## 2.0.0 / 2024-03-24
+
+* Changed main font from *Overpass* to *Barlow* - its rounded edges
+  fit better with the rest of the design
+  (@thekid)
+* Upgraded XP Compiler & Core - dropping support for PHP 7.0 - 7.3
+  (@thekid)
+* Merged PR #59: Use `Collection::modify()` instead of invoking
+  "findAndModify"
+  (@thekid)
+
+## 1.18.0 / 2024-03-02
+
+* Upgraded `xp-forge/markdown` and `xp-forge/web-auth` libraries
+  (@thekid)
 * Merged PR #58: Balance layout for odd number of preview images
   (@thekid)
 

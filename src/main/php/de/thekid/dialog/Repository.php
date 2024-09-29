@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog;
 
-use com\mongodb\result\{Cursor, Update};
+use com\mongodb\result\{Cursor, Update, Modification};
 use com\mongodb\{Database, Document};
 use text\hash\Hashing;
 use util\{Date, Secret};
@@ -53,7 +53,7 @@ class Repository {
       // If no preview images are set, aggregate children
       ['$lookup' => [
         'from'     => 'entries',
-        'let'      => ['parent' => '$slug', 'images' => ['$size' => '$images']],
+        'let'      => ['parent' => '$slug', 'images' => ['$size' => ['$ifNull' => ['$images', []]]]],
         'pipeline' => [
           ['$match' => ['$expr' => ['$cond' => [
             ['$eq' => ['$$images', 0]],
@@ -155,13 +155,11 @@ class Repository {
 
   /** Replace an entry identified by a given slug with a given entity */
   public function replace(string $slug, array<string, mixed> $entity): Modification {
-    $arguments= [
-      'query'  => ['slug' => $slug],
-      'update' => ['$set' => ['slug' => $slug, ...$entity]],
-      'new'    => true,  // Return modified document
-      'upsert' => true,
-    ];
-    return new Modification($this->database->collection('entries')->run('findAndModify', $arguments)->value());
+    return $this->database->collection('entries')->modify(
+      ['slug' => $slug],
+      ['$set' => ['slug' => $slug, ...$entity]],
+      upsert: true,
+    );
   }
 
   /** Modify an entry identified by a given slug with MongoDB statements */

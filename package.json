@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "ol": "^7.1"
+    "ol": "^10.1"
   },
   "bundles": {
     "vendor": {
       "ol": "ol.css | dist/ol.js",
-      "fonts://display=swap": "Overpass",
+      "fonts://display=swap": "Barlow",
       ".": "src/main/js/*.js"
     }
   }
