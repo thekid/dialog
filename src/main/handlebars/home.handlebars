@@ -6,15 +6,15 @@
     <meta property="og:title" content="Home - Dialog">
     <meta property="og:description" content="Fotoblog von Timm Friebe">
     {{#with cover}}
-      <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{images.0.name}}.jpg">
-      <link rel="preload" href="/image/{{slug}}/full-{{images.0.name}}.webp" as="image">
+      <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{preview.name}}.jpg">
+      <link rel="preload" href="/image/{{slug}}/full-{{preview.name}}.webp" as="image">
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
 
     <!-- About me -->
     {{#with cover}}
-      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{images.0.name}}.webp)">
+      <div class="cover" style="background-image: url(/image/{{slug}}/full-{{preview.name}}.webp)">
         <h1>{{title}}</h1>
       </div>
       <article class="intro">
