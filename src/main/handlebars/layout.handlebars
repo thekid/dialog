@@ -789,8 +789,7 @@
 
   <script type="module">
     {{&use 'lightbox'}}
-    const lightbox = new Lightbox();
-    lightbox.attach(document.querySelectorAll('a[data-lightbox]'), document.querySelector('#lightbox'));
+    new Lightbox().attach(document.querySelectorAll('a[data-lightbox]'), document.querySelector('#lightbox'));
   </script>
 </body>
 </html>
