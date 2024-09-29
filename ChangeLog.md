@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.5.0 / 2024-09-29
+
+* Merged PR #57: Use CSS nesting, see https://caniuse.com/css-nesting
+  (@thekid)
+
 ## 2.4.0 / 2024-09-15
 
 * Merged PR #61: Refactor to make use of asymmetric visibility
