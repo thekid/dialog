@@ -4,6 +4,7 @@ parent: feed
 {{#> layout}}
   {{#*inline "title"}}{{item.title}}{{/inline}}
   {{#*inline "meta"}}
+    <link rel="stylesheet" type="text/css" href="/assets/{{asset 'mapping.css'}}">
     <meta property="og:url" content="{{request.uri}}">
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{item.title}} - Dialog">
@@ -38,6 +39,7 @@ parent: feed
     </section>
   {{/inline}}
   {{#*inline "scripts"}}
+    <script src="/assets/{{asset 'mapping.js'}}" defer></script>
     <script type="module">
       {{&use 'mapping'}}
       const mapping = new Mapping('/static/marker.png');
