@@ -18,11 +18,7 @@ class Signing {
   /** Sign a given input string and return the signature parameter's value */
   public function sign(string $input, ?int $time= null): string {
     $time??= time();
-    return sprintf(
-      '%s.%d',
-      $this->hashing->digest($input.$time.$this->secret->reveal())->hex(),
-      $time
-    );
+    return "{$this->hashing->digest($input.$time.$this->secret->reveal())->hex()}.{$time}";
   }
 
   /** Verify a given signature is valid for a given input string */
