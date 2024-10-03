@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #62: Extract OpenLayers mapping JS & CSS into separate
+  bundle, reducing the amount of JS to be loaded for the home page by
+  more than 800 kilobytes
+  (@thekid)
+
 ## 2.5.0 / 2024-09-29
 
 * Merged PR #57: Use CSS nesting, see https://caniuse.com/css-nesting
