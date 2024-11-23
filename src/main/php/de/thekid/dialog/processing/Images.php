@@ -8,6 +8,12 @@ class Images extends Processing {
 
   public function kind(): string { return 'image'; }
 
+  /** Rounds focal lengths, which are potentially expressed as a fraction */
+  private function toRounded(string $input, int $precision): float {
+    sscanf($input, '%d/%d', $n, $d);
+    return null === $d ? (float)$n : round($n / $d, $precision);
+  }
+
   public function meta(File $source): array<string, mixed> {
     $r= [];
     try {
@@ -24,7 +30,7 @@ class Images extends Processing {
           'apertureFNumber' => $exif->apertureFNumber,
           'exposureTime'    => $exif->exposureTime,
           'isoSpeedRatings' => $exif->isoSpeedRatings,
-          'focalLength'     => $exif->focalLength,
+          'focalLength'     => $this->toRounded($exif->focalLength, precision: 1),
           'flashUsed'       => $exif->flashUsed(),
         ];
       }

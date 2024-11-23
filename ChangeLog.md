@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Changed image import to rounds focal lengths, which are potentially
+  expressed as a fraction
+  (@thekid)
 * Merged PR #62: Extract OpenLayers mapping JS & CSS into separate
   bundle, reducing the amount of JS to be loaded for the home page by
   more than 800 kilobytes
