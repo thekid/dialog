@@ -12,10 +12,11 @@
       <link href="{{request.uri.base}}/{{route this}}"/>
       <id>urn:oid:{{_id}}</id>
       <updated>{{date ./date format="c"}}</updated>
-      <summary type="html">
+      <summary type="text">{{#each locations}}{{.}}{{#unless @last}}, {{/unless}}{{/each}}</summary>
+      <content type="html">
         {{#with images.0}}&lt;img src="/image/{{slug}}/preview-{{name}}.jpg"&gt;{{/with}}&lt;br&gt;
         {{content}}
-      </summary>
+      </content>
     </entry>
   {{/each}}
 </feed>
