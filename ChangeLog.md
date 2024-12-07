@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgraded Docker image to PHP 8.4 following its release on 2024-11-21
+  https://www.php.net/releases/8.4/en.php
+
 ## 2.6.0 / 2024-12-07
 
 * Assigned a high *fetchpriority* to the cover image to further improve
