@@ -3,6 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #66: Add an Atom feed at `/feed/atom`, showing the 20 newest
+  entries, each with one preview image. Requested in #63.
+  (@kiesel, @thekid)
 * Changed maps to not interrupt page scrolling as requested in #64
   (@kiesel, @thekid)
 * Changed image import to rounds focal lengths, which are potentially
