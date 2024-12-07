@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Changed maps to not interrupt page scrolling as requested in #64
+  (@kiesel, @thekid)
 * Changed image import to rounds focal lengths, which are potentially
   expressed as a fraction
   (@thekid)
