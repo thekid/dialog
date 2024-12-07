@@ -7,7 +7,7 @@
     <meta property="og:description" content="Fotoblog von Timm Friebe">
     {{#with cover}}
       <meta property="og:image" content="{{request.uri.base}}/image/{{slug}}/preview-{{preview.name}}.jpg">
-      <link rel="preload" href="/image/{{slug}}/full-{{preview.name}}.webp" as="image">
+      <link rel="preload" href="/image/{{slug}}/full-{{preview.name}}.webp" as="image" fetchpriority="high">
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}

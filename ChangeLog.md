@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 2.6.0 / 2024-12-07
+
+* Assigned a high *fetchpriority* to the cover image to further improve
+  home page performance. See #65
+  (@thekid)
 * Merged PR #66: Add an Atom feed at `/feed/atom`, showing the 20 newest
   entries, each with one preview image. Requested in #63.
   (@kiesel, @thekid)
