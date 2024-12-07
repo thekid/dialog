@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Feed - Dialog - Timm Friebe</title>
+  <link href="{{request.uri.base}}/feed/atom" rel="self"/>
+  <updated>{{date items.0.date format="c"}}</updated>
+  <author><name>Timm Friebe</name></author>
+  <id>urn:uuid:abf3ae67-8d43-497f-bd40-f7fb793eed4f</id>
+
+  {{#each items}}
+    <entry>
+      <title>{{title}}</title>
+      <link href="{{request.uri.base}}/{{route this}}"/>
+      <id>urn:oid:{{_id}}</id>
+      <updated>{{date ./date format="c"}}</updated>
+      <summary type="html">{{content}}</summary>
+    </entry>
+  {{/each}}
+</feed>
