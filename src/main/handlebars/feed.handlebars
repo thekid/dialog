@@ -24,7 +24,9 @@
         <section>
           <h2>
             {{#with parent}}
-              <span class="journey"><a href="{{route this}}">{{title}}</a> » </span>
+              <span class="journey" title="Reise, {{range is.from is.until format="M Y"}}">
+                <a href="{{route this}}">{{title}}</a>
+              </span>
             {{/with}}
             <a href="{{route this}}">{{title}}</a>
           </h2>
