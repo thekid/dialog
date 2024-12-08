@@ -360,25 +360,35 @@
         box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
       }
 
-      .date {
+      .context {
         position: absolute;
         top: .75rem;
         left: .75rem;
-        background-color: black;
+        background-color: var(--main-color);
         border-radius: .25rem;
-        color: white;
+        color: var(--text-color);
         padding: .125rem .4rem;
-      }
 
-      .current.date {
-        background-color: orange;
-      }
+        .journey a {
+          color: var(--text-color);
+        }
 
-      .current.date::before {
-        content: 'LIVE';
-        margin-right: .25rem;
-        padding-right: .25rem;
-        border-right: 1px solid white;
+        .journey::before {
+          content: '—';
+          margin-right: .25rem;
+        }
+
+        &.current {
+          background-color: orange;
+          color: white;
+        }
+
+        &.current::before {
+          content: 'LIVE';
+          margin-right: .25rem;
+          padding-right: .25rem;
+          border-right: 1px solid white;
+        }
       }
 
       h3 {
@@ -395,6 +405,15 @@
       }
     }
 
+    h1.current::before {
+      content: 'LIVE';
+      background-color: orange;
+      margin-right: .5rem;
+      padding: .125rem .4rem;
+      border-radius: .25rem;
+      font-size: 1.15rem;
+    }
+
     section {
       padding-top: 1rem;
       margin-bottom: 3rem;
@@ -403,6 +422,10 @@
       h2 {
         font-size: 1.5rem;
         font-weight: 700;
+
+        .journey::after {
+          content: '»';
+        }
       }
 
       h2.scroll {
@@ -412,15 +435,6 @@
 
       h2 a {
         color: var(--text-color);
-      }
-
-      h2.current::before {
-        content: 'LIVE';
-        background-color: orange;
-        margin-right: .5rem;
-        padding: .125rem .4rem;
-        border-radius: .25rem;
-        font-size: 1rem;
       }
 
       h2 .top {

@@ -5,7 +5,7 @@ use web\frontend\{Handler, Get, Param, View};
 
 #[Handler('/feed')]
 class Feed {
-  private $pagination= new Pagination(5);
+  private $pagination= new Pagination(8);
 
   public function __construct(private Repository $repository) { }
 
