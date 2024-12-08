@@ -360,7 +360,7 @@
         box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
       }
 
-      .date {
+      .context {
         position: absolute;
         top: .75rem;
         left: .75rem;
@@ -368,17 +368,22 @@
         border-radius: .25rem;
         color: white;
         padding: .125rem .4rem;
-      }
 
-      .current.date {
-        background-color: orange;
-      }
+        .journey::before {
+          content: '—';
+          margin-right: .25rem;
+        }
 
-      .current.date::before {
-        content: 'LIVE';
-        margin-right: .25rem;
-        padding-right: .25rem;
-        border-right: 1px solid white;
+        &.current {
+          background-color: orange;
+        }
+
+        &.current::before {
+          content: 'LIVE';
+          margin-right: .25rem;
+          padding-right: .25rem;
+          border-right: 1px solid white;
+        }
       }
 
       h3 {
