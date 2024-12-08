@@ -395,6 +395,15 @@
       }
     }
 
+    h1.current::before {
+      content: 'LIVE';
+      background-color: orange;
+      margin-right: .5rem;
+      padding: .125rem .4rem;
+      border-radius: .25rem;
+      font-size: 1.15rem;
+    }
+
     section {
       padding-top: 1rem;
       margin-bottom: 3rem;
@@ -412,15 +421,6 @@
 
       h2 a {
         color: var(--text-color);
-      }
-
-      h2.current::before {
-        content: 'LIVE';
-        background-color: orange;
-        margin-right: .5rem;
-        padding: .125rem .4rem;
-        border-radius: .25rem;
-        font-size: 1rem;
       }
 
       h2 .top {

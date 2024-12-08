@@ -14,7 +14,7 @@ parent: feed
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
-    <h1 class="title">Dialog - {{journey.title}}</h1>
+    <h1 class="{{range-rel journey.is.from journey.is.until}} title">Dialog - {{journey.title}}</h1>
 
     <!-- The journey itself -->
     <section id="summary">
