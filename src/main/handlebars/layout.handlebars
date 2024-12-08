@@ -364,10 +364,14 @@
         position: absolute;
         top: .75rem;
         left: .75rem;
-        background-color: black;
+        background-color: var(--main-color);
         border-radius: .25rem;
-        color: white;
+        color: var(--text-color);
         padding: .125rem .4rem;
+
+        .journey a {
+          color: var(--text-color);
+        }
 
         .journey::before {
           content: '—';
@@ -376,6 +380,7 @@
 
         &.current {
           background-color: orange;
+          color: white;
         }
 
         &.current::before {
