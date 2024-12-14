@@ -99,8 +99,9 @@ parent: feed
       // user has spent time viewing, use intersection observer
       {{&use 'statistics'}}
       const statistics = new Statistics();
-      statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 10000);
-      statistics.schedule('{{journey.slug}}');
+      if (!document.location.hash) {
+        statistics.schedule(statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 10000));
+      }
 
       const observer = new IntersectionObserver(
         (entries) => {

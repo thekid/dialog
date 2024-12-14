@@ -4,6 +4,7 @@ class Statistics {
   /** Adds a statistics target with a given delay */
   add(target, signature, delay) {
     this.#tasks[target] = { signature, delay, timer : null, completed : false };
+    return target;
   }
 
   /** Schedules the given statistics target */
