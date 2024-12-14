@@ -63,6 +63,7 @@ parent: feed
                 <li><a href="{{link}}">{{name}}</a></li>
               {{/each}}
             </ul>
+            {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
           </div>
           {{> partials/images in=.}}
 
@@ -103,9 +104,9 @@ parent: feed
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting) {
-              statistics.schedule(entry.target.id);
+              statistics.schedule('{{journey.slug}}/' + entry.target.id);
             } else {
-              statistics.withdraw(entry.target.id);
+              statistics.withdraw('{{journey.slug}}/' + entry.target.id);
             }
           }
         },
@@ -113,7 +114,7 @@ parent: feed
       );
       {{#each itinerary}}
         observer.observe(document.querySelector('#{{scroll slug}}'));
-        statistics.add('{{scroll slug}}', '{{sign slug}}', Math.min({{size images}} * 1500, 5000));
+        statistics.add('{{slug}}', '{{sign slug}}', Math.min({{size images}} * 1500, 5000));
       {{/each}}
     </script>
   {{/inline}}
