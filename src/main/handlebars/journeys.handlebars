@@ -32,11 +32,13 @@
     <script src="/assets/{{asset 'mapping.js'}}" defer></script>
     <script type="module">
       {{&use 'mapping'}}
-      const mapping = new Mapping('/static/marker.png');
+      const mapping = new Mapping();
 
       {{#each journeys}}
         {{#each locations}}
-          mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`);
+          {{#with (wrap images @index)}}
+            mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{../name}}`, '/image/{{slug}}/thumb-{{name}}.webp');
+          {{/with}}
         {{/each}}
       {{/each}}
 

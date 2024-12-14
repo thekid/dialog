@@ -42,10 +42,12 @@ parent: feed
     <script src="/assets/{{asset 'mapping.js'}}" defer></script>
     <script type="module">
       {{&use 'mapping'}}
-      const mapping = new Mapping('/static/marker.png');
+      const mapping = new Mapping();
 
       {{#each item.locations}}
-        mapping.mark(null, {{lon}}, {{lat}}, `{{name}}`);
+        {{#with (wrap item.images @index)}}
+          mapping.mark(null, {{lon}}, {{lat}}, `{{name}}`, '/image/{{item.slug}}/thumb-{{name}}.webp');
+        {{/with}}
       {{/each}}
 
       mapping.project(document.querySelector('#map'));

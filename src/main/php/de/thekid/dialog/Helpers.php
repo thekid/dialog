@@ -59,6 +59,9 @@ class Helpers extends Extension {
       }
       return $r;
     };
+    yield 'wrap' => function($node, $context, $options) {
+      return $options[0][$options[1] % sizeof($options[0])];
+    };
     yield 'sign' => function($node, $context, $options) {
       return $this->signing?->sign($options[0]);
     };
