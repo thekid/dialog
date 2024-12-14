@@ -1,20 +1,29 @@
 class Mapping {
-  #list = [];
-
-  /** Creates new map using given marker images */
-  constructor(image) {
-    this.style = new ol.style.Style({image: new ol.style.Icon(({src: image}))})
-  }
+  #features = [];
+  #markers = [];
 
   /** Add marker and link at a given position */
-  mark(link, lon, lat, name) {
+  mark(link, lon, lat, name, uri) {
+    const $image = document.createElement('img');
+    $image.src = uri;
+    $image.alt = name;
+    $image.classList.add('marker');
+
+    const overlay = new ol.Overlay({
+      position: ol.proj.fromLonLat([lon, lat]),
+      positioning: 'center-center',
+      element: $image,
+      stopEvent: false
+    });
+    this.#markers.push(overlay);
+
     const marker = new ol.Feature({
       geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
       link     : link,
       name     : name
     });
-    marker.setStyle(this.style);
-    this.#list.push(marker);
+
+    this.#features.push(marker);
   }
 
   /** Escape input for use in HTML */
@@ -24,13 +33,17 @@ class Mapping {
 
   /** Project this map on to a given DOM element */
   project($element) {
-    const source = new ol.source.Vector({features: this.#list});
     const map = new ol.Map({
       target: $element,
       layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
     });
-    map.addLayer(new ol.layer.Vector({source: source}));
-    map.getView().fit(source.getExtent(), {padding: [32, 32, 32, 32], minResolution: 30});
+    for (const overlay of this.#markers) {
+      map.addOverlay(overlay);
+    }
+
+    const features = new ol.source.Vector({features: this.#features});
+    map.addLayer(new ol.layer.Vector({source: features}));
+    map.getView().fit(features.getExtent(), {padding: [32, 32, 32, 32], minResolution: 30});
 
     const $popup = $element.querySelector('.popup');
     map.on('movestart', event => {
