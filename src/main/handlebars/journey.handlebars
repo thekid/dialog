@@ -95,21 +95,17 @@ parent: feed
 
       mapping.project(document.querySelector('#map'));
 
-      // Update statistics for journey after a little while. To determine which entries the
-      // user has spent time viewing, use intersection observer
+      // To determine which entries the user has spent time viewing, use intersection observer
       {{&use 'statistics'}}
       const statistics = new Statistics();
-      if (!document.location.hash) {
-        statistics.schedule(statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 10000));
-      }
-
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
+            const id = '{{journey.slug}}' + (entry.target.id ? '/' + entry.target.id : '');
             if (entry.isIntersecting) {
-              statistics.schedule('{{journey.slug}}/' + entry.target.id);
+              statistics.schedule(id);
             } else {
-              statistics.withdraw('{{journey.slug}}/' + entry.target.id);
+              statistics.withdraw(id);
             }
           }
         },
@@ -119,6 +115,14 @@ parent: feed
         observer.observe(document.querySelector('#{{scroll slug}}'));
         statistics.add('{{slug}}', '{{sign slug}}', Math.min({{size images}} * 1500, 5000));
       {{/each}}
+
+      // If a child element is navigated to, observe whether the user scrolls to the page top
+      if (document.location.hash) {
+        statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 500)
+        observer.observe(document.querySelector('h1'));
+      } else {
+        statistics.schedule(statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 10000));
+      }
     </script>
   {{/inline}}
 {{/layout}}
