@@ -31,7 +31,7 @@ class Repository {
   /** Returns newest entries */
   public function newest(int $limit): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
-      ['$match' => ['is.journey' => ['$ne' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$match' => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
       ['$limit' => $limit],
@@ -53,7 +53,7 @@ class Repository {
   /** Returns paginated entries */
   public function entries(Pagination $pagination, int $page): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
-      ['$match'  => ['is.journey' => ['$ne' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$match'  => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset'  => '_searchable'],
       ['$sort'   => ['date' => -1]],
       ['$skip'   => $pagination->skip($page)],

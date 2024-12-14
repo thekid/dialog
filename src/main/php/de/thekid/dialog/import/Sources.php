@@ -64,7 +64,7 @@ abstract class Sources extends Enum {
           'keywords'  => $d->meta['keywords'] ?? [],
           'locations' => isset($d->meta['location']) ? [$d->meta['location']] : $d->meta['locations'],
           'content'   => $d->content,
-          'is'        => ['content' => true],
+          'is'        => ['cover' => true],
         ];
       }
     };
