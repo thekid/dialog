@@ -51,9 +51,10 @@ parent: feed
       mapping.project(document.querySelector('#map'));
 
       // Update statistics
-      window.setTimeout(() => {
-        fetch('/api/statistics/{{item.slug}}', {method: 'POST', body: '{{sign item.slug}}'});
-      }, Math.min({{size item.images}} * 1500, 5000));
+      {{&use 'statistics'}}
+      const statistics = new Statistics();
+      statistics.add('{{item.slug}}', '{{sign item.slug}}', Math.min({{size item.images}} * 1500, 5000));
+      statistics.schedule('{{item.slug}}');
     </script>
   {{/inline}}
 {{/layout}}
