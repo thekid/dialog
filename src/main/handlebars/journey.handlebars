@@ -92,10 +92,29 @@ parent: feed
 
       mapping.project(document.querySelector('#map'));
 
-      // Update statistics
-      window.setTimeout(() => {
-        fetch('/api/statistics/{{journey.slug}}', {method: 'POST', body: '{{sign journey.slug}}'});
-      }, 10000);
+      // Update statistics for journey after a little while. To determine which entries the
+      // user has spent time viewing, use intersection observer
+      {{&use 'statistics'}}
+      const statistics = new Statistics();
+      statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 10000);
+      statistics.schedule('{{journey.slug}}');
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              statistics.schedule(entry.target.id);
+            } else {
+              statistics.withdraw(entry.target.id);
+            }
+          }
+        },
+        { threshold: 0.2 }
+      );
+      {{#each itinerary}}
+        observer.observe(document.querySelector('#{{scroll slug}}'));
+        statistics.add('{{scroll slug}}', '{{sign slug}}', Math.min({{size images}} * 1500, 5000));
+      {{/each}}
     </script>
   {{/inline}}
 {{/layout}}
