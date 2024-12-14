@@ -3,8 +3,13 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 3.0.0 / ????-??-??
+
+* Merged PR #67: Switch journeys to display entries oldest - newest
+  (@thekid)
 * Upgraded Docker image to PHP 8.4 following its release on 2024-11-21
   https://www.php.net/releases/8.4/en.php
+  (@thekid)
 
 ## 2.6.0 / 2024-12-07
 
