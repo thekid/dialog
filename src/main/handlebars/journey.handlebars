@@ -14,7 +14,7 @@ parent: feed
     {{/with}}
   {{/inline}}
   {{#*inline "main"}}
-    <h1 class="title">Dialog - {{journey.title}}</h1>
+    <h1 class="{{range-rel journey.is.from journey.is.until}} title">Dialog - {{journey.title}}</h1>
 
     <!-- The journey itself -->
     <section id="summary">
@@ -63,6 +63,7 @@ parent: feed
                 <li><a href="{{link}}">{{name}}</a></li>
               {{/each}}
             </ul>
+            {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
           </div>
           {{> partials/images in=.}}
 
@@ -92,10 +93,29 @@ parent: feed
 
       mapping.project(document.querySelector('#map'));
 
-      // Update statistics
-      window.setTimeout(() => {
-        fetch('/api/statistics/{{journey.slug}}', {method: 'POST', body: '{{sign journey.slug}}'});
-      }, 10000);
+      // Update statistics for journey after a little while. To determine which entries the
+      // user has spent time viewing, use intersection observer
+      {{&use 'statistics'}}
+      const statistics = new Statistics();
+      statistics.add('{{journey.slug}}', '{{sign journey.slug}}', 10000);
+      statistics.schedule('{{journey.slug}}');
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              statistics.schedule('{{journey.slug}}/' + entry.target.id);
+            } else {
+              statistics.withdraw('{{journey.slug}}/' + entry.target.id);
+            }
+          }
+        },
+        { threshold: 0.2 }
+      );
+      {{#each itinerary}}
+        observer.observe(document.querySelector('#{{scroll slug}}'));
+        statistics.add('{{slug}}', '{{sign slug}}', Math.min({{size images}} * 1500, 5000));
+      {{/each}}
     </script>
   {{/inline}}
 {{/layout}}

@@ -12,7 +12,7 @@ class Home {
   public function index() {
     return View::named('home')->with([
       'cover'  => $this->repository->entry('@cover'),
-      'newest' => $this->repository->newest(6),
+      'newest' => $this->repository->newest(9),
     ]);
   }
 

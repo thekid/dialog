@@ -22,7 +22,14 @@
     {{#with elements}}
       {{#each .}}
         <section>
-          <h2 class="{{range-rel is.from is.until}} date"><a href="{{route this}}">{{title}}</a></h2>
+          <h2>
+            {{#with parent}}
+              <span class="journey" title="Reise, {{range is.from is.until format="M Y"}}">
+                <a href="{{route this}}">{{title}}</a>
+              </span>
+            {{/with}}
+            <a href="{{route this}}">{{title}}</a>
+          </h2>
 
           <div class="meta">
             {{date ./date format="d.m.Y"}} @
@@ -34,11 +41,7 @@
             {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
           </div>
 
-          {{#if images}}
-            {{> partials/images in=. first=@first}}
-          {{else}}
-            {{> partials/cards in=children}}
-          {{/if}}
+          {{> partials/images in=. first=@first}}
 
           <div class="content">
             {{& content}}

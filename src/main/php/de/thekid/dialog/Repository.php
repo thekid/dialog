@@ -6,6 +6,15 @@ use text\hash\Hashing;
 use util\{Date, Secret};
 
 class Repository {
+  private const WITH_PARENT= [
+    ['$lookup' => [
+      'from'         => 'entries',
+      'localField'   => 'parent',
+      'foreignField' => 'slug',
+      'as'           => 'parent',
+    ]],
+    ['$addFields' => ['parent' => ['$first' => '$parent']]],
+  ];
   private $passwords= Hashing::sha256();
 
   public function __construct(private Database $database) { }
@@ -19,13 +28,14 @@ class Repository {
     return $cursor->first();
   }
 
-  /** Returns newest (top-level) entries */
+  /** Returns newest entries */
   public function newest(int $limit): array<Document> {
     $cursor= $this->database->collection('entries')->aggregate([
-      ['$match' => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+      ['$match' => ['is.journey' => ['$ne' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
       ['$limit' => $limit],
+      ...self::WITH_PARENT,
     ]);
     return $cursor->all();
   }
@@ -40,36 +50,16 @@ class Repository {
     return $cursor->all();
   }
 
-  /** Returns paginated (top-level) entries */
-  public function entries(Pagination $pagination, int $page, int $children= 6): array<Document> {
-    $entries= $this->database->collection('entries');
-    $cursor= $entries->aggregate([
-      ['$match'  => ['parent' => ['$eq' => null], 'published' => ['$lt' => Date::now()]]],
+  /** Returns paginated entries */
+  public function entries(Pagination $pagination, int $page): array<Document> {
+    $cursor= $this->database->collection('entries')->aggregate([
+      ['$match'  => ['is.journey' => ['$ne' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset'  => '_searchable'],
       ['$sort'   => ['date' => -1]],
       ['$skip'   => $pagination->skip($page)],
       ['$limit'  => $pagination->limit()],
-
-      // If no preview images are set, aggregate children
-      ['$lookup' => [
-        'from'     => 'entries',
-        'let'      => ['parent' => '$slug', 'images' => ['$size' => ['$ifNull' => ['$images', []]]]],
-        'pipeline' => [
-          ['$match' => ['$expr' => ['$cond' => [
-            ['$eq' => ['$$images', 0]],
-            ['$eq' => ['$parent', '$$parent']],
-            ['$eq' => ['$_id', null]],
-          ]]]]
-        ],
-        'as'       => 'children',
-      ]],
-      ['$addFields' => ['children' => ['$map' => [
-        'input' => ['$sortArray' => ['input'  => '$children', 'sortBy' => ['date' => -1]]],
-        'as'    => 'it',
-        'in'    => ['$unsetField' => ['input' => '$$it', 'field' => '_searchable']],
-      ]]]],
+      ...self::WITH_PARENT,
     ]);
-
     return $pagination->paginate($page, $cursor);
   }
 
@@ -145,11 +135,11 @@ class Repository {
   }
 
   /** Returns an entry's children, latest first */
-  public function children(string $slug): Cursor {
+  public function children(string $slug, array<string, mixed> $sort= ['date' => -1]): Cursor {
     return $this->database->collection('entries')->aggregate([
-      ['$match' => ['parent' => ['$eq' => $slug], 'published' => ['$lt' => Date::now()]]],
+      ['$match' => ['parent' => $slug, 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
-      ['$sort'  => ['date' => -1]],
+      ['$sort'  => $sort],
     ]);
   }
 
