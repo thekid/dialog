@@ -5,6 +5,8 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #68: Show preview images instead of marker icons on map
+  (@thekid)
 * Merged PR #67: Switch journeys to display entries oldest - newest
   (@thekid)
 * Upgraded Docker image to PHP 8.4 following its release on 2024-11-21
