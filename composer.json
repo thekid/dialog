@@ -10,7 +10,7 @@
     "xp-framework/networking": "^10.4",
     "xp-forge/web": "^4.0",
     "xp-forge/web-auth": "^5.0",
-    "xp-forge/frontend": "^6.0",
+    "xp-forge/frontend": "^6.4",
     "xp-forge/rest-api": "^4.0",
     "xp-forge/rest-client": "^5.3",
     "xp-forge/handlebars-templates": "^3.0",

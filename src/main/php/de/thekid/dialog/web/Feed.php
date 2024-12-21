@@ -2,7 +2,6 @@
 
 use de\thekid\dialog\{Repository, Pagination};
 use util\Date;
-use web\Headers;
 use web\frontend\{Handler, Header, Get, Param, View};
 
 #[Handler('/feed')]
@@ -26,9 +25,9 @@ class Feed {
     }
 
     return $view
-      ->header('Cache-Control', 'public, max-age=3600')
-      ->header('Content-Type', 'application/atom+xml; charset=utf-8')
-      ->header('Last-Modified', Headers::date($items[0]['date'] ?? null))
+      ->modified($items[0]['date'] ?? null)
+      ->cache('public, max-age=3600')
+      ->type('application/atom+xml; charset=utf-8')
     ;
   }
 }
