@@ -26,7 +26,7 @@ class Feed {
     }
 
     return $view
-      ->header('Cache-Control', 'max-age=3600')
+      ->header('Cache-Control', 'public, max-age=3600')
       ->header('Content-Type', 'application/atom+xml; charset=utf-8')
       ->header('Last-Modified', Headers::date($items[0]['date'] ?? null))
     ;
