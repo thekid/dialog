@@ -1,7 +1,9 @@
 <?php namespace de\thekid\dialog\web;
 
 use de\thekid\dialog\{Repository, Pagination};
-use web\frontend\{Handler, Get, Param, View};
+use util\Date;
+use web\Headers;
+use web\frontend\{Handler, Header, Get, Param, View};
 
 #[Handler('/feed')]
 class Feed {
@@ -15,10 +17,18 @@ class Feed {
   }
 
   #[Get('/atom')]
-  public function atom() {
-    return View::named('atom')
+  public function atom(#[Header('If-Modified-Since')] $since= null) {
+    $items= $this->repository->newest(20);
+    if ($since && $items && !$items[0]['date']->isAfter(new Date($since))) {
+      $view= View::empty()->status(304);
+    } else {
+      $view= View::named('atom')->with(['items' => $items]);
+    }
+
+    return $view
+      ->header('Cache-Control', 'max-age=3600')
       ->header('Content-Type', 'application/atom+xml; charset=utf-8')
-      ->with(['items' => $this->repository->newest(20)])
+      ->header('Last-Modified', Headers::date($items[0]['date'] ?? null))
     ;
   }
 }

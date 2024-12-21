@@ -5,6 +5,9 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Implemented support for conditional requests in Atom feed using the
+  `If-Modified-Since` header.
+  (@thekid) 
 * Merged PR #68: Show preview images instead of marker icons on map
   (@thekid)
 * Merged PR #67: Switch journeys to display entries oldest - newest
