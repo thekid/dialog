@@ -46,7 +46,24 @@ class DescriptionsTest {
   public function resolve_timezone($tz, $resolved) {
     Assert::equals(
       ['date' => new Date('2024-12-29 13:19:00', $resolved)],
-      $this->parse("---\ndate: 2024-12-29 13:19:00 {$tz}\n---\nContent")->meta
+      $this->parse("---\ndate: 2024-12-29 13:19:00 {$tz}\n---\n")->meta
+    );
+  }
+
+  #[Test, Values(['Europe/Berlin', 'Asia/Muscat', 'America/New_York'])]
+  public function location_timezone($tz) {
+    $locations= implode("\n", [
+      '  - {name: "Here"}',
+      '  - {name: "Oman", timezone: "Asia/Muscat"}',
+      '  - {name: "日本", timezone: "Asia/Tokyo"}',
+    ]);
+    Assert::equals(
+      [
+        ['name' => 'Here', 'timezone' => $tz],
+        ['name' => 'Oman', 'timezone' => 'Asia/Muscat'],
+        ['name' => '日本', 'timezone' => 'Asia/Tokyo'],
+      ],
+      [...$this->parse("---\nlocations:\n{$locations}\n---\n")->locations($tz)]
     );
   }
 }
