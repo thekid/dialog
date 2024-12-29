@@ -97,6 +97,7 @@ class Videos extends Processing {
         '-i', $source->getURI(),
         '-ss', '00:00:03',
         '-vsync', 'vfr',
+        '-update', 'true',
         '-frames:v', '1',
         '-q:v', '1',
         '-qscale:v', '1',
