@@ -14,7 +14,7 @@ class Journey {
     $journey= $this->repository->entry($id) ?? throw new Error(404, 'Not found: '.$id);
     return [
       'journey'   => $journey,
-      'itinerary' => $this->repository->children($id, ['date' => 1])->all(),
+      'itinerary' => $this->repository->children($id, sort: ['date' => 1])->all(),
       'scroll'    => fn($node, $context, $options) => substr($options[0], strlen($id) + 1),
       'text'      => fn($node, $context, $options) => strip_tags($options[0]),
     ];
