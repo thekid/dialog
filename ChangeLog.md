@@ -5,6 +5,7 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Fixed issue #69: ffpmeg warnings when converting videos - @thekid
 * Implemented support for conditional requests in Atom feed using the
   `If-Modified-Since` header.
   (@thekid) 
