@@ -11,11 +11,11 @@ class Entries {
   public function __construct(private Repository $repository, private Storage $storage) { }
 
   #[Put('/{id:.+(/.+)?}')]
-  public function upsert(#[Value] $user, string $id, #[Param, SeparatedBy(',')] $expand= null) {
+  public function upsert(#[Value] $user, string $id, #[Param, SeparatedBy(',')] array<string> $expand= []) {
     if ($document= $this->repository->entry($id, published: false)) {
 
       // Expand requested properties by performing lookups
-      foreach ((array)$expand as $selector) {
+      foreach ($expand as $selector) {
         $document[$selector]= match ($selector) {
           '$children' => $this->repository->children($document['slug'], published: false)->all(),
         };
