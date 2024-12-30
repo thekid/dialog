@@ -3,7 +3,7 @@
 use de\thekid\dialog\{Repository, Storage};
 use io\File;
 use util\Date;
-use web\rest\{Async, Delete, Entity, Put, Resource, Request, Response, Value};
+use web\rest\{Async, Delete, Entity, Get, Patch, Put, Resource, Param, Request, Response, Value, SeparatedBy};
 
 #[Resource('/api/entries')]
 class Entries {
@@ -11,35 +11,25 @@ class Entries {
   public function __construct(private Repository $repository, private Storage $storage) { }
 
   #[Put('/{id:.+(/.+)?}')]
-  public function create(#[Value] $user, string $id, #[Entity] array<string, mixed> $attributes) {
+  public function upsert(#[Value] $user, string $id, #[Param, SeparatedBy(',')] $expand= null) {
+    if ($document= $this->repository->entry($id, published: false)) {
 
-    // Join places, autocomplete seems to only work for strings
-    $suggest= '';
-    foreach ($attributes['locations'] as $location) {
-      $suggest.= ' '.$location['name'];
+      // Expand requested properties by performing lookups
+      foreach ((array)$expand as $selector) {
+        $document[$selector]= match ($selector) {
+          '$children' => $this->repository->children($document['slug'], published: false)->all(),
+        };
+      }
+      return $document;
+    } else {
+      $result= $this->repository->replace($id, ['modified' => time()]);
+
+      // Ensure storage directory is created
+      if ($result->upserted()) {
+        $this->storage->folder($id)->create();
+      }
+      return $result->document();
     }
-
-    $result= $this->repository->replace($id, [
-      'parent'      => $attributes['parent'] ?? null,
-      'date'        => new Date($attributes['date']),
-      'title'       => $attributes['title'],
-      'keywords'    => $attributes['keywords'],
-      'locations'   => $attributes['locations'],
-      'content'     => $attributes['content'],
-      'is'          => $attributes['is'],
-      '_searchable' => [
-        'boost'   => isset($attributes['is']['journey']) ? 2.0 : 1.0,
-        'suggest' => trim($suggest),
-        'content' => strip_tags(strtr($attributes['content'], ['<br>' => "\n", '</p><p>' => "\n"]))
-      ],
-    ]);
-
-    // Ensure storage directory is created
-    if ($result->upserted()) {
-      $this->storage->folder($id)->create();
-    }
-
-    return $result->document();
   }
 
   #[Put('/{id:.+(/.+)?}/images/{name}')]
@@ -101,8 +91,8 @@ class Entries {
     return $deleted;
   }
 
-  #[Put('/{id:.+(/.+)?}/published')]
-  public function publish(#[Value] $user, string $id, #[Entity] Date $date) {
+  #[Patch('/{id:.+(/.+)?}')]
+  public function update(#[Value] $user, string $id, #[Entity] Entry $source) {
 
     // If this entry does not contain any images, use the first image of the latest
     // child element as the preview image. This will update the preview image every
@@ -114,8 +104,30 @@ class Entries {
     } else {
       $preview= ['slug' => $id, ...$entry['images'][0]];
     }
-    $this->repository->modify($id, ['$set' => ['published' => $date, 'preview' => $preview]]);
 
-    return ['published' => $date];
+    // Join places, autocomplete seems to only work for strings
+    $suggest= '';
+    foreach ($source->locations as $location) {
+      $suggest.= ' '.$location['name'];
+    }
+    $changes= $source->attributes() + [
+      'preview'     => $preview,
+      'modified'    => time(),
+      '_searchable' => [
+        'boost'   => isset($source->is['journey']) ? 2.0 : 1.0,
+        'suggest' => trim($suggest),
+        'content' => strip_tags(strtr($source->content, ['<br>' => "\n", '</p><p>' => "\n"]))
+      ],
+    ];
+    $n= $this->repository->modify($id, ['$set' => $changes])->modified();
+    return ['updated' => $n];
+  }
+
+  #[Delete('/{id:.+(/.+)?}')]
+  public function delete(#[Value] $user, string $id) {
+    if ($n= $this->repository->delete($id)->deleted()) {
+      $this->storage->folder($id)->unlink();
+    }
+    return ['deleted' => $n];
   }
 }

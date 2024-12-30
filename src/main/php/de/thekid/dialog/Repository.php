@@ -1,6 +1,6 @@
 <?php namespace de\thekid\dialog;
 
-use com\mongodb\result\{Cursor, Update, Modification};
+use com\mongodb\result\{Cursor, Update, Modification, Delete};
 use com\mongodb\{Database, Document};
 use text\hash\Hashing;
 use util\{Date, Secret};
@@ -135,9 +135,9 @@ class Repository {
   }
 
   /** Returns an entry's children, latest first */
-  public function children(string $slug, array<string, mixed> $sort= ['date' => -1]): Cursor {
+  public function children(string $slug, bool $published= true, array<string, mixed> $sort= ['date' => -1]): Cursor {
     return $this->database->collection('entries')->aggregate([
-      ['$match' => ['parent' => $slug, 'published' => ['$lt' => Date::now()]]],
+      ['$match' => ['parent' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
       ['$sort'  => $sort],
     ]);
@@ -158,5 +158,10 @@ class Repository {
       ['slug' => $slug],
       $statements,
     );
+  }
+
+  /** Delete an entry identified by a given slug */
+  public function delete(string $slug): Delete {
+    return $this->database->collection('entries')->delete(['slug' => $slug]);
   }
 }
