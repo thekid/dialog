@@ -3,7 +3,7 @@
 use de\thekid\dialog\processing\Files;
 
 /** Imports the cover image */ 
-class Content extends Source {
+class Cover extends Source {
 
   public function entryFrom(Description $description): array<string, mixed> {
     return [
