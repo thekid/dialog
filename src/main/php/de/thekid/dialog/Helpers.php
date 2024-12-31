@@ -7,6 +7,7 @@ use web\frontend\helpers\Extension;
  *
  * - range <from> <until>
  * - range-rel <from> <until>
+ * - temperature <min> <max>
  * - size-class <size>
  * - route <entry>
  * - dataset <meta-inf>
