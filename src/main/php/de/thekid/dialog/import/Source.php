@@ -76,6 +76,7 @@ abstract class Source implements Value {
 
     if (isset($updated)) {
       $changes['locations']= yield new LookupLocationInfos($changes);
+      $changes['weather']= yield new LookupWeather($changes, $this->entry['images'] ?? []);
       $changes['published']= time();
       yield new PublishEntry($this->entry['slug'], $changes);
     }

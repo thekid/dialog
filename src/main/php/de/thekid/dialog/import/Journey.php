@@ -2,6 +2,7 @@
 
 use de\thekid\dialog\processing\Files;
 use io\File;
+use util\Date;
 
 /** Imports journeys */ 
 class Journey extends Source {
@@ -32,13 +33,14 @@ class Journey extends Source {
   }
 
   public function entryFrom(Description $description): array<string, mixed> {
+    $date= $description->meta['from'];
     return [
       'slug'      => $this->name(),
       'date'      => $description->meta['from'],
       'title'     => $description->meta['title'],
       'keywords'  => $description->meta['keywords'] ?? [],
       'content'   => $description->content,
-      'locations' => [...$description->locations($description->meta['from']->getTimeZone())],
+      'locations' => [...$description->locations(($date instanceof Date ? $date : new Date($date))->getTimeZone())],
       'is'        => [
         'journey' => true,
         'from'    => $description->meta['from'],

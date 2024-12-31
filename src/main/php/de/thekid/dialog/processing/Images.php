@@ -30,7 +30,7 @@ class Images extends Processing {
           'apertureFNumber' => $exif->apertureFNumber,
           'exposureTime'    => $exif->exposureTime,
           'isoSpeedRatings' => $exif->isoSpeedRatings,
-          'focalLength'     => $this->toRounded($exif->focalLength, precision: 1),
+          'focalLength'     => $exif->focalLength ? $this->toRounded($exif->focalLength, precision: 1) : null,
           'flashUsed'       => $exif->flashUsed(),
         ];
       }

@@ -442,6 +442,26 @@
         color: orange;
       }
 
+      .meta {
+        margin-block: .25rem -.5rem;
+        color: var(--meta-color);
+
+        a {
+          color: var(--meta-color);
+        }
+
+        .weather {
+          display: flex;
+          gap: .25rem;
+
+          img {
+            width: 1lh;
+            height: 1lh;
+            filter: drop-shadow(.125rem .125rem .125rem rgb(0 0 0 / .5));
+          }
+        }
+      }
+
       .cards {
         margin-top: 1rem;
       }
@@ -458,10 +478,6 @@
       .content p {
         margin-bottom: 1rem;
       }
-    }
-
-    .meta, .meta a {
-      color: var(--meta-color);
     }
 
     ul.locations {

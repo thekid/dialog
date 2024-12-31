@@ -64,6 +64,7 @@ parent: feed
               {{/each}}
             </ul>
             {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
+            {{> partials/weather in=.}}
           </div>
           {{> partials/images in=.}}
 

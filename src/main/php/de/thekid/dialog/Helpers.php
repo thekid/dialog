@@ -7,6 +7,7 @@ use web\frontend\helpers\Extension;
  *
  * - range <from> <until>
  * - range-rel <from> <until>
+ * - temperature <min> <max>
  * - size-class <size>
  * - route <entry>
  * - dataset <meta-inf>
@@ -23,7 +24,7 @@ class Helpers extends Extension {
     yield 'range' => function($node, $context, $options) {
       $from= date($options['format'], strtotime($options[0]));
       $until= date($options['format'], strtotime($options[1]));
-      return $from === $until ? $from : $from.' - '.$until;
+      return $from === $until ? $from : $from.' — '.$until;
     };
     yield 'range-rel' => function($node, $context, $options) {
       $from= strtotime($options[0]);
@@ -32,6 +33,13 @@ class Helpers extends Extension {
       if ($time < $from) return 'future';
       if ($time > $until) return 'passed';
       return 'current';
+    };
+    yield 'temperature' => function($node, $context, $options) {
+      $diff= abs($options[0] - $options[1]);
+      return $diff <= ($options['tolerance'] ?? 1)
+        ? sprintf('%.1f', ($options[0] + $options[1]) / 2)
+        : $options[0].' — '.$options[1]
+      ;
     };
     yield 'size-class' => function($node, $context, $options) {
       $s= (int)$options[0];
