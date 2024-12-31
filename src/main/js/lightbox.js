@@ -24,10 +24,29 @@ class Lightbox {
 
   /** Attach all of the given elements to open the lightbox specified by the given DOM element */
   attach(selector, $target) {
-    $target.addEventListener('click', e => $target.close());
-    selector.forEach($link => $link.addEventListener('click', e => {
-      e.preventDefault();
-      this.#open($target, $link);
-    }));
+    $target.addEventListener('click', e => {
+      $target.close();
+    });
+    $target.addEventListener('keydown', e => {
+      let offset;
+      switch (e.key) {
+        case 'ArrowLeft': offset = parseInt(e.target.dataset.offset) - 1; break;
+        case 'ArrowRight': offset = parseInt(e.target.dataset.offset) + 1; break;
+        default: return;
+      }
+
+      e.stopPropagation();
+      selector.item(offset)?.dispatchEvent(new Event('click'));
+    });
+
+    let i = 0;
+    for (const $link of selector) {
+      const offset = i++;
+      $link.addEventListener('click', e => {
+        e.preventDefault();
+        $target.dataset.offset = offset;
+        this.#open($target, $link);
+      });
+    }
   }
 }
