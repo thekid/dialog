@@ -26,7 +26,7 @@ class OpenMeteo {
     );
   }
 
-  public function lookup(string|float $lat, string|float $lon, Date $start, ?Date $end= null, TimeZone $tz= null): array<string, mixed> {
+  public function lookup(string|float $lat, string|float $lon, Date $start, ?Date $end= null, ?TimeZone $tz= null): array<string, mixed> {
     $params= $this->auth + [
       'latitude'   => $lat,
       'longitude'  => $lon,
