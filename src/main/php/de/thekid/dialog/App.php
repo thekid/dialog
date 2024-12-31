@@ -66,7 +66,7 @@ class App extends Application {
       '/'            => new Frontend(
         new HandlersIn('de.thekid.dialog.web', $inject->get(...)),
         new Handlebars($this->environment->path('src/main/handlebars'), [
-          new Dates(TimeZone::getByName('Europe/Berlin')),
+          new Dates(new TimeZone('Europe/Berlin')),
           new Numbers(),
           new Assets($manifest),
           $inject->get(Helpers::class),
