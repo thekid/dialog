@@ -5,6 +5,9 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #71: Aggregate weather for entries when importing. This uses
+  the free https://open-meteo.com/en/docs/historical-weather-api API
+  (@thekid)
 * Merged PR #70: Speed up importing from local directory. The `import`
   tool was more or less completely rewritten for this purpose. As a side
   effect, it's way more extensible
