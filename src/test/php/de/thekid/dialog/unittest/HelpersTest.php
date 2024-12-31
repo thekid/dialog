@@ -7,9 +7,9 @@ class HelpersTest {
   private $helpers= [...new Helpers()->helpers()];
 
   #[Test, Values([
-    [['2022-11-29', '2022-12-01', 'format' => 'd.m.Y'], '29.11.2022 - 01.12.2022'],
+    [['2022-11-29', '2022-12-01', 'format' => 'd.m.Y'], '29.11.2022 — 01.12.2022'],
     [['2022-11-29', '2022-11-29', 'format' => 'd.m.Y'], '29.11.2022'],
-    [['2022-11-29', '2022-12-01', 'format' => 'M Y'], 'Nov 2022 - Dec 2022'],
+    [['2022-11-29', '2022-12-01', 'format' => 'M Y'], 'Nov 2022 — Dec 2022'],
     [['2022-11-29', '2022-11-30', 'format' => 'M Y'], 'Nov 2022'],
   ])]
   public function range($options, $expected) {
@@ -25,6 +25,17 @@ class HelpersTest {
   ])]
   public function range_rel($options, $expected) {
     Assert::equals($expected, $this->helpers['range-rel'](null, null, $options));
+  }
+
+  #[Test, Values([
+    [[25.0, 25.0], '25.0'],
+    [[25.0, 25.4], '25.2'],
+    [[25.2, 25.4, 'tolerance' => 0], '25.2 — 25.4'],
+    [[25.4, 27.2], '25.4 — 27.2'],
+    [[-1.5, 1.5], '-1.5 — 1.5'],
+  ])]
+  public function temperature($options, $expected) {
+    Assert::equals($expected, $this->helpers['temperature'](null, null, $options));
   }
 
   #[Test, Values([

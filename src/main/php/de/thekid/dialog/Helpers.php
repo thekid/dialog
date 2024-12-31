@@ -23,7 +23,7 @@ class Helpers extends Extension {
     yield 'range' => function($node, $context, $options) {
       $from= date($options['format'], strtotime($options[0]));
       $until= date($options['format'], strtotime($options[1]));
-      return $from === $until ? $from : $from.' - '.$until;
+      return $from === $until ? $from : $from.' — '.$until;
     };
     yield 'range-rel' => function($node, $context, $options) {
       $from= strtotime($options[0]);
