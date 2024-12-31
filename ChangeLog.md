@@ -5,7 +5,8 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
-* Enabled keyboard navigation inside lightbox with arrow left and right
+* Enabled keyboard navigation with arrow left and right keys as well as
+  swiping left and right inside lightbox
   (@thekid)
 * Merged PR #71: Aggregate weather for entries when importing. This uses
   the free https://open-meteo.com/en/docs/historical-weather-api API
