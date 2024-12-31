@@ -32,7 +32,7 @@ class LookupWeather extends Task {
       $end= array_search(Dates::truncate($last, TimeInterval::$HOURS)->toString('Y-m-d\TH:i'), $result['hourly']['time']);
 
       // Determine most common weather codes and temperature range
-      $codes= array_count_values(array_slice($result['hourly']['weather_code'], $min, 1 + ($end - $start)));
+      $codes= array_count_values(array_slice($result['hourly']['weather_code'], $start, 1 + ($end - $start)));
       $temp= array_slice($result['hourly']['apparent_temperature'], $start, 1 + ($end - $start));
       $min= null === $min ? min($temp) : min($min, min($temp));
       $max= null === $max ? max($temp) : max($max, max($temp));
