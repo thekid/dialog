@@ -4,7 +4,7 @@ use io\File;
 use util\TimeZone;
 
 abstract class Processing {
-  protected static $UTC= TimeZone::getByName('UTC');
+  protected static $UTC= new TimeZone('UTC');
   protected $targets= [];
 
   /** Returns processing kind */

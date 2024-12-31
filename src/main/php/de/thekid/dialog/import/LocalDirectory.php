@@ -1,9 +1,9 @@
 <?php namespace de\thekid\dialog\import;
 
+use Generator;
 use de\thekid\dialog\processing\{Files, Images, Videos, ResizeTo};
-use io\{Folder, File};
-use lang\{IllegalArgumentException, IllegalStateException, FormatException, Process};
-use peer\http\HttpConnection;
+use io\{File, Folder};
+use lang\{Throwable, IllegalArgumentException};
 use util\cmd\{Command, Arg};
 use util\log\Logging;
 use webservices\rest\{Endpoint, RestUpload};
@@ -19,13 +19,29 @@ use webservices\rest\{Endpoint, RestUpload};
  * - cover.md: The image to use for the cover page
  */
 class LocalDirectory extends Command {
-  private $origin, $api;
-  private $force= false;
+  private static $implementations= [
+    'content.md' => new Content(...),
+    'journey.md' => new Journey(...),
+    'cover.md'   => new Cover(...),
+  ];
+  private $source, $api;
 
   /** Sets origin folder, e.g. `./imports/album` */
   #[Arg(position: 0)]
   public function from(string $origin): void {
-    $this->origin= new Folder($origin);
+    foreach (self::$implementations as $source => $implementation) {
+      $file= new File($origin, $source);
+      if (!$file->exists()) continue;
+
+      $this->source= $implementation(new Folder($origin), $file);
+      return;
+    }
+
+    throw new IllegalArgumentException(sprintf(
+      'Cannot locate any of [%s] in %s',
+      implode(', ', array_keys(self::$implementations)),
+      $origin
+    ));
   }
 
   /** Sets API url, e.g. `http://user:pass@localhost:8080/api` */
@@ -34,24 +50,10 @@ class LocalDirectory extends Command {
     $this->api= new Endpoint($api);
   }
 
-  /** Transfers images even if they have not been changed */
-  #[Arg]
-  public function useForce() {
-    $this->force= true;
-  }
-
   /** Add verbose logging for API calls */
   #[Arg]
   public function useVerbose() {
     $this->api->setTrace(Logging::all()->toConsole());
-  }
-
-  /** Executes a given external command and returns its exit code */
-  private function execute(string $command, array<string> $args, $redirect= null): void {
-    $p= new Process($command, $args, null, null, [STDIN, $redirect ?? STDOUT, STDERR]);
-    if (0 === ($r= $p->close())) return;
-
-    throw new IllegalStateException($p->getCommandLine().' exited with exit code '.$r);
   }
 
   /** Runs this command */
@@ -68,93 +70,30 @@ class LocalDirectory extends Command {
       )
     ;
 
-    $publish= time();
-    foreach (Sources::in($this->origin) as $folder => $item) {
-      $this->out->writeLine('[+] ', $item);
+    $this->out->writeLine("[+] \e[37;1m{$this->source->toString()}\e[0m");
+    for ($tasks= $this->source->synchronize($files); $task= $tasks->current(); ) {
+      $this->out->write(' => ', $task->description(), ':');
 
-      // Aggregate coordinates from Google Maps links
-      foreach ($item['locations'] as &$location) {
-        $r= new HttpConnection($location['link'])->get();
-
-        if (preg_match('#/maps/place/[^/]+/@([0-9.-]+),([0-9.-]+),([0-9.]+)z#', $r->header('Location')[0], $m)) {
-          $location['lat']= (float)$m[1];
-          $location['lon']= (float)$m[2];
-          $location['zoom']= (float)$m[3];
-        } else if (preg_match('#/maps/search/([0-9.-]+),.([0-9.-]+)#', $r->header('Location')[0], $m)) {
-          $location['lat']= (float)$m[1];
-          $location['lon']= (float)$m[2];
-          $location['zoom']= 1.0;
+      try {
+        $result= $task->execute($this->api);
+        if ($result instanceof Generator) {
+          $this->out->write("\e[34m");
+          foreach ($result as $input => $output) {
+            $this->out->write(' <', $input, ' -> ', $output, '>');
+          }
+          $this->out->writeLine("\e[0m");
+          $tasks->send($result->getReturn());
         } else {
-          throw new FormatException('Cannot resolve '.$location['link'].': '.$r->toString());
+          $this->out->writeLine(" \e[32m✓\e[0m");
+          $tasks->send($result);
         }
+      } catch ($e) {
+        $this->out->writeLine(" \e[31m⨯\e[0m ", Throwable::wrap($e));
+        return 1;
       }
-
-      // Fetch existing entry
-      $document= $this->api->resource('entries/{0}', [$item['slug']])->put($item, 'application/json')->value();
-      $this->out->writeLine(' => ID<', $document['_id'], '>');
-      $media= [];
-      foreach ($document['images'] ?? [] as $image) {
-        $media[$image['name']]= $image;
-      }
-
-      foreach ($folder->entries() as $entry) {
-        $name= $entry->name();
-        if (!$entry->isFile() || preg_match('/^(thumb|preview|full|video|screen)-/', $name)) continue;
-
-        // Select processing method
-        if (null === ($processing= $files->processing($name))) continue;
-        $this->out->write(' => Processing ', $processing->kind(), ' ', $name);
-
-        // Synchronize with server
-        $source= $entry->asFile();
-        $modified= $media[$name]['modified'] ?? null;
-        if ($this->force || null === $modified || $source->lastModified() > $modified) {
-          $resource= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $entry->name()]);
-          $transfer= [];
-          foreach ($processing->targets($source) as $kind => $target) {
-
-            // FIXME: Uploading files that take longer than ~30 seconds is, for some reason,
-            // broken, and will result in a) the import tool crashing and b) the server ending
-            // up in an endless blocking loop. Use `curl` for videos instead.
-            if ('video' === $kind) {
-              $this->execute('curl', [
-                '-#',
-                '-X', 'PUT',
-                '-H', 'Authorization: '.$this->api->headers()['Authorization'],
-                '-F', $kind.'=@'.strtr($target->getURI(), [DIRECTORY_SEPARATOR => '/']),
-                $resource->uri(),
-              ], ['null']);
-            } else {
-              $transfer[$kind]= $target;
-            }
-          }
-
-          $upload= new RestUpload($this->api, $resource->request('PUT')->waiting(read: 3600));
-          foreach ($processing->meta($source) as $key => $value) {
-            $upload->pass('meta['.$key.']', $value);
-          }
-          foreach ($transfer as $kind => $file) {
-            $upload->transfer($kind, $file->in(), $file->filename);
-          }
-          $r= $upload->finish();
-          $this->out->writeLine(': ', $r->status());
-        } else {
-          $this->out->writeLine(': (not updated)');
-        }
-
-        // Mark image as processed
-        unset($media[$name]);
-      }
-
-      // Clean up images
-      foreach ($media as $name => $_) {
-        $r= $this->api->resource('entries/{0}/images/{1}', [$item['slug'], $name])->delete();
-        $this->out->writeLine(' => Deleted ', $r->value(), ' from ', $item['slug']);
-      }
-
-      $r= $this->api->resource('entries/{0}/published', [$item['slug']])->put($publish, 'application/json');
-      $this->out->writeLine('# ', $r->value());
     }
+
+    $this->out->writeLine(" => Finished at \e[34m", date('r'), "\e[0m");
     return 0;
   }
 }
