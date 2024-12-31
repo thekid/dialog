@@ -33,6 +33,13 @@ class Helpers extends Extension {
       if ($time > $until) return 'passed';
       return 'current';
     };
+    yield 'temperature' => function($node, $context, $options) {
+      $diff= abs($options[0] - $options[1]);
+      return $diff <= ($options['tolerance'] ?? 1)
+        ? sprintf('%.1f', ($options[0] + $options[1]) / 2)
+        : $options[0].' — '.$options[1]
+      ;
+    };
     yield 'size-class' => function($node, $context, $options) {
       $s= (int)$options[0];
       return match {

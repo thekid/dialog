@@ -460,8 +460,22 @@
       }
     }
 
-    .meta, .meta a {
+    .meta {
+      margin-block: .25rem -.5rem;
       color: var(--meta-color);
+
+      a {
+        color: var(--meta-color);
+      }
+
+      .weather {
+        display: flex;
+
+        img {
+          width: 1lh;
+          height: 1lh;
+        }
+      }
     }
 
     ul.locations {
