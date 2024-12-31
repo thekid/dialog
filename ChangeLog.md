@@ -5,6 +5,10 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #70: Speed up importing from local directory. The `import`
+  tool was more or less completely rewritten for this purpose. As a side
+  effect, it's way more extensible
+  (@thekid)
 * Fixed issue #69: ffpmeg warnings when converting videos - @thekid
 * Implemented support for conditional requests in Atom feed using the
   `If-Modified-Since` header.
