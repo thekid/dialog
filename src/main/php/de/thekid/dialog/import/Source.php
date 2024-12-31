@@ -11,7 +11,12 @@ abstract class Source implements Value {
   private static $descriptions= new Descriptions();
   private $name;
 
-  public function __construct(protected Folder $origin, protected File $file, protected ?array<string, mixed> $entry= null) {
+  /** Creates a new source from a given folder and file, optionally passing an existing entry */
+  public function __construct(
+    protected Folder $origin,
+    protected File $file,
+    protected ?array<string, mixed> $entry= null
+  ) {
     $this->name= $this->origin->dirname;
   }
 
