@@ -1,9 +1,10 @@
 <?php namespace de\thekid\dialog\processing;
 
-use img\io\MetaDataReader;
+use img\io\{MetaDataReader, XMPSegment};
 use io\File;
 
 class Images extends Processing {
+  private const RDF= 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
   private $meta= new MetaDataReader();
 
   public function kind(): string { return 'image'; }
@@ -24,15 +25,23 @@ class Images extends Processing {
         $r+= [
           'width'           => $exif->width,
           'height'          => $exif->height,
-          'dateTime'        => $exif->dateTime?->toString('c', self::$UTC) ?? gmdate('c'),
+          'dateTime'        => $exif->dateTime?->toString(self::DATEFORMAT),
           'make'            => $exif->make,
           'model'           => $exif->model,
+          'lensModel'       => $exif->lensModel,
           'apertureFNumber' => $exif->apertureFNumber,
           'exposureTime'    => $exif->exposureTime,
           'isoSpeedRatings' => $exif->isoSpeedRatings,
           'focalLength'     => $exif->focalLength ? $this->toRounded($exif->focalLength, precision: 1) : null,
           'flashUsed'       => $exif->flashUsed(),
         ];
+      }
+
+      // Merge in XMP segment
+      if ($xmp= $meta?->segmentsOf(XMPSegment::class)) {
+        foreach ($xmp[0]->document()->getElementsByTagNameNS(self::RDF, 'Description')[0]->attributes as $attr) {
+          $r[lcfirst($attr->name)]= $attr->value;
+        }
       }
       return $r;
     } finally {
