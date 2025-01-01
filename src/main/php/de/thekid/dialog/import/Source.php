@@ -20,6 +20,26 @@ abstract class Source implements Value {
     $this->name= $this->origin->dirname;
   }
 
+  /** Creates a source from a given origin folder */
+  public static function in(string|Folder $origin): self {
+    static $implementations= [
+      'content.md' => new Content(...),
+      'journey.md' => new Journey(...),
+      'cover.md'   => new Cover(...),
+    ];
+
+    foreach ($implementations as $source => $new) {
+      $file= new File($origin, $source);
+      if ($file->exists()) return $new($origin instanceof Folder ? $origin : new Folder($origin), $file);
+    }
+
+    throw new IllegalArgumentException(sprintf(
+      'Cannot locate any of [%s] in %s',
+      implode(', ', array_keys($implementations)),
+      $origin
+    ));
+  }
+
   /** Returns this source's name */
   public function name(): string { return $this->name; }
 
