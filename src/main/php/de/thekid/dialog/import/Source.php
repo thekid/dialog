@@ -49,26 +49,22 @@ abstract class Source implements Value {
   /** Sets a parent for this source */
   public function nestedIn(string $parent): self { $this->name= $parent.'/'.$this->name; return $this; }
 
+  /** Returns this source's origin */
+  public function origin(): Folder { return $this->origin; }
+
   /** Yields all the media files in this source */
   protected function mediaIn(Files $files): iterable {
-    static $processed= '/^(thumb|preview|full|video|screen)-/';
-
     $images= [];
     foreach ($this->entry['images'] ?? [] as $image) {
       $images[$image['name']]= $image;
     }
 
-    foreach ($this->origin->entries() as $path) {
-      $name= $path->name();
-      if ($path->isFile() && !preg_match($processed, $name) && ($processing= $files->processing($name))) {
-        $file= $path->asFile();
-        $name= $file->filename;
-
-        if (!isset($images[$name]) || $file->lastModified() > $images[$name]['modified']) {
-          yield new UploadMedia($this->entry['slug'], $file, $processing);
-        }        
-        unset($images[$name]);
+    foreach ($files->in($this->origin) as $file => $processing) {
+      $name= $file->filename;
+      if (!isset($images[$name]) || $file->lastModified() > $images[$name]['modified']) {
+        yield new UploadMedia($this->entry['slug'], $file, $processing);
       }
+      unset($images[$name]);
     }
 
     foreach ($images as $rest) {

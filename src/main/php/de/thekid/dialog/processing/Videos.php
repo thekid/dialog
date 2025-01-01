@@ -16,7 +16,11 @@ class Videos extends Processing {
 
   public function __construct(private string $executable= 'ffmpeg') { }
 
+  /** Returns processing kind */
   public function kind(): string { return 'video'; }
+
+  /** Returns prefixes used by the targets */
+  public function prefixes(): array<string> { return [...parent::prefixes(), 'video', 'screen']; }
 
   /** Executes a given external command and returns its exit code */
   private function execute(string $command, array<string> $args): void {
