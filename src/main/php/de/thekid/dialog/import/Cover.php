@@ -6,6 +6,9 @@ use util\Date;
 /** Imports the cover image */ 
 class Cover extends Source {
 
+  /** Returns this source's name */
+  public function name(): string { return '@cover'; }
+
   public function entryFrom(Description $description): array<string, mixed> {
     $date= $description->meta['date'];
     return [
@@ -15,7 +18,7 @@ class Cover extends Source {
       'title'     => $description->meta['title'],
       'keywords'  => $description->meta['keywords'] ?? [],
       'content'   => $description->content,
-      'locations' => [...$description->locations(($date instanceof Date ? $date : new Date($date)->getTimeZone())],
+      'locations' => [...$description->locations(($date instanceof Date ? $date : new Date($date))->getTimeZone())],
       'is'        => ['cover' => true],
     ];
   }
