@@ -42,6 +42,7 @@ class Images extends Processing {
         foreach ($xmp[0]->document()->getElementsByTagNameNS(self::RDF, 'Description')[0]->attributes as $attr) {
           $r[lcfirst($attr->name)]= $attr->value;
         }
+        $r['lensModel']??= $r['lens'] ?? '(Unknown Lens)';
       }
       return $r;
     } finally {
