@@ -1,5 +1,14 @@
 class Lightbox {
 
+  #meta($meta, dataset) {
+    if ('' !== (dataset.make ?? '')) {
+      $meta.querySelectorAll('output').forEach($o => $o.value = dataset[$o.name]);
+      $meta.style.visibility = 'visible';
+    } else {
+      $meta.style.visibility = 'hidden';
+    }
+  }
+
   /** Opens the given lightbox, loading the image and filling in meta data */
   #open($target, $link, offset) {
     const $full = $target.querySelector('img');
@@ -7,20 +16,18 @@ class Lightbox {
 
     // Use opening image...
     $full.src = $img.src;
-    $target.dataset.offset = offset;
     $target.showModal();
 
-    // Overlay meta data if present
-    const $meta = $target.querySelector('.meta');
-    if ('' !== ($img.dataset.make ?? '')) {
-      $meta.querySelectorAll('output').forEach($o => $o.value = $img.dataset[$o.name]);
-      $meta.style.visibility = 'visible';
-    } else {
-      $meta.style.visibility = 'hidden';
-    }
-
     // ...then replace by larger version
+    this.#meta($target.querySelector('.meta'), $img.dataset);
+    $target.dataset.offset = offset;
     $full.src = $link.href;
+  }
+
+  #navigate($target, $link, offset) {
+    this.#meta($target.querySelector('.meta'), $link.querySelector('img').dataset);
+    $target.dataset.offset = offset;
+    $target.querySelector('img').src = $link.href;
   }
 
   /** Attach all of the given elements to open the lightbox specified by the given DOM element */
@@ -42,7 +49,7 @@ class Lightbox {
 
       e.stopPropagation();
       if (offset >= 0 && offset < selector.length) {
-        this.#open($target, selector.item(offset), offset);
+        this.#navigate($target, selector.item(offset), offset);
       }
     });
 
@@ -72,7 +79,7 @@ class Lightbox {
 
       e.stopPropagation();
       if (offset >= 0 && offset < selector.length) {
-        this.#open($target, selector.item(offset), offset);
+        this.#navigate($target, selector.item(offset), offset);
       }
     });
 
