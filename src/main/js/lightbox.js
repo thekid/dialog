@@ -1,12 +1,13 @@
 class Lightbox {
 
   /** Opens the given lightbox, loading the image and filling in meta data */
-  #open($target, $link) {
+  #open($target, $link, offset) {
     const $full = $target.querySelector('img');
     const $img = $link.querySelector('img');
 
     // Use opening image...
     $full.src = $img.src;
+    $target.dataset.offset = offset;
     $target.showModal();
 
     // Overlay meta data if present
@@ -32,13 +33,17 @@ class Lightbox {
     $target.addEventListener('keydown', e => {
       let offset;
       switch (e.key) {
-        case 'ArrowLeft': offset = parseInt(e.target.dataset.offset) - 1; break;
-        case 'ArrowRight': offset = parseInt(e.target.dataset.offset) + 1; break;
+        case 'Home': offset = 0; break;
+        case 'End': offset = selector.length - 1; break;
+        case 'ArrowLeft': offset = parseInt($target.dataset.offset) - 1; break;
+        case 'ArrowRight': offset = parseInt($target.dataset.offset) + 1; break;
         default: return;
       }
 
       e.stopPropagation();
-      selector.item(offset)?.dispatchEvent(new Event('click'));
+      if (offset >= 0 && offset < selector.length) {
+        this.#open($target, selector.item(offset), offset);
+      }
     });
 
     // Swipe left and right
@@ -66,7 +71,9 @@ class Lightbox {
       }
 
       e.stopPropagation();
-      selector.item(offset)?.dispatchEvent(new Event('click'));
+      if (offset >= 0 && offset < selector.length) {
+        this.#open($target, selector.item(offset), offset);
+      }
     });
 
     let i = 0;
@@ -74,8 +81,7 @@ class Lightbox {
       const offset = i++;
       $link.addEventListener('click', e => {
         e.preventDefault();
-        $target.dataset.offset = offset;
-        this.#open($target, $link);
+        this.#open($target, $link, offset);
       });
     }
   }
