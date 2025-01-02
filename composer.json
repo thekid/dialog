@@ -30,6 +30,7 @@
     "dev": "xp -supervise web -c . -p dev -m develop -a 0.0.0.0:8080 de.thekid.dialog.App ./import",
     "serve": "xp -supervise web -c . -p dev -a 0.0.0.0:8080 de.thekid.dialog.App ./import",
     "import": "xp cmd de.thekid.dialog.import.LocalDirectory",
-    "post-update-cmd": "xp bundle -m src/main/webapp/assets/manifest.json src/main/webapp/assets/"
+    "bundle": "xp bundle -m src/main/webapp/assets/manifest.json src/main/webapp/assets/",
+    "post-update-cmd": "xp bundle"
   }
 }
