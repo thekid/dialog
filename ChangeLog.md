@@ -5,6 +5,10 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #72: Show lens model and creation date from EXIF and XMP
+  segments. **Heads up:** This requires to run a migration script, see
+  the pull request!
+  (@thekid)
 * Enabled keyboard navigation with pos1, end and left and right arrow
   keys, and swiping left and right inside lightbox
   (@thekid)
