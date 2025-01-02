@@ -60,10 +60,14 @@ class Lightbox {
       x = e.touches[0].clientX;
       y = e.touches[0].clientY;
     });
-    $target.addEventListener('touchmove', e => e.cancelable && e.preventDefault(), { passive: false });
+    $target.addEventListener('touchmove', e => {
+      $target.querySelector('img').style.transform = `translate(${e.changedTouches[0].clientX - x}px, 0)`;
+      e.cancelable && e.preventDefault();
+    }, { passive: false });
     $target.addEventListener('touchend', e => {
       const width = e.changedTouches[0].clientX - x;
       const height = e.changedTouches[0].clientY - y;
+      $target.querySelector('img').style.transform = null;
 
       // Swipe was mostly vertical, ignore
       if (Math.abs(width) <= Math.abs(height)) return;
