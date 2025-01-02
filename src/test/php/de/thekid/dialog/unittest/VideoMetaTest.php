@@ -66,7 +66,7 @@ class VideoMetaTest {
     $meta= $this->videos->meta($this->file($this->atom('moov', [
       $this->atom('mvhd', pack('cc3NNNN', 0, 0, 0, 0, 3777782036, 3777782037, 1000, 3500)),
     ])));
-    Assert::equals('2023-09-17T07:53:56+00:00', $meta['dateTime']);
+    Assert::equals('17.09.2023 07:53', $meta['dateTime']);
   }
 
   #[Test]
@@ -86,7 +86,7 @@ class VideoMetaTest {
         $this->list('data', ['2023-09-17T08:33:56+00:00']),
       ])
     ])));
-    Assert::equals('2023-09-17T08:33:56+00:00', $meta['dateTime']);
+    Assert::equals('17.09.2023 08:33', $meta['dateTime']);
   }
 
   #[Test, Values(['com.apple.quicktime.make', 'com.android.manufacturer'])]

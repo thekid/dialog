@@ -16,7 +16,11 @@ class Videos extends Processing {
 
   public function __construct(private string $executable= 'ffmpeg') { }
 
+  /** Returns processing kind */
   public function kind(): string { return 'video'; }
+
+  /** Returns prefixes used by the targets */
+  public function prefixes(): array<string> { return [...parent::prefixes(), 'video', 'screen']; }
 
   /** Executes a given external command and returns its exit code */
   private function execute(string $command, array<string> $args): void {
@@ -27,7 +31,7 @@ class Videos extends Processing {
   }
 
   public function meta(File $source): array<string, mixed> {
-    static $MAP= [
+    static $mdta= [
       'mdta:com.apple.quicktime.make'  => 'make',
       'mdta:com.apple.quicktime.model' => 'model',
       'mdta:com.android.manufacturer'  => 'make',
@@ -49,21 +53,21 @@ class Videos extends Processing {
       // Normalize meta data from iOS and Android devices
       $r= [];
       foreach ($meta as $key => $value) {
-        if ($mapped= $MAP[$key] ?? null) {
+        if ($mapped= $mdta[$key] ?? null) {
           $r[$mapped]= $value[0];
         }
       }
 
       // Prefer original creation date from iOS, converting it to local time
       if ($date= $meta['mdta:com.apple.quicktime.creationdate'][0] ?? null) {
-        $r['dateTime']= new Date(preg_replace('/[+-][0-9]{4}$/', '', $date))->toString('c', self::$UTC);
+        $r['dateTime']= new Date(preg_replace('/[+-][0-9]{4}$/', '', $date))->toString(self::DATEFORMAT);
       }
 
       // Aggregate information from movie header: Duration and creation time
       // Time info is the number of seconds since 1904-01-01 00:00:00 UTC
       if (isset($meta['mvhd'])) {
         $r['duration']= round($meta['mvhd']['duration'] / $meta['mvhd']['scale'], 3);
-        $r['dateTime']??= new Date($meta['mvhd']['created'] - 2082844800)->toString('c', self::$UTC);
+        $r['dateTime']??= new Date($meta['mvhd']['created'] - 2082844800)->toString(self::DATEFORMAT);
       }
 
       return $r;

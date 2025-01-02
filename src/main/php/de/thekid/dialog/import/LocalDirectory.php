@@ -2,8 +2,7 @@
 
 use Generator;
 use de\thekid\dialog\processing\{Files, Images, Videos, ResizeTo};
-use io\{File, Folder};
-use lang\{Throwable, IllegalArgumentException};
+use lang\Throwable;
 use util\cmd\{Command, Arg};
 use util\log\Logging;
 use webservices\rest\{Endpoint, RestUpload};
@@ -19,29 +18,12 @@ use webservices\rest\{Endpoint, RestUpload};
  * - cover.md: The image to use for the cover page
  */
 class LocalDirectory extends Command {
-  private static $implementations= [
-    'content.md' => new Content(...),
-    'journey.md' => new Journey(...),
-    'cover.md'   => new Cover(...),
-  ];
   private $source, $api;
 
   /** Sets origin folder, e.g. `./imports/album` */
   #[Arg(position: 0)]
   public function from(string $origin): void {
-    foreach (self::$implementations as $source => $implementation) {
-      $file= new File($origin, $source);
-      if (!$file->exists()) continue;
-
-      $this->source= $implementation(new Folder($origin), $file);
-      return;
-    }
-
-    throw new IllegalArgumentException(sprintf(
-      'Cannot locate any of [%s] in %s',
-      implode(', ', array_keys(self::$implementations)),
-      $origin
-    ));
+    $this->source= Source::in($origin);
   }
 
   /** Sets API url, e.g. `http://user:pass@localhost:8080/api` */

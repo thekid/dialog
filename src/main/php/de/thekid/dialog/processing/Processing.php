@@ -4,11 +4,14 @@ use io\File;
 use util\TimeZone;
 
 abstract class Processing {
-  protected static $UTC= new TimeZone('UTC');
+  protected const DATEFORMAT= 'd.m.Y H:i';
   protected $targets= [];
 
   /** Returns processing kind */
   public abstract function kind(): string;
+
+  /** Returns prefixes used by the targets */
+  public function prefixes(): array<string> { return array_keys($this->targets); }
 
   /**
    * Adds a conversion target with a given prefix and conversion target.

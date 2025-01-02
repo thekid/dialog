@@ -20,6 +20,26 @@ abstract class Source implements Value {
     $this->name= $this->origin->dirname;
   }
 
+  /** Creates a source from a given origin folder */
+  public static function in(string|Folder $origin): self {
+    static $implementations= [
+      'content.md' => new Content(...),
+      'journey.md' => new Journey(...),
+      'cover.md'   => new Cover(...),
+    ];
+
+    foreach ($implementations as $source => $new) {
+      $file= new File($origin, $source);
+      if ($file->exists()) return $new($origin instanceof Folder ? $origin : new Folder($origin), $file);
+    }
+
+    throw new IllegalArgumentException(sprintf(
+      'Cannot locate any of [%s] in %s',
+      implode(', ', array_keys($implementations)),
+      $origin
+    ));
+  }
+
   /** Returns this source's name */
   public function name(): string { return $this->name; }
 
@@ -29,26 +49,22 @@ abstract class Source implements Value {
   /** Sets a parent for this source */
   public function nestedIn(string $parent): self { $this->name= $parent.'/'.$this->name; return $this; }
 
+  /** Returns this source's origin */
+  public function origin(): Folder { return $this->origin; }
+
   /** Yields all the media files in this source */
   protected function mediaIn(Files $files): iterable {
-    static $processed= '/^(thumb|preview|full|video|screen)-/';
-
     $images= [];
     foreach ($this->entry['images'] ?? [] as $image) {
       $images[$image['name']]= $image;
     }
 
-    foreach ($this->origin->entries() as $path) {
-      $name= $path->name();
-      if ($path->isFile() && !preg_match($processed, $name) && ($processing= $files->processing($name))) {
-        $file= $path->asFile();
-        $name= $file->filename;
-
-        if (!isset($images[$name]) || $file->lastModified() > $images[$name]['modified']) {
-          yield new UploadMedia($this->entry['slug'], $file, $processing);
-        }        
-        unset($images[$name]);
+    foreach ($files->in($this->origin) as $file => $processing) {
+      $name= $file->filename;
+      if (!isset($images[$name]) || $file->lastModified() > $images[$name]['modified']) {
+        yield new UploadMedia($this->entry['slug'], $file, $processing);
       }
+      unset($images[$name]);
     }
 
     foreach ($images as $rest) {

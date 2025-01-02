@@ -680,7 +680,7 @@
         left: 0;
         font-size: .9rem;
         display: grid;
-        grid-template-columns: repeat(6, max-content);
+        grid-template-columns: repeat(8, max-content);
         gap: 1px;
         justify-content: center;
         pointer-events: none;
@@ -761,8 +761,12 @@
           border-radius: 0;
         }
 
-        .meta div:nth-child(2) {
-          grid-column: span 3;
+        .meta div:nth-child(1) {
+          grid-column: span 2;
+        }
+
+        .meta div:nth-child(4) {
+          grid-column: span 4;
         }
 
         .meta div {
@@ -811,8 +815,10 @@
     <div class="image">
       <img alt="Lightbox" width="100%">
       <div class="meta">
+        <div><output name="datetime"></output></div>
         <div><output name="make"></output></div>
         <div><output name="model"></output></div>
+        <div><output name="lensmodel"></output></div>
         <div>ISO <output name="isospeedratings"></output></div>
         <div><output name="focallength"></output> mm</div>
         <div><output name="aperturefnumber"></output></div>

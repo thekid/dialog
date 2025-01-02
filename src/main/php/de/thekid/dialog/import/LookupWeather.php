@@ -20,7 +20,7 @@ class LookupWeather extends Task {
       // Infer date range from first and last images
       $dates= [];
       foreach ($this->images as $image) {
-        $dates[]= new Date(strtr($image['meta']['dateTime'], ['+00:00' => '']), $tz);
+        $dates[]= new Date($image['meta']['dateTime'], $tz);
       }
       usort($dates, fn($a, $b) => $b->compareTo($a));
       $first= current($dates);
