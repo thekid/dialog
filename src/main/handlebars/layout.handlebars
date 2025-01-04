@@ -643,13 +643,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #444;
       transform: scale(0, 0);
       transition: transform ease-in-out 300ms;
       padding: 0;
       border: none;
       background-color: transparent;
       outline: none;
+      width: 100%;
 
       &::backdrop {
         -webkit-backdrop-filter: blur(10px) brightness(.5);
@@ -676,8 +676,8 @@
 
       img {
         max-height: calc(100vh - 6rem);
-        width: auto;
         margin: auto;
+        object-fit: cover;
       }
 
       img.next, img.prev {
@@ -756,6 +756,11 @@
         margin-right: 0;
         max-width: 100%;
 
+        .image {
+          border: none;
+          border-radius: 0;
+        }
+
         .meta {
           grid-template-columns: repeat(3, max-content) 1fr;
           transform: scale(1, 1);
@@ -764,11 +769,6 @@
           border: none;
           border-radius: 0;
           position: unset;
-        }
-
-        img {
-          border: none;
-          border-radius: 0;
         }
 
         .meta div:nth-child(1) {
