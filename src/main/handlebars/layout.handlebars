@@ -582,26 +582,26 @@
         bottom: 1.5rem;
         left: 1.5rem;
         display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-        width: var(--_size);
+        isolation: isolate;
 
-        img, video {
-          z-index: 1;
+        img {
           display: block;
           border: .25rem solid white;
           border-radius: .5rem;
           width: var(--_size);
-          height: var(--_size);
+          aspect-ratio: 1 / 1;
           object-fit: cover;
-          margin-right: calc(-1 * var(--_overlap));
-          box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .4);
-          transition: margin-right ease-in-out 150ms;
+          box-shadow: .5rem .5rem 1rem rgb(0 0 0 / .2);
+          transition: margin ease-in-out 150ms;
+        }
+
+        img:not(:first-child) {
+          margin-left: calc(-1 * var(--_overlap));
         }
       }
 
-      &:hover .more img, video {
-        margin-right: 1rem;
+      &:hover .more img:not(:first-child) {
+        margin-left: 1rem;
       }
     }
 

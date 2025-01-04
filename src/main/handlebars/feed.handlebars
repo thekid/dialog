@@ -51,7 +51,7 @@
             <div class="more">
               {{#each images}}
                 {{#unless (equals @index 0)}}
-                  <img src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
+                  <img style="z-index: -{{@index}}" src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
                 {{/unless}}
               {{/each}}
             </div>
