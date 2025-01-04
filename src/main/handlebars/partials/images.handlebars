@@ -2,7 +2,7 @@
   {{#each in.images}}
     <div class="image">
       {{#if is.video}}
-        <video controls preload="metadata" width="100%" poster="/image/{{in.slug}}/thumb-{{name}}.webp">
+        <video controls playsinline preload="metadata" width="100%" poster="/image/{{in.slug}}/thumb-{{name}}.webp">
           <source src="/image/{{in.slug}}/video-{{name}}.mp4" type="video/mp4">
         </video>
       {{else}}
