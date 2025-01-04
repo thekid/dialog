@@ -1,33 +1,41 @@
 class Lightbox {
+  #replace = null;
 
-  #meta($meta, dataset) {
-    if ('' !== (dataset.make ?? '')) {
-      $meta.querySelectorAll('output').forEach($o => $o.value = dataset[$o.name]);
-      $meta.style.visibility = 'visible';
+  /** Wraps around to last item at beginning, and first item at end of list */
+  #wrap(offset, length) {
+    if (offset < 0) {
+      return length - 1;
+    } else if (offset >= length) {
+      return 0;
     } else {
-      $meta.style.visibility = 'hidden';
+      return offset;
     }
   }
 
   /** Opens the given lightbox, loading the image and filling in meta data */
-  #open($target, $link, offset) {
-    const $full = $target.querySelector('img');
+  #open($target, $links, offset) {
+    offset = this.#wrap(offset, $links.length);
+    const $display = $target.querySelector('img.display');
+    const $link = $links.item(offset);
     const $img = $link.querySelector('img');
+    const $meta = $target.querySelector('.meta');
 
-    // Use opening image...
-    $full.src = $img.src;
-    $target.showModal();
-
-    // ...then replace by larger version
-    this.#meta($target.querySelector('.meta'), $img.dataset);
+    // Update meta information
     $target.dataset.offset = offset;
-    $full.src = $link.href;
-  }
+    if ('' !== ($img.dataset.make ?? '')) {
+      $meta.querySelectorAll('output').forEach($o => $o.value = $img.dataset[$o.name]);
+      $meta.style.visibility = 'visible';
+    } else {
+      $meta.style.visibility = 'hidden';
+    }
 
-  #navigate($target, $link, offset) {
-    this.#meta($target.querySelector('.meta'), $link.querySelector('img').dataset);
-    $target.dataset.offset = offset;
-    $target.querySelector('img').src = $link.href;
+    // Exchange images
+    $display.src = $img.src;
+    $target.querySelector('img.prev').src = $links.item(this.#wrap(offset - 1, $links.length)).querySelector('img').src;
+    $target.querySelector('img.next').src = $links.item(this.#wrap(offset + 1, $links.length)).querySelector('img').src;
+
+    // ...then replace by larger version after a short duration
+    this.#replace = setTimeout(() => $display.src = $link.href, 150);
   }
 
   /** Attach all of the given elements to open the lightbox specified by the given DOM element */
@@ -38,6 +46,8 @@ class Lightbox {
 
     // Keyboard navigation
     $target.addEventListener('keydown', e => {
+      clearTimeout(this.#replace);
+
       let offset;
       switch (e.key) {
         case 'Home': offset = 0; break;
@@ -47,27 +57,37 @@ class Lightbox {
         default: return;
       }
 
+      e.preventDefault();
       e.stopPropagation();
-      if (offset >= 0 && offset < selector.length) {
-        this.#navigate($target, selector.item(offset), offset);
-      }
+      this.#open($target, selector, offset);
     });
 
     // Swipe left and right
     let x, y;
     const threshold = 50;
     $target.addEventListener('touchstart', e => {
+      clearTimeout(this.#replace);
       x = e.touches[0].clientX;
       y = e.touches[0].clientY;
     });
     $target.addEventListener('touchmove', e => {
-      $target.querySelector('img').style.transform = `translate(${e.changedTouches[0].clientX - x}px, 0)`;
+      const delta = e.changedTouches[0].clientX - x;
+      $target.querySelector('img.display').style.transform = `translate(${delta}px, 0)`;
+      if (delta > 0) {
+        $target.querySelector('img.next').style.visibility = null;
+        $target.querySelector('img.prev').style.visibility = 'visible';
+      } else {
+        $target.querySelector('img.next').style.visibility = 'visible';
+        $target.querySelector('img.prev').style.visibility = null;
+      }
       e.cancelable && e.preventDefault();
     }, { passive: false });
     $target.addEventListener('touchend', e => {
       const width = e.changedTouches[0].clientX - x;
       const height = e.changedTouches[0].clientY - y;
-      $target.querySelector('img').style.transform = null;
+      $target.querySelector('img.prev').style.visibility = null;
+      $target.querySelector('img.next').style.visibility = null;
+      $target.querySelector('img.display').style.transform = null;
 
       // Swipe was mostly vertical, ignore
       if (Math.abs(width) <= Math.abs(height)) return;
@@ -82,9 +102,7 @@ class Lightbox {
       }
 
       e.stopPropagation();
-      if (offset >= 0 && offset < selector.length) {
-        this.#navigate($target, selector.item(offset), offset);
-      }
+      this.#open($target, selector, offset);
     });
 
     let i = 0;
@@ -92,7 +110,8 @@ class Lightbox {
       const offset = i++;
       $link.addEventListener('click', e => {
         e.preventDefault();
-        this.#open($target, $link, offset);
+        $target.showModal();
+        this.#open($target, selector, offset);
       });
     }
   }
