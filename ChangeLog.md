@@ -5,6 +5,9 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #73: Preview previous and next images when swiping inside
+  lightbox
+  (@thekid)
 * Merged PR #72: Show lens model and creation date from EXIF and XMP
   segments. **Heads up:** This requires to run a migration script, see
   the pull request!
