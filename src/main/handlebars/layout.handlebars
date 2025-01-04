@@ -574,6 +574,16 @@
         box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
       }
 
+      .is-video::after {
+        content: url('/static/play.svg');
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: max(5%, 2rem);
+        aspect-ratio: 1 / 1;
+        filter: drop-shadow(.25rem .25rem .25rem rgb(0 0 0 / .5));
+      }
+
       .more {
         --_size: 10rem;
         --_overlap: 8rem;

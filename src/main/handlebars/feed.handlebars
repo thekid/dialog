@@ -44,14 +44,8 @@
 
           <a class="images is-preview" href="{{route this}}">
             {{#with images.0}}
-              <div class="image">
-                {{#if is.video}}
-                  <video controls playsinline preload="metadata" width="100%" poster="/image/{{slug}}/thumb-{{name}}.webp">
-                    <source src="/image/{{slug}}/video-{{name}}.mp4" type="video/mp4">
-                  </video>
-                {{else}}
-                  <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{&dataset meta}} src="/image/{{slug}}/thumb-{{name}}.webp" width="1024">
-                {{/if}}
+              <div class="{{#if is.video}}is-video{{/if}} image">
+                <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{&dataset meta}} src="/image/{{slug}}/thumb-{{name}}.webp" width="1024">
               </div>
             {{/with}}
             <div class="more">
