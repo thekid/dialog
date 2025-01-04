@@ -559,15 +559,19 @@
         grid-template-columns: 1fr;
       }
 
-      &.is-single, &.is-preview .image img, video {
+      &.is-single .image :is(img, video) {
         aspect-ratio: auto;
       }
 
-      &:where(.is-odd:not(.all)) .image:first-child {
+      &.is-preview .image :is(img, video) {
+        aspect-ratio: auto;
+      }
+
+      &:is(.is-odd:not(.all)) .image:first-child {
         grid-column: 1 / 3;
       }
 
-      .image img, .image video {
+      .image :is(img, video) {
         aspect-ratio: 15 / 10;
         object-fit: cover;
         border-radius: .25rem;
