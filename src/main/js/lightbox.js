@@ -60,7 +60,7 @@ class Lightbox {
     } else {
       $meta.className = 'meta for-video';
       $display.className = 'display is-video';
-      $display.innerHTML = `<video playsinline poster="${$item.poster}" width="100%">${$item.innerHTML}</video>`;
+      $display.innerHTML = `<video controls playsinline preload="metadata" poster="${$item.poster}" width="100%">${$item.innerHTML}</video>`;
 
       // Simulate :playing pseudo-class
       const $video = $display.querySelector('video');
@@ -76,6 +76,13 @@ class Lightbox {
     $target.focus();
   }
 
+  #activate($target) {
+    const $video = $target.querySelector('video');
+    if ($video) {
+      $video.paused ? $video.play() : $video.pause();
+    }
+  }
+
   /** Attach all of the given elements to open the lightbox specified by the given DOM element */
   attach(selector, $target) {
     $target.addEventListener('click', e => {
@@ -87,17 +94,17 @@ class Lightbox {
       this.#replace && clearTimeout(this.#replace);
 
       let offset;
-      switch (e.key) {
-        case 'Home': offset = 0; break;
-        case 'End': offset = selector.length - 1; break;
-        case 'ArrowLeft': offset = parseInt($target.dataset.offset) - 1; break;
-        case 'ArrowRight': offset = parseInt($target.dataset.offset) + 1; break;
+      switch (e.code) {
+        case 'Home': this.#open($target, selector, 0); break;
+        case 'End': this.#open($target, selector, selector.length - 1); break;
+        case 'ArrowLeft': this.#open($target, selector, parseInt($target.dataset.offset) - 1); break;
+        case 'ArrowRight': this.#open($target, selector, parseInt($target.dataset.offset) + 1); break;
+        case 'Space': this.#activate($target); break;
         default: return;
       }
 
       e.preventDefault();
       e.stopPropagation();
-      this.#open($target, selector, offset);
     });
 
     // Swipe left and right
@@ -127,27 +134,18 @@ class Lightbox {
       $target.querySelector('.next').style.visibility = null;
       $target.querySelector('.display').style.transform = null;
 
-      // Swipe was mostly vertical, ignore
-      if (Math.abs(width) <= Math.abs(height)) return;
-
-      let offset;
-      if (width > threshold) {
-        offset = parseInt($target.dataset.offset) - 1;
-      } else if (width < -threshold) {
-        offset = parseInt($target.dataset.offset) + 1;
-      } else {
-        return;
-      }
-
       e.stopPropagation();
-      this.#open($target, selector, offset);
+      if (Math.abs(width) <= threshold && Math.abs(height) <= threshold) {
+        this.#activate($target);
+      } else if (Math.abs(width) <= Math.abs(height)) {
+        // Swipe was mostly vertical, ignore
+      } else {
+        this.#open($target, selector, parseInt($target.dataset.offset) - Math.sign(width));
+      }
     });
 
     $target.querySelector('.display').addEventListener('click', e => {
       e.stopPropagation();
-      if (e.target instanceof HTMLVideoElement) {
-        e.target.paused ? e.target.play() : e.target.pause();
-      }
     });
     $target.addEventListener('close', e => {
       $target.querySelector('video')?.pause();
