@@ -2,13 +2,11 @@
   {{#each in.images}}
     <div class="image">
       {{#if is.video}}
-        <video controls playsinline preload="metadata" width="100%" poster="/image/{{in.slug}}/thumb-{{name}}.webp">
+        <video data-lightbox controls playsinline preload="metadata" width="100%" poster="/image/{{in.slug}}/thumb-{{name}}.webp" {{&dataset meta}}>
           <source src="/image/{{in.slug}}/video-{{name}}.mp4" type="video/mp4">
         </video>
       {{else}}
-        <a href="/image/{{in.slug}}/full-{{name}}.webp" data-lightbox>
-          <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{&dataset meta}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024">
-        </a>
+        <img data-lightbox alt="{{in.title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} src="/image/{{in.slug}}/thumb-{{name}}.webp" width="1024" {{&dataset meta}} data-full="/image/{{in.slug}}/full-{{name}}.webp">
       {{/if}}
     </div>
   {{/each}}

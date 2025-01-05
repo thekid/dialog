@@ -310,6 +310,31 @@
       margin-bottom: .5rem;
     }
 
+    .is-video {
+      position: relative;
+
+      &::after {
+        content: url('/static/play.svg');
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: max(5%, 2rem);
+        aspect-ratio: 1 / 1;
+        filter: drop-shadow(.25rem .25rem .25rem rgb(0 0 0 / .5));
+        transition: scale 100ms ease-in-out;
+        scale: 1;
+      }
+
+      &.playing::after {
+        scale: 0;
+      }
+
+      &.loading::after, &:buffering::after {
+        content: url('/static/loading.svg');
+      }
+    }
+
     .cards {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -578,16 +603,6 @@
         box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
       }
 
-      .is-video::after {
-        content: url('/static/play.svg');
-        position: absolute;
-        inset: 0;
-        margin: auto;
-        width: max(5%, 2rem);
-        aspect-ratio: 1 / 1;
-        filter: drop-shadow(.25rem .25rem .25rem rgb(0 0 0 / .5));
-      }
-
       .more {
         --_size: 10rem;
         --_overlap: 8rem;
@@ -719,9 +734,8 @@
       }
 
       .imageset {
-        display: flex;
-        flex-direction: row;
         position: relative;
+        width: 100%;
       }
 
       img {
@@ -760,6 +774,22 @@
 
         div:where(:last-child) {
           border-top-right-radius: .25rem;
+        }
+
+        &.for-image {
+          div:has([name='duration']) {
+            display: none;
+          }
+        }
+
+        &.for-video {
+          div:has([name='lensmodel']),
+          div:has([name='isospeedratings']),
+          div:has([name='focallength']),
+          div:has([name='aperturefnumber']),
+          div:has([name='exposuretime']) {
+            display: none;
+          }
         }
       }
 
