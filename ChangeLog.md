@@ -5,6 +5,9 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #74: Show 1 preview image and collapse the rest into an
+  overlapping list in feed
+  (@thekid)
 * Merged PR #73: Preview previous and next images when swiping inside
   lightbox
   (@thekid)
@@ -12,8 +15,8 @@ Dialog change log
   segments. **Heads up:** This requires to run a migration script, see
   the pull request!
   (@thekid)
-* Enabled keyboard navigation with pos1, end and left and right arrow
-  keys, and swiping left and right inside lightbox
+* Enabled keyboard navigation with `pos1`, `end` and `<-` and `->` arrow
+  keys, as well as swiping left and right inside lightbox
   (@thekid)
 * Merged PR #71: Aggregate weather for entries when importing. This uses
   the free https://open-meteo.com/en/docs/historical-weather-api API
