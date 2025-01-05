@@ -43,6 +43,10 @@ parent: feed
   {{#*inline "scripts"}}
     <script src="/assets/{{asset 'mapping.js'}}" defer></script>
     <script type="module">
+      {{&use 'lightbox'}}
+      new Lightbox().attach(document.querySelectorAll('a[data-lightbox]'), document.querySelector('#lightbox'));
+    </script>
+    <script type="module">
       {{&use 'mapping'}}
       const mapping = new Mapping();
 
