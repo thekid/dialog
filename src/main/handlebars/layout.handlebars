@@ -719,9 +719,8 @@
       }
 
       .imageset {
-        display: flex;
-        flex-direction: row;
         position: relative;
+        width: 100%;
       }
 
       img {
@@ -760,6 +759,16 @@
 
         div:where(:last-child) {
           border-top-right-radius: .25rem;
+        }
+
+        &.for-video {
+          div:has([name='lensmodel']),
+          div:has([name='isospeedratings']),
+          div:has([name='focallength']),
+          div:has([name='aperturefnumber']),
+          div:has([name='exposuretime']) {
+            display: none;
+          }
         }
       }
 
