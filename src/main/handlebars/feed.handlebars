@@ -42,20 +42,33 @@
             {{> partials/weather in=.}}
           </div>
 
-          <a class="images is-preview is-{{size-class (size images)}}" href="{{route this}}">
-            {{#with images.0}}
-              <div class="{{#if is.video}}is-video{{/if}} image">
-                <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{&dataset meta}} src="/image/{{slug}}/thumb-{{name}}.webp" width="1024">
-              </div>
-            {{/with}}
-            <div class="more">
-              {{#each images}}
-                {{#unless (equals @index 0)}}
-                  <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless ../@first}}loading="lazy"{{/unless}} style="z-index: -{{@index}}" src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
-                {{/unless}}
-              {{/each}}
+          {{! Content formed of a single video can be played back inline directly }}
+          {{#if (all (equals 1 (size images)) images.0.is.video)}}
+            <div class="images is-single">
+              {{#with images.0}}
+                <div class="image">
+                  <video controls playsinline preload="metadata" width="100%" poster="/image/{{slug}}/thumb-{{name}}.webp" data-slug="{{slug}}">
+                    <source src="/image/{{slug}}/video-{{name}}.mp4" type="video/mp4">
+                  </video>
+                </div>
+              {{/with}}
             </div>
-          </a>
+          {{else}}
+            <a class="images is-preview is-{{size-class (size images)}}" href="{{route this}}">
+              {{#with images.0}}
+                <div class="{{#if is.video}}is-video{{/if}} image">
+                  <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{&dataset meta}} src="/image/{{slug}}/thumb-{{name}}.webp" width="1024">
+                </div>
+              {{/with}}
+              <div class="more">
+                {{#each images}}
+                  {{#unless (equals @index 0)}}
+                    <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless ../@first}}loading="lazy"{{/unless}} style="z-index: -{{@index}}" src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
+                  {{/unless}}
+                {{/each}}
+              </div>
+            </a>
+          {{/if}}
 
           <div class="content">
             {{& content}}
@@ -75,5 +88,20 @@
     </div>
   {{/inline}}
   {{#*inline "scripts"}}
+    <script type="module">
+      {{&use 'statistics'}}
+      const statistics = new Statistics();
+      {{#each elements}}
+        {{#if (all (equals 1 (size images)) images.0.is.video)}}
+          statistics.add('{{slug}}', '{{sign slug}}', 1500);
+        {{/if}}
+      {{/each}}
+
+      // Content formed of a single video has been watched once it's played back for more than 1.5 seconds
+      for (const $video of document.querySelectorAll('video')) {
+        $video.addEventListener('play', e => statistics.schedule($video.dataset['slug']));
+        $video.addEventListener('pause', e => statistics.withdraw($video.dataset['slug']));
+      }
+    </script>
   {{/inline}}
 {{/layout}}
