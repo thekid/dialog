@@ -5,6 +5,8 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #76: Include videos in lightbox using a minimalistic player.
+  (@thekid)
 * Merged PR #75: If a content is formed of a single video, play in feed
   (@thekid)
 * Merged PR #74: Show 1 preview image and collapse the rest into an
