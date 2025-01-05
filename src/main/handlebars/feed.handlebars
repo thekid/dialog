@@ -42,7 +42,20 @@
             {{> partials/weather in=.}}
           </div>
 
-          {{> partials/images in=. first=@first}}
+          <a class="images is-preview is-{{size-class (size images)}}" href="{{route this}}">
+            {{#with images.0}}
+              <div class="{{#if is.video}}is-video{{/if}} image">
+                <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless first}}loading="lazy"{{/unless}} {{&dataset meta}} src="/image/{{slug}}/thumb-{{name}}.webp" width="1024">
+              </div>
+            {{/with}}
+            <div class="more">
+              {{#each images}}
+                {{#unless (equals @index 0)}}
+                  <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless ../@first}}loading="lazy"{{/unless}} style="z-index: -{{@index}}" src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
+                {{/unless}}
+              {{/each}}
+            </div>
+          </a>
 
           <div class="content">
             {{& content}}
