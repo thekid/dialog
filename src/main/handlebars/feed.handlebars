@@ -63,7 +63,9 @@
               <div class="more">
                 {{#each images}}
                   {{#unless (equals @index 0)}}
-                    <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless ../@first}}loading="lazy"{{/unless}} style="z-index: -{{@index}}" src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
+                    <div class="{{#if is.video}}is-video{{/if}} image" style="z-index: -{{@index}}">
+                      <img alt="{{title}}, {{date meta.dateTime format='d.m.Y H:i'}}" {{#unless ../@first}}loading="lazy"{{/unless}} src="/image/{{slug}}/thumb-{{name}}.webp" width="192">
+                    </div>
                   {{/unless}}
                 {{/each}}
               </div>
