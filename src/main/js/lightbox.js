@@ -59,11 +59,12 @@ class Lightbox {
       this.#replace = setTimeout(() => $display.querySelector('img').src = $item.dataset['full'], 150);
     } else {
       $meta.className = 'meta for-video';
-      $display.className = 'display is-video';
-      $display.innerHTML = `<video controls playsinline preload="metadata" poster="${$item.poster}" width="100%">${$item.innerHTML}</video>`;
+      $display.className = 'display is-video loading';
+      $display.innerHTML = `<video playsinline preload="metadata" poster="${$item.poster}" width="100%">${$item.innerHTML}</video>`;
 
       // Simulate :playing pseudo-class
       const $video = $display.querySelector('video');
+      $video.addEventListener('canplay', e => $display.classList.remove('loading'));
       $video.addEventListener('play', e => $display.classList.add('playing'));
       $video.addEventListener('pause', e => $display.classList.remove('playing'));
       $video.addEventListener('ended', e => $display.classList.remove('playing'));
@@ -76,6 +77,7 @@ class Lightbox {
     $target.focus();
   }
 
+  /** Activate a target. For videos, this toggles it being played */
   #activate($target) {
     const $video = $target.querySelector('video');
     if ($video) {
@@ -134,18 +136,16 @@ class Lightbox {
       $target.querySelector('.next').style.visibility = null;
       $target.querySelector('.display').style.transform = null;
 
-      e.stopPropagation();
-      if (Math.abs(width) <= threshold && Math.abs(height) <= threshold) {
-        this.#activate($target);
-      } else if (Math.abs(width) <= Math.abs(height)) {
+      if (Math.abs(width) <= Math.abs(height)) {
         // Swipe was mostly vertical, ignore
-      } else {
+      } else if (width < -threshold || width > threshold) {
         this.#open($target, selector, parseInt($target.dataset.offset) - Math.sign(width));
       }
     });
 
     $target.querySelector('.display').addEventListener('click', e => {
       e.stopPropagation();
+      this.#activate($target);
     });
     $target.addEventListener('close', e => {
       $target.querySelector('video')?.pause();
