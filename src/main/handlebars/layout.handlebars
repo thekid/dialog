@@ -330,7 +330,7 @@
         scale: 0;
       }
 
-      &.loading::after {
+      &.loading::after, &:buffering::after {
         content: url('/static/loading.svg');
       }
     }

@@ -64,7 +64,7 @@ class Lightbox {
 
       // Simulate :playing pseudo-class
       const $video = $display.querySelector('video');
-      $video.addEventListener('canplay', e => $display.classList.remove('loading'));
+      $video.addEventListener('progress', e => $display.classList.remove('loading'));
       $video.addEventListener('play', e => $display.classList.add('playing'));
       $video.addEventListener('pause', e => $display.classList.remove('playing'));
       $video.addEventListener('ended', e => $display.classList.remove('playing'));
