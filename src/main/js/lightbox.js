@@ -1,5 +1,20 @@
 class Lightbox {
   #replace = null;
+  #formats = {
+    duration: value => {
+      const parts = [];
+      let seconds = parseInt(value);
+
+      if (seconds >= 3600) {
+        parts.push(Math.floor(seconds / 3600));
+        seconds %= 3600;
+      }
+
+      parts.push(Math.floor(seconds / 60));
+      parts.push(seconds % 60);
+      return parts.map(part => part < 10 ? '0' + part : part).join(':');
+    },
+  };
 
   /** Wraps around to last item at beginning, and first item at end of list */
   #wrap(offset, length) {
@@ -30,17 +45,28 @@ class Lightbox {
     const $meta = $target.querySelector('.meta');
 
     // Update meta information
-    $meta.querySelectorAll('output').forEach($o => $o.value = $item.dataset[$o.name]);
+    $meta.querySelectorAll('output').forEach($o => $o.value = $o.dataset['format']
+      ? this.#formats[$o.dataset['format']]($item.dataset[$o.name])
+      : $item.dataset[$o.name]
+    );
 
     // Load image, then replace by larger version after a short duration
     $target.dataset.offset = offset;
     if ($item instanceof HTMLImageElement) {
       $meta.className = 'meta for-image';
+      $display.className = 'display is-image';
       $display.innerHTML= `<img src="${$item.src}" width="100%">`;
       this.#replace = setTimeout(() => $display.querySelector('img').src = $item.dataset['full'], 150);
     } else {
       $meta.className = 'meta for-video';
-      $display.innerHTML = `<video autoplay playsinline poster="${$item.poster}" width="100%">${$item.innerHTML}</video>`;
+      $display.className = 'display is-video';
+      $display.innerHTML = `<video playsinline poster="${$item.poster}" width="100%">${$item.innerHTML}</video>`;
+
+      // Simulate :playing pseudo-class
+      const $video = $display.querySelector('video');
+      $video.addEventListener('play', e => $display.classList.add('playing'));
+      $video.addEventListener('pause', e => $display.classList.remove('playing'));
+      $video.addEventListener('ended', e => $display.classList.remove('playing'));
       this.#replace = null;
     }
 
@@ -117,11 +143,14 @@ class Lightbox {
       this.#open($target, selector, offset);
     });
 
-    $target.addEventListener('close', e => {
-      const $media = $target.querySelector('.display').children[0];
-      if ($media instanceof HTMLVideoElement) {
-        $media.pause();
+    $target.querySelector('.display').addEventListener('click', e => {
+      e.stopPropagation();
+      if (e.target instanceof HTMLVideoElement) {
+        e.target.paused ? e.target.play() : e.target.pause();
       }
+    });
+    $target.addEventListener('close', e => {
+      $target.querySelector('video')?.pause();
     });
 
     let i = 0;
