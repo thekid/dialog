@@ -68,7 +68,7 @@ abstract class Source implements Value {
     }
 
     foreach ($images as $rest) {
-      yield new DeleteMedia($entry['slug'], $rest['name']);
+      yield new DeleteMedia($this->entry['slug'], $rest['name']);
     }
   }
 
