@@ -1,7 +1,7 @@
 <?php namespace de\thekid\dialog;
 
 use com\mongodb\result\{Cursor, Update, Modification, Delete};
-use com\mongodb\{Database, Document};
+use com\mongodb\{Collection, Document, MongoConnection};
 use text\hash\Hashing;
 use util\{Date, Secret};
 
@@ -16,12 +16,18 @@ class Repository {
     ['$addFields' => ['parent' => ['$first' => '$parent']]],
   ];
   private $passwords= Hashing::sha256();
+  private $collections= [];
 
-  public function __construct(private Database $database) { }
+  public function __construct(private MongoConnection $conn, private string $database) { }
+
+  /** Memoizes and returns a named collection */
+  private function collection(string $name): Collection {
+    return $this->collections[$name]??= $this->conn->collection($this->database, $name);
+  }
 
   /** Authenticates a given user, returning NULL on failure */
   public function authenticate(string $user, Secret $secret): ?Document {
-    $cursor= $this->database->collection('users')->find([
+    $cursor= $this->collection('users')->find([
       'handle' => $user,
       'hash'   => $this->passwords->digest($secret->reveal())->hex()
     ]);
@@ -30,7 +36,7 @@ class Repository {
 
   /** Returns newest entries */
   public function newest(int $limit): array<Document> {
-    $cursor= $this->database->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->aggregate([
       ['$match' => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
@@ -42,7 +48,7 @@ class Repository {
 
   /** Returns all journeys */
   public function journeys(): array<Document> {
-    $cursor= $this->database->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->aggregate([
       ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
@@ -52,7 +58,7 @@ class Repository {
 
   /** Returns paginated entries */
   public function entries(Pagination $pagination, int $page): array<Document> {
-    $cursor= $this->database->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->aggregate([
       ['$match'  => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset'  => '_searchable'],
       ['$sort'   => ['date' => -1]],
@@ -72,7 +78,7 @@ class Repository {
       ],
       'mustNot' => ['text' => ['path' => 'slug', 'query' => '@cover']],
     ];
-    return '' === $query ? [] : $this->database->collection('entries')->aggregate([
+    return '' === $query ? [] : $this->collection('entries')->aggregate([
       ['$search'    => ['index' => $this->database->name(), 'compound' => $autocomplete]],
       ['$addFields' => ['at' => '$locations.name']],
       ['$unset'     => '_searchable'],
@@ -104,14 +110,14 @@ class Repository {
         ['text' => ['path' => 'slug', 'query' => '@cover']
       ]],
     ];
-    $meta= $this->database->collection('entries')->aggregate([
+    $meta= $this->collection('entries')->aggregate([
       ['$searchMeta' => [
         'index'    => $this->database->name(),
         'count'    => ['type' => 'lowerBound'],
         'compound' => $search,
       ]]
     ]);
-    $cursor= $this->database->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->aggregate([
       ['$search'    => [
         'index'     => $this->database->name(),
         'compound'  => $search,
@@ -127,7 +133,7 @@ class Repository {
 
   /** Returns a single entry */
   public function entry(string $slug, bool $published= true): ?Document {
-    $cursor= $this->database->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->aggregate([
       ['$match' => ['slug' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
     ]);
@@ -136,7 +142,7 @@ class Repository {
 
   /** Returns an entry's children, latest first */
   public function children(string $slug, bool $published= true, array<string, mixed> $sort= ['date' => -1]): Cursor {
-    return $this->database->collection('entries')->aggregate([
+    return $this->collection('entries')->aggregate([
       ['$match' => ['parent' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
       ['$sort'  => $sort],
@@ -145,7 +151,7 @@ class Repository {
 
   /** Replace an entry identified by a given slug with a given entity */
   public function replace(string $slug, array<string, mixed> $entity): Modification {
-    return $this->database->collection('entries')->modify(
+    return $this->collection('entries')->modify(
       ['slug' => $slug],
       ['$set' => ['slug' => $slug, ...$entity]],
       upsert: true,
@@ -154,7 +160,7 @@ class Repository {
 
   /** Modify an entry identified by a given slug with MongoDB statements */
   public function modify(string $slug, array<string, mixed> $statements): Update {
-    return $this->database->collection('entries')->update(
+    return $this->collection('entries')->update(
       ['slug' => $slug],
       $statements,
     );
@@ -162,6 +168,6 @@ class Repository {
 
   /** Delete an entry identified by a given slug */
   public function delete(string $slug): Delete {
-    return $this->database->collection('entries')->delete(['slug' => $slug]);
+    return $this->collection('entries')->delete(['slug' => $slug]);
   }
 }

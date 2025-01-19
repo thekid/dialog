@@ -33,7 +33,7 @@ class App extends Application {
     $preferences= new Preferences($this->environment, 'config');
     $this->conn??= new MongoConnection($preferences->get('mongo', 'uri'));
     $this->storage??= new Storage($this->environment->arguments()[0]);
-    $repository= new Repository($this->conn->database($preferences->optional('mongo', 'db', 'dialog')));
+    $repository= new Repository($this->conn, $preferences->optional('mongo', 'db', 'dialog'));
     $inject= new Injector(Bindings::using()
       ->instance($repository)
       ->instance($this->storage)
