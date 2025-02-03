@@ -79,7 +79,7 @@ class Repository {
       'mustNot' => ['text' => ['path' => 'slug', 'query' => '@cover']],
     ];
     return '' === $query ? [] : $this->collection('entries')->aggregate([
-      ['$search'    => ['index' => $this->database->name(), 'compound' => $autocomplete]],
+      ['$search'    => ['index' => $this->database, 'compound' => $autocomplete]],
       ['$addFields' => ['at' => '$locations.name']],
       ['$unset'     => '_searchable'],
       ['$limit'     => $limit],
@@ -112,14 +112,14 @@ class Repository {
     ];
     $meta= $this->collection('entries')->aggregate([
       ['$searchMeta' => [
-        'index'    => $this->database->name(),
+        'index'    => $this->database,
         'count'    => ['type' => 'lowerBound'],
         'compound' => $search,
       ]]
     ]);
     $cursor= $this->collection('entries')->aggregate([
       ['$search'    => [
-        'index'     => $this->database->name(),
+        'index'     => $this->database,
         'compound'  => $search,
         'highlight' => ['path' => '_searchable.content', 'maxNumPassages' => 3]
       ]],
