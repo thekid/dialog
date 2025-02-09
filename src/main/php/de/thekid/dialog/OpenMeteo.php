@@ -10,6 +10,7 @@ use webservices\rest\Endpoint;
  * @see https://github.com/open-meteo/open-meteo
  */
 class OpenMeteo {
+  private const URLENCODED= 'application/x-www-form-urlencoded';
   private $base;
   private $auth= [];
   private $endpoints= [];
@@ -36,7 +37,8 @@ class OpenMeteo {
       'daily'      => ['sunrise', 'sunset'],
       'hourly'     => ['weather_code', 'apparent_temperature'],
     ];
-    return $this->endpoint('archive-api')->resource('archive')->get($params)->match([
+
+    return $this->endpoint('archive-api')->resource('archive')->post($params, self::URLENCODED)->match([
       200 => fn($r) => $r->value(),
       400 => fn($r) => throw new IllegalArgumentException($r->content()),
     ]);
