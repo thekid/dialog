@@ -5,6 +5,9 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Fixed weather being incorrect for current dates; there's a 5-day delay
+  in the historical data from OpenMeteo
+  (@thekid)
 * Merged PR #76: Include videos in lightbox using a minimalistic player.
   (@thekid)
 * Merged PR #75: If a content is formed of a single video, play in feed
