@@ -10,7 +10,7 @@ class Journey extends Source {
   /** Subfolders of a journey form its child contents */
   private function childrenIn(Files $files): iterable {
     $children= [];
-    foreach ($this->entry['$children'] as $child) {
+    foreach ($this->entry['$children'] ?? [] as $child) {
       $children[$child['slug']]= $child;
     }
 
