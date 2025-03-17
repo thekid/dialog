@@ -12,6 +12,11 @@ class LookupWeather extends Task {
   public function __construct(private array<string, mixed> $entry, private array<mixed> $images) { }
 
   public function execute(Endpoint $api) {
+    if (empty($this->images)) {
+      yield 'skip' => 'no images';
+      return null;
+    }
+
     $weather= [];
     $min= $max= null;
     foreach ($this->entry['locations'] as $location) {
