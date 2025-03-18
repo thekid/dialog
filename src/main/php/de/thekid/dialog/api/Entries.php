@@ -20,16 +20,13 @@ class Entries {
           '$children' => $this->repository->children($document['slug'], published: false)->all(),
         };
       }
-      return $document;
     } else {
-      $result= $this->repository->replace($id, ['modified' => time()]);
+      $document= $this->repository->replace($id, ['modified' => null])->document();
 
       // Ensure storage directory is created
-      if ($result->upserted()) {
-        $this->storage->folder($id)->create();
-      }
-      return $result->document();
+      $this->storage->folder($id)->create();
     }
+    return $document;
   }
 
   #[Put('/{id:.+(/.+)?}/images/{name}')]
