@@ -62,7 +62,7 @@ abstract class Source implements Value {
     foreach ($files->in($this->origin) as $file => $processing) {
       $name= $file->filename;
       if (!isset($images[$name]) || $file->lastModified() > $images[$name]['modified']) {
-        yield new UploadMedia($this->entry['slug'], $file, $processing);
+        $this->entry['images'][$name]= yield new UploadMedia($this->entry['slug'], $file, $processing);
       }
       unset($images[$name]);
     }

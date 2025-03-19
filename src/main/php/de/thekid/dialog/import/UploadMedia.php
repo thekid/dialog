@@ -27,7 +27,7 @@ class UploadMedia extends Task {
       $upload->transfer($kind, $target->in(), $target->filename);
     }
 
-    return $upload->finish();
+    return $upload->finish()->value();
   }
 
   /** @return string */

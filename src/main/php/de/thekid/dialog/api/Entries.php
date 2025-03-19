@@ -67,8 +67,10 @@ class Entries {
         // Sort by date and time, then write back
         set: usort($images, fn($a, $b) => $a['meta']['dateTime'] <=> $b['meta']['dateTime']);
         $this->repository->modify($id, ['$set' => ['images' => $images]]);
+        return $image;
       }
 
+      // Simply "OK" an upload w/o files
       return Response::ok();
     });
   }
