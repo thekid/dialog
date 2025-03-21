@@ -5,6 +5,9 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Changed current journey to be displayed with a pulsating border in the
+  journeys overview map
+  (@thekid)
 * Fixed weather being incorrect for current dates; there's a 5-day delay
   in the historical data from OpenMeteo
   (@thekid)
