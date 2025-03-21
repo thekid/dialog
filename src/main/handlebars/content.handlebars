@@ -52,7 +52,7 @@ parent: feed
 
       {{#each item.locations}}
         {{#with (wrap item.images @index)}}
-          mapping.mark(null, {{lon}}, {{lat}}, `{{name}}`, '/image/{{item.slug}}/thumb-{{name}}.webp');
+          mapping.mark(null, {{lon}}, {{lat}}, `{{name}}`, null, '/image/{{item.slug}}/thumb-{{name}}.webp');
         {{/with}}
       {{/each}}
 

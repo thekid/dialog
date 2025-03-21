@@ -95,7 +95,7 @@ parent: feed
       {{#each itinerary}}
         {{#each locations}}
           {{#with (wrap images @index)}}
-            mapping.mark('#{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{../name}}`, '/image/{{slug}}/thumb-{{name}}.webp');
+            mapping.mark('#{{scroll slug}}', {{lon}}, {{lat}}, `{{title}}: {{../name}}`, null, '/image/{{slug}}/thumb-{{name}}.webp');
           {{/with}}
         {{/each}}
       {{/each}}
