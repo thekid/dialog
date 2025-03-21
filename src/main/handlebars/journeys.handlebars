@@ -36,9 +36,13 @@
 
       {{#each journeys}}
         {{#each locations}}
-          {{#with (wrap images @index)}}
-            mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{../name}}`, '/image/{{slug}}/thumb-{{name}}.webp');
-          {{/with}}
+          mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`,
+            {{#with (wrap images @index)}}
+              '/image/{{slug}}/thumb-{{name}}.webp'
+            {{else}}
+              '/image/{{preview.slug}}/thumb-{{preview.name}}.webp'
+            {{/with}}
+          );
         {{/each}}
       {{/each}}
 
