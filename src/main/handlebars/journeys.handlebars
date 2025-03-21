@@ -36,7 +36,7 @@
 
       {{#each journeys}}
         {{#each locations}}
-          mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`,
+          mapping.mark('/journey/{{slug}}', {{lon}}, {{lat}}, `{{title}}: {{name}}`, '{{range-rel is.from is.until}}',
             {{#with (wrap images @index)}}
               '/image/{{slug}}/thumb-{{name}}.webp'
             {{else}}

@@ -645,6 +645,23 @@
       border: .15rem solid white;
       box-shadow: .25rem .25rem 1rem rgb(0 0 0 / .2);
       object-fit: cover;
+
+      &.current {
+        border-color: orange;
+        animation: pulse 2s infinite;
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgb(255 165 0 / .4);
+      }
+      70% {
+        box-shadow: 0 0 0 1rem rgb(255 165 0 / 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgb(255 165 0 / 0);
+      }
     }
 
     #map {

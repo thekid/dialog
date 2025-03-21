@@ -3,11 +3,12 @@ class Mapping {
   #markers = [];
 
   /** Add marker and link at a given position */
-  mark(link, lon, lat, name, uri) {
+  mark(link, lon, lat, name, kind, uri) {
     const $image = document.createElement('img');
     $image.src = uri;
     $image.alt = name;
     $image.classList.add('marker');
+    $image.classList.add(kind);
 
     const overlay = new ol.Overlay({
       position: ol.proj.fromLonLat([lon, lat]),
