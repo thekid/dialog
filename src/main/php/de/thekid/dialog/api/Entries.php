@@ -106,20 +106,22 @@ class Entries {
 
     // Join places, autocomplete seems to only work for strings
     $suggest= '';
-    foreach ($source->locations as $location) {
+    foreach ($source->locations ?? $entry['locations'] as $location) {
       $suggest.= ' '.$location['name'];
     }
-    $changes= $source->attributes() + [
+    $content= $source->content ?? $entry['content'];
+    $is= $source->is ?? $entry['is'];
+
+    $r= $this->repository->modify($id, ['$set' => $source->attributes() + [
       'preview'     => $preview,
       'modified'    => time(),
       '_searchable' => [
-        'boost'   => isset($source->is['journey']) ? 2.0 : 1.0,
+        'boost'   => isset($is['journey']) ? 2.0 : 1.0,
         'suggest' => trim($suggest),
-        'content' => strip_tags(strtr($source->content, ['<br>' => "\n", '</p><p>' => "\n"]))
+        'content' => strip_tags(strtr($content, ['<br>' => "\n", '</p><p>' => "\n"])),
       ],
-    ];
-    $n= $this->repository->modify($id, ['$set' => $changes])->modified();
-    return ['updated' => $n];
+    ]]);
+    return ['updated' => $r->modified()];
   }
 
   #[Delete('/{id:.+(/.+)?}')]

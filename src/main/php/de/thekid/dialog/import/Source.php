@@ -54,6 +54,7 @@ abstract class Source implements Value {
 
   /** Yields all the media files in this source */
   protected function mediaIn(Files $files): iterable {
+    $updated= false;
     $images= [];
     foreach ($this->entry['images'] ?? [] as $image) {
       $images[$image['name']]= $image;
@@ -63,13 +64,16 @@ abstract class Source implements Value {
       $name= $file->filename;
       if (!isset($images[$name]) || $file->lastModified() > $images[$name]['modified']) {
         $this->entry['images'][$name]= yield new UploadMedia($this->entry['slug'], $file, $processing);
+        $updated= true;
       }
       unset($images[$name]);
     }
 
     foreach ($images as $rest) {
       yield new DeleteMedia($this->entry['slug'], $rest['name']);
+      $updated= true;
     }
+    return $updated;
   }
 
   /** Returns an entry from the given description */
@@ -79,23 +83,27 @@ abstract class Source implements Value {
   public abstract function contentsIn(Files $files): iterable;
 
   /** Yields tasks to synchronize this source */
-  public function synchronize(Files $files) {
+  public function synchronize(Files $files): iterable {
     $this->entry??= yield new FetchEntry($this->name());
     if (!isset($this->entry['modified']) || $this->file->lastModified() > $this->entry['modified']) {
       $changes= $this->entryFrom(self::$descriptions->parse($this->file));
-      $updated= time();
+      $this->entry= $changes + ($this->entry ?? []);
+      $updated= true;
+    } else {
+      $changes= [];
+      $updated= false;
     }
 
     // Although the description file may not have changed, nested contents
     // may have, so process them unconditionally.
-    yield from $this->contentsIn($files);
+    $updated|= yield from $this->contentsIn($files);
 
-    if (isset($updated)) {
-      $changes['locations']= yield new LookupLocationInfos($changes);
-      $changes['weather']= yield new LookupWeather($changes, $this->entry['images'] ?? []);
-      $changes['published']= time();
-      yield new PublishEntry($this->entry['slug'], $changes);
+    if ($updated) {
+      $changes['locations']= $this->entry['locations']= yield new LookupLocationInfos($this->entry);
+      $changes['weather']= $this->entry['weather']= yield new LookupWeather($this->entry);
+      yield new PublishEntry($this->entry['slug'], $changes + ['published' => time()]);
     }
+    return $updated;
   }
 
   /** @return string */

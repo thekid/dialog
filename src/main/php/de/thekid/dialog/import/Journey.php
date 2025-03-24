@@ -9,6 +9,7 @@ class Journey extends Source {
 
   /** Subfolders of a journey form its child contents */
   private function childrenIn(Files $files): iterable {
+    $updated= false;
     $children= [];
     foreach ($this->entry['$children'] ?? [] as $child) {
       $children[$child['slug']]= $child;
@@ -19,7 +20,7 @@ class Journey extends Source {
         $folder= $path->asFolder();
         $slug= $this->entry['slug'].'/'.$folder->dirname;
 
-        yield from new Content($folder, new File($folder, 'content.md'), $children[$slug] ?? null)
+        $updated|= yield from new Content($folder, new File($folder, 'content.md'), $children[$slug] ?? null)
           ->nestedIn($this->entry['slug'])
           ->synchronize($files)
         ;
@@ -29,7 +30,9 @@ class Journey extends Source {
 
     foreach ($children as $rest) {
       yield new DeleteEntry($rest['slug']);
+      $updated= true;
     }
+    return $updated;
   }
 
   public function entryFrom(Description $description): array<string, mixed> {
@@ -50,7 +53,9 @@ class Journey extends Source {
   }
 
   public function contentsIn(Files $files): iterable {
-    yield from $this->mediaIn($files);
-    yield from $this->childrenIn($files);
+    $updated= false;
+    $updated|= yield from $this->mediaIn($files);
+    $updated|= yield from $this->childrenIn($files);
+    return $updated;
   }
 }

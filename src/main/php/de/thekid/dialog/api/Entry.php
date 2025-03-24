@@ -22,13 +22,13 @@ class Entry implements Value {
     set { $this->attributes['title']= $value; }
   }
 
-  public string $content {
-    get => $this->attributes['content'];
+  public ?string $content {
+    get => $this->attributes['content'] ?? null;
     set { $this->attributes['content']= $value; }
   }
 
-  public array<string, mixed> $is {
-    get => $this->attributes['is'];
+  public ?array<string, mixed> $is {
+    get => $this->attributes['is'] ?? null;
     set { $this->attributes['is']= $value; }
   }
 
@@ -37,18 +37,18 @@ class Entry implements Value {
     set { $this->attributes['parent']= $value; }
   }
 
-  public array<string> $keywords {
-    get => $this->attributes['keywords'] ?? [];
+  public ?array<string> $keywords {
+    get => $this->attributes['keywords'] ?? null;
     set { $this->attributes['keywords']= $value; }
   }
 
-  public array<array<mixed>> $locations {
-    get => $this->attributes['locations'] ?? [];
+  public ?array<array<mixed>> $locations {
+    get => $this->attributes['locations'] ?? null;
     set { $this->attributes['locations']= $value; }
   }
 
-  public array<string, mixed> $weather {
-    get => $this->attributes['weather'];
+  public ?array<string, mixed> $weather {
+    get => $this->attributes['weather'] ?? null;
     set { $this->attributes['weather']= $value; }
   }
 

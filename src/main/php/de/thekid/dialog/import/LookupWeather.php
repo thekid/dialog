@@ -9,10 +9,10 @@ use webservices\rest\Endpoint;
 class LookupWeather extends Task {
   private $weather= new OpenMeteo('https://open-meteo.com/v1');
 
-  public function __construct(private array<string, mixed> $entry, private array<mixed> $images) { }
+  public function __construct(private array<string, mixed> $entry) { }
 
   public function execute(Endpoint $api) {
-    if (empty($this->images)) {
+    if (empty($this->entry['images'])) {
       yield 'skip' => 'no images';
       return null;
     }
@@ -24,7 +24,7 @@ class LookupWeather extends Task {
 
       // Infer date range from first and last images
       $dates= [];
-      foreach ($this->images as $image) {
+      foreach ($this->entry['images'] as $image) {
         $dates[]= new Date($image['meta']['dateTime'], $tz);
       }
       usort($dates, fn($a, $b) => $b->compareTo($a));

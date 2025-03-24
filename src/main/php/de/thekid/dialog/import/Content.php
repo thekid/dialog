@@ -21,6 +21,6 @@ class Content extends Source {
   }
 
   public function contentsIn(Files $files): iterable {
-    yield from $this->mediaIn($files);
+    return yield from $this->mediaIn($files);
   }
 }
