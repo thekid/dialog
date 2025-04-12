@@ -11,44 +11,6 @@
   <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
   <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed/atom"/>
   <style type="text/css">
-    /* CSS reset, see https://piccalil.li/blog/a-modern-css-reset/ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
-      margin: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      text-rendering: optimizeSpeed;
-      line-height: 1.5;
-    }
-
-    h1, h2, h3, h4 {
-      line-height: 1.125;
-      letter-spacing: 0px;
-    }
-
-    ul[role='list'], ol[role='list'] {
-      list-style: none;
-    }
-
-    a:not([class]) {
-      text-decoration-skip-ink: auto;
-    }
-
-    img, picture, video {
-      max-width: 100%;
-      display: block;
-    }
-
-    /* Dialog */
     body {
       --page-color: black;
       --nav-color: #111;
@@ -907,6 +869,45 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+      }
+    }
+
+    /* CSS reset, see https://piccalil.li/blog/a-modern-css-reset/ */
+    @layer reset {
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+        margin: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        text-rendering: optimizeSpeed;
+        line-height: 1.5;
+      }
+
+      h1, h2, h3, h4 {
+        line-height: 1.125;
+        letter-spacing: 0px;
+      }
+
+      ul[role='list'], ol[role='list'] {
+        list-style: none;
+      }
+
+      a:not([class]) {
+        text-decoration-skip-ink: auto;
+      }
+
+      img, picture, video {
+        max-width: 100%;
+        display: block;
       }
     }
   </style>
