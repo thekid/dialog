@@ -120,7 +120,7 @@ parent: feed
       );
       {{#each itinerary}}
         observer.observe(document.querySelector('#{{scroll slug}}'));
-        statistics.add('{{slug}}', '{{sign slug}}', Math.min({{size images}} * 1500, 5000));
+        statistics.add('{{slug}}', '{{sign slug}}', Math.min({{size images}} * 500, 2000));
       {{/each}}
 
       // If a child element is navigated to, observe whether the user scrolls to the page top
