@@ -5,6 +5,8 @@ Dialog change log
 
 ## 3.0.0 / ????-??-??
 
+* Merged PR #77: Use CSS layers, see https://caniuse.com/css-cascade-layers
+  (@thekid)
 * Changed current journey to be displayed with a pulsating border in the
   journeys overview map
   (@thekid)
