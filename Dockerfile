@@ -6,7 +6,7 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN sed -ri -e 's!memory_limit = .+!memory_limit = -1!g' "$PHP_INI_DIR/php.ini"
 
-RUN curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/e/entrypoint/xp-run-8.8.0.sh > /usr/bin/xp-run
+RUN curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/e/entrypoint/xp-run-9.1.0.sh > /usr/bin/xp-run
 
 RUN mkdir /app
 
