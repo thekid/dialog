@@ -9,7 +9,7 @@
     "xp-framework/command": "^12.0",
     "xp-framework/networking": "^10.4",
     "xp-forge/marshalling": "^2.4",
-    "xp-forge/web": "dev-feature/websockets as 4.6.0",
+    "xp-forge/web": "^4.6",
     "xp-forge/web-auth": "^5.0",
     "xp-forge/frontend": "^6.4",
     "xp-forge/rest-api": "^4.0",
