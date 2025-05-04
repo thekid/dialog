@@ -17,7 +17,7 @@
     "xp-forge/handlebars-templates": "^4.0",
     "xp-forge/markdown": "^8.0",
     "xp-forge/yaml": "^8.0",
-    "xp-forge/hashing": "^2.1",
+    "xp-forge/hashing": "^3.0",
     "xp-forge/inject": "^6.0",
     "xp-forge/mongodb": "^3.0"
   },
