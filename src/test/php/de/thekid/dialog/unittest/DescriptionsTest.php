@@ -50,6 +50,24 @@ class DescriptionsTest {
     );
   }
 
+  #[Test]
+  public function passed_timezone_used() {
+    $tz= 'Europe/Berlin';
+    Assert::equals(
+      [['name' => 'Berlin', 'timezone' => $tz]],
+      [...$this->parse("---\nlocation:\n{name: \"Berlin\"}\n---\n")->locations($tz)]
+    );
+  }
+
+  #[Test]
+  public function location_supplied_timezone_used() {
+    $tz= 'Europe/Berlin';
+    Assert::equals(
+      [['name' => 'Oman', 'timezone' => 'Asia/Muscat']],
+      [...$this->parse("---\nlocation:\n{name: \"Oman\", timezone: \"Asia/Muscat\"}\n---\n")->locations($tz)]
+    );
+  }
+
   #[Test, Values(['Europe/Berlin', 'Asia/Muscat', 'America/New_York'])]
   public function location_timezone($tz) {
     $locations= implode("\n", [

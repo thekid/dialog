@@ -10,7 +10,7 @@ class Description {
 
   public function locations(string|TimeZone $timezone): iterable {
     $tz= $timezone instanceof TimeZone ? $timezone->name() : $timezone;
-    foreach (isset($this->meta['location']) ? [$this->meta['location']] : $this->meta['locations'] as $location) {
+    foreach ($this->meta['locations'] ?? [$this->meta['location']] as $location) {
       $location['timezone']??= $tz;
       yield $location;
     }
