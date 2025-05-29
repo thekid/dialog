@@ -5,11 +5,17 @@ use lang\FormatException;
 use util\{Date, Dates, TimeZone, TimeInterval};
 use webservices\rest\Endpoint;
 
-/** Aggregates weather for entries using OpenMeteo */
+/**
+ * Aggregates weather for entries using OpenMeteo
+ *
+ * @test  de.thekid.dialog.unittest.LookupWeatherTest
+ */
 class LookupWeather extends Task {
-  private $weather= new OpenMeteo('https://open-meteo.com/v1');
 
-  public function __construct(private array<string, mixed> $entry) { }
+  public function __construct(
+    private array<string, mixed> $entry,
+    private OpenMeteo $weather= new OpenMeteo('https://open-meteo.com/v1'),
+  ) { }
 
   public function execute(Endpoint $api) {
     if (empty($this->entry['images'])) {
@@ -19,6 +25,7 @@ class LookupWeather extends Task {
 
     $weather= [];
     $min= $max= null;
+    $hourly= fn($date) => Dates::truncate($date, TimeInterval::$HOURS)->toString('Y-m-d\TH:i');
     foreach ($this->entry['locations'] as $location) {
       $tz= new TimeZone($location['timezone']);
 
@@ -33,12 +40,12 @@ class LookupWeather extends Task {
 
       // Filter hourly weather for the duration of the images
       $result= $this->weather->lookup($location['lat'], $location['lon'], $first, $last, $tz);
-      $start= array_search(Dates::truncate($first, TimeInterval::$HOURS)->toString('Y-m-d\TH:i'), $result['hourly']['time']);
-      $end= array_search(Dates::truncate($last, TimeInterval::$HOURS)->toString('Y-m-d\TH:i'), $result['hourly']['time']);
+      $offset= array_search($first |> $hourly, $result['hourly']['time']);
+      $length= array_search($last |> $hourly, $result['hourly']['time']) - $offset + 1;
 
       // Determine most common weather codes and temperature range
-      $codes= array_count_values(array_slice($result['hourly']['weather_code'], $start, 1 + ($end - $start)));
-      $temp= array_slice($result['hourly']['apparent_temperature'], $start, 1 + ($end - $start));
+      $codes= array_slice($result['hourly']['weather_code'], $offset, $length) |> array_count_values(...);
+      $temp= array_slice($result['hourly']['apparent_temperature'], $offset, $length);
       $min= null === $min ? min($temp) : min($min, min($temp));
       $max= null === $max ? max($temp) : max($max, max($temp));
 
