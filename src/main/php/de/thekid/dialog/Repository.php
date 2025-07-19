@@ -27,16 +27,15 @@ class Repository {
 
   /** Authenticates a given user, returning NULL on failure */
   public function authenticate(string $user, Secret $secret): ?Document {
-    $cursor= $this->collection('users')->find([
+    return $this->collection('users')->first([
       'handle' => $user,
       'hash'   => $this->passwords->digest($secret->reveal())->hex()
     ]);
-    return $cursor->first();
   }
 
   /** Returns newest entries */
   public function newest(int $limit): array<Document> {
-    $cursor= $this->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->query([
       ['$match' => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
@@ -48,7 +47,7 @@ class Repository {
 
   /** Returns all journeys */
   public function journeys(): array<Document> {
-    $cursor= $this->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->query([
       ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
@@ -58,7 +57,7 @@ class Repository {
 
   /** Returns paginated entries */
   public function entries(Pagination $pagination, int $page): array<Document> {
-    $cursor= $this->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->query([
       ['$match'  => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
       ['$unset'  => '_searchable'],
       ['$sort'   => ['date' => -1]],
@@ -70,16 +69,19 @@ class Repository {
   }
 
   /** Returns search suggestions */
-  public function suggest(string $query, int $limit= 10): iterable {
-    $autocomplete= [
-      'should'  => [
-        ['autocomplete' => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 5.0]]]],
-        ['autocomplete' => ['query' => $query, 'path' => '_searchable.suggest', 'score' => ['boost' => ['path' => '_searchable.boost']]]],
-      ],
-      'mustNot' => ['text' => ['path' => 'slug', 'query' => '@cover']],
-    ];
-    return '' === $query ? [] : $this->collection('entries')->aggregate([
-      ['$search'    => ['index' => $this->database, 'compound' => $autocomplete]],
+  public function suggest(string $query, int $limit= 10): Cursor {
+    if ('' === $query) return [];
+
+    // Rank a match on title with a hard factor of 5 along `suggest` and `boost`
+    // fields inside the `_searchable` object. Filter out special `@conver` entry.
+    return $this->collection('entries')->query([
+      ['$search'    => ['index' => $this->database, 'compound' => [
+        'should'  => [
+          ['autocomplete' => ['query' => $query, 'path' => 'title', 'score' => ['boost' => ['value' => 5.0]]]],
+          ['autocomplete' => ['query' => $query, 'path' => '_searchable.suggest', 'score' => ['boost' => ['path' => '_searchable.boost']]]],
+        ],
+        'mustNot' => ['text' => ['path' => 'slug', 'query' => '@cover']],
+      ]]],
       ['$addFields' => ['at' => '$locations.name']],
       ['$unset'     => '_searchable'],
       ['$limit'     => $limit],
@@ -106,18 +108,16 @@ class Repository {
         ['phrase' => ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['path' => '_searchable.boost']]]],
         ['text'   => $fuzzy + ['query' => $query, 'path' => $fields, 'score' => ['boost' => ['value' => 0.2]]]],
       ],
-      'mustNot' => [
-        ['text' => ['path' => 'slug', 'query' => '@cover']
-      ]],
+      'mustNot' => [['text' => ['path' => 'slug', 'query' => '@cover']]],
     ];
-    $meta= $this->collection('entries')->aggregate([
+    $meta= $this->collection('entries')->first([
       ['$searchMeta' => [
         'index'    => $this->database,
         'count'    => ['type' => 'lowerBound'],
         'compound' => $search,
       ]]
     ]);
-    $cursor= $this->collection('entries')->aggregate([
+    $cursor= $this->collection('entries')->query([
       ['$search'    => [
         'index'     => $this->database,
         'compound'  => $search,
@@ -128,21 +128,20 @@ class Repository {
       ['$skip'      => $pagination->skip($page)],
       ['$limit'     => $pagination->limit()],
     ]);
-    return new SearchResult($meta->first(), $pagination->paginate($page, $cursor));
+    return new SearchResult($meta, $pagination->paginate($page, $cursor));
   }
 
   /** Returns a single entry */
   public function entry(string $slug, bool $published= true): ?Document {
-    $cursor= $this->collection('entries')->aggregate([
+    return $this->collection('entries')->first([
       ['$match' => ['slug' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
     ]);
-    return $cursor->first();
   }
 
   /** Returns an entry's children, latest first */
   public function children(string $slug, bool $published= true, array<string, mixed> $sort= ['date' => -1]): Cursor {
-    return $this->collection('entries')->aggregate([
+    return $this->collection('entries')->query([
       ['$match' => ['parent' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
       ['$sort'  => $sort],

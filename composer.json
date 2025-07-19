@@ -19,7 +19,7 @@
     "xp-forge/yaml": "^9.0",
     "xp-forge/hashing": "^3.0",
     "xp-forge/inject": "^6.0",
-    "xp-forge/mongodb": "^3.0"
+    "xp-forge/mongodb": "^3.3"
   },
 
   "require-dev": {
