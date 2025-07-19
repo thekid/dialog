@@ -8,7 +8,7 @@ on:
 
 jobs:
   tests:
-    name: Default configuratin (PHP 8.3, MongoDB 5.0, Ubuntu)
+    name: Default configuratin (PHP 8.4, MongoDB 5.0, Ubuntu)
     runs-on: ubuntu-latest
     services:
       mongodb:
@@ -19,10 +19,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Set up PHP 8.3
+    - name: Set up PHP 8.4
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.3
+        php-version: 8.4
         extensions: gd
         ini-values: date.timezone=Europe/Berlin
 
