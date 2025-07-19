@@ -69,7 +69,7 @@ class Repository {
   }
 
   /** Returns search suggestions */
-  public function suggest(string $query, int $limit= 10): Cursor {
+  public function suggest(string $query, int $limit= 10): iterable {
     if ('' === $query) return [];
 
     // Rank a match on title with a hard factor of 5 along `suggest` and `boost`
