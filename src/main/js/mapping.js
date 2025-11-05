@@ -10,21 +10,18 @@ class Mapping {
     $image.classList.add('marker');
     $image.classList.add(kind);
 
-    const overlay = new ol.Overlay({
-      position: ol.proj.fromLonLat([lon, lat]),
+    const position = ol.proj.fromLonLat([lon, lat]);
+    this.#markers.push(new ol.Overlay({
+      position: position,
       positioning: 'center-center',
       element: $image,
       stopEvent: false
-    });
-    this.#markers.push(overlay);
-
-    const marker = new ol.Feature({
-      geometry : new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
-      link     : link,
-      name     : name
-    });
-
-    this.#features.push(marker);
+    }));
+    this.#features.push(new ol.Feature({
+      geometry: new ol.geom.Point(position),
+      link: link,
+      name: name
+    }));
   }
 
   /** Escape input for use in HTML */
