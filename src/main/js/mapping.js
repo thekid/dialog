@@ -50,7 +50,8 @@ class Mapping {
         stroke: new ol.style.Stroke({
           color: '#666666',
           width: 3,
-          lineDash: [6, 6]
+          lineDash: [4, 6],
+          lineCap: 'round'
         })
       }));
       features.addFeature(line);
