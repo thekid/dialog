@@ -42,6 +42,8 @@
             {{> partials/weather in=.}}
           </div>
 
+          <div class="content">{{& content}}</div>
+
           {{! Content formed of a single video can be played back inline directly }}
           {{#if (all (equals 1 (size images)) images.0.is.video)}}
             <div class="images is-single">
@@ -71,10 +73,6 @@
               </div>
             </a>
           {{/if}}
-
-          <div class="content">
-            {{& content}}
-          </div>
         </section>
       {{/each}}
     {{else}}

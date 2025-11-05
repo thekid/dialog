@@ -33,9 +33,7 @@ parent: feed
         <div class="popup"></div>
       </div>
 
-      <div class="content">
-        {{& journey.content}}
-      </div>
+      <div class="content">{{& journey.content}}</div>
 
       <ul class="summary">
         {{#each itinerary}}
@@ -66,11 +64,10 @@ parent: feed
             {{count views '' '(Eine Ansicht)' '(# Ansichten)'}}
             {{> partials/weather in=.}}
           </div>
-          {{> partials/images in=.}}
 
-          <div class="content">
-            {{& content}}
-          </div>
+          <div class="content">{{& content}}</div>
+
+          {{> partials/images in=.}}
         </section>
       {{/each}}
     {{else}}
