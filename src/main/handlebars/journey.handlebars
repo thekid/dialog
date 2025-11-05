@@ -100,7 +100,7 @@ parent: feed
         {{/each}}
       {{/each}}
 
-      mapping.project(document.querySelector('#map'));
+      mapping.project(document.querySelector('#map'), true);
 
       // To determine which entries the user has spent time viewing, use intersection observer
       {{&use 'statistics'}}

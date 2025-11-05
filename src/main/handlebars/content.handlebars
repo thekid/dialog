@@ -56,7 +56,7 @@ parent: feed
         {{/with}}
       {{/each}}
 
-      mapping.project(document.querySelector('#map'));
+      mapping.project(document.querySelector('#map'), false);
 
       // Update statistics
       {{&use 'statistics'}}

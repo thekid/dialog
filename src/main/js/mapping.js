@@ -32,7 +32,7 @@ class Mapping {
   }
 
   /** Project this map on to a given DOM element */
-  project($element) {
+  project($element, connect) {
     const map = new ol.Map({
       target: $element,
       layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
@@ -44,7 +44,7 @@ class Mapping {
     const features = new ol.source.Vector({features: this.#features});
 
     // If there is more than one coordinate, connect with dotted lines
-    if (this.#coords.length > 1) {
+    if (connect && this.#coords.length > 1) {
       const line = new ol.Feature({geometry: new ol.geom.LineString(this.#coords)});
       line.setStyle(new ol.style.Style({
         stroke: new ol.style.Stroke({
