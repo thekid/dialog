@@ -44,19 +44,37 @@ class ServeTest {
   #[Test]
   public function serves_robots_txt() {
     $res= $this->serve('GET', '/robots.txt');
-    Assert::equals([200, 'text/plain; charset=utf-8'], [$res->status(), $res->headers()['Content-Type']]);
+    Assert::equals(
+      [200, 'text/plain; charset=utf-8'],
+      [$res->status(), $res->headers()['Content-Type']]
+    );
   }
 
   #[Test]
   public function serves_homepage() {
     $res= $this->serve('GET', '/');
-    Assert::equals([200, 'text/html; charset=utf-8'], [$res->status(), $res->headers()['Content-Type']]);
+    Assert::equals(
+      [200, 'text/html; charset=utf-8'], 
+      [$res->status(), $res->headers()['Content-Type']]
+    );
+  }
+
+  #[Test]
+  public function serves_atomfeed() {
+    $res= $this->serve('GET', '/feed/atom');
+    Assert::equals(
+      [200, 'application/atom+xml; charset=utf-8'],
+      [$res->status(), $res->headers()['Content-Type']]
+    );
   }
 
   #[Test]
   public function type_ahead_api_publicly_accessible() {
     $res= $this->serve('GET', '/api/suggestions?q=');
-    Assert::equals([200, 'application/json; charset=utf-8'], [$res->status(), $res->headers()['Content-Type']]);
+    Assert::equals(
+      [200, 'application/json; charset=utf-8'],
+      [$res->status(), $res->headers()['Content-Type']]
+    );
   }
 
   #[Test]
