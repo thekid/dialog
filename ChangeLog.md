@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #78: Add text before images - for a better reading experiencd
+  (@thekid)
+* Connect places on map using order of their visits for journey entries
+  (@thekid)
+
 ## 3.0.0 / 2025-05-10
 
 * Merged PR #77: Use CSS layers, see https://caniuse.com/css-cascade-layers
