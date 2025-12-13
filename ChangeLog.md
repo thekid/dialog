@@ -3,7 +3,9 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
-* Merged PR #78: Add text before images - for a better reading experiencd
+* Upgraded to PHP 8.5, see https://www.php.net/archive/2025.php#2025-11-20-3
+  (@thekid)
+* Merged PR #78: Add text before images - for a better reading experience
   (@thekid)
 * Connect places on map using order of their visits for journey entries
   (@thekid)
