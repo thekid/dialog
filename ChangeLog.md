@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 3.1.0 / 2025-12-13
+
 * Upgraded to PHP 8.5, see https://www.php.net/archive/2025.php#2025-11-20-3
   (@thekid)
 * Merged PR #78: Add text before images - for a better reading experience
