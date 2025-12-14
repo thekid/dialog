@@ -37,7 +37,9 @@ class Mapping {
       interactions: [
         new ol.interaction.DragPan(),
         new ol.interaction.PinchZoom(),
-        new ol.interaction.MouseWheelZoom({condition: event => event.originalEvent.ctrlKey})
+        new ol.interaction.MouseWheelZoom({condition: event => event.originalEvent.ctrlKey}),
+        new ol.interaction.KeyboardPan(),
+        new ol.interaction.KeyboardZoom(),
       ],
       target: $element,
       layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
