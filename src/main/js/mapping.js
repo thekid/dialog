@@ -28,12 +28,19 @@ class Mapping {
 
   /** Escape input for use in HTML */
   html(input) {
-    return input.replace(/[<>&]/g, c => '&#' + c.charCodeAt(0) + ';');
+    return input?.replace(/[<>&]/g, c => '&#' + c.charCodeAt(0) + ';');
   }
 
   /** Project this map on to a given DOM element */
   project($element, connect) {
     const map = new ol.Map({
+      interactions: [
+        new ol.interaction.DragPan(),
+        new ol.interaction.PinchZoom(),
+        new ol.interaction.MouseWheelZoom({condition: event => event.originalEvent.ctrlKey}),
+        new ol.interaction.KeyboardPan(),
+        new ol.interaction.KeyboardZoom(),
+      ],
       target: $element,
       layers: [new ol.layer.Tile({source: new ol.source.OSM()})]
     });
