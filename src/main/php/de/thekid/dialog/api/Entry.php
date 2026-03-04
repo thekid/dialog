@@ -17,6 +17,11 @@ class Entry implements Value {
     set { $this->attributes['date']= $value; }
   }
 
+  public string $timezone {
+    get => $this->attributes['timezone'];
+    set { $this->attributes['timezone']= $value; }
+  }
+
   public string $title {
     get => $this->attributes['title'];
     set { $this->attributes['title']= $value; }

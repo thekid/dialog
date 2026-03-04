@@ -36,14 +36,18 @@ class Journey extends Source {
   }
 
   public function entryFrom(Description $description): array<string, mixed> {
-    $date= $description->meta['from'];
+    $date= $description->meta['from'] instanceof Date
+      ? $description->meta['from']
+      : new Date($description->meta['from'])
+    ;
     return [
       'slug'      => $this->name(),
       'date'      => $description->meta['from'],
+      'timezone'  => $date->getTimeZone()->name(),
       'title'     => $description->meta['title'],
       'keywords'  => $description->meta['keywords'] ?? [],
       'content'   => $description->content,
-      'locations' => [...$description->locations(($date instanceof Date ? $date : new Date($date))->getTimeZone())],
+      'locations' => [...$description->locations($date->getTimeZone())],
       'is'        => [
         'journey' => true,
         'from'    => $description->meta['from'],

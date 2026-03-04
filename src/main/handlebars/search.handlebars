@@ -22,7 +22,7 @@ parent: feed
               <h2><a href="{{route this}}">{{#if is.journey}}Reise: {{/if}}{{title}}</a></h2>
 
               <div class="meta">
-                {{date ./date format="d.m.Y"}} @
+                {{date ./date format="d.m.Y" timezone=timezone}} @
                 <ul class="locations" role="list">
                   {{#each locations}}
                     <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>

@@ -18,7 +18,7 @@ parent: feed
 
     <section>
       <div class="meta">
-        {{date item.date format="d.m.Y"}} @
+        {{date item.date format="d.m.Y" timezone=item.timezone}} @
         <ul class="locations" role="list">
           {{#each item.locations}}
             <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
