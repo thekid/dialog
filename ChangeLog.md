@@ -3,7 +3,12 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
-* Merged PR #80: Store timezone in database - @thekid
+* Added support for EXIF attribute `lens` as alternative if `lensModel` is
+  not set - original Canon lenses use the latter, Sigma the first.
+  (@thekid)
+* Merged PR #80: Store timezone in database and use it to render dates as
+  observed by the creator
+  (@thekid)
 
 ## 3.1.0 / 2025-12-13
 

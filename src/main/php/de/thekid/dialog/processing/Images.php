@@ -28,7 +28,7 @@ class Images extends Processing {
           'dateTime'        => $exif->dateTime?->toString(self::DATEFORMAT),
           'make'            => $exif->make,
           'model'           => $exif->model,
-          'lensModel'       => $exif->lensModel,
+          'lensModel'       => $exif->lensModel ?: $exif->lens,
           'apertureFNumber' => $exif->apertureFNumber,
           'exposureTime'    => $exif->exposureTime,
           'isoSpeedRatings' => $exif->isoSpeedRatings,
