@@ -7,15 +7,19 @@ use util\Date;
 class Content extends Source {
 
   public function entryFrom(Description $description): array<string, mixed> {
-    $date= $description->meta['date'];
+    $date= $description->meta['date'] instanceof Date
+      ? $description->meta['date']
+      : new Date($description->meta['date'])
+    ;
     return [
       'slug'      => $this->name(),
       'parent'    => $this->parent(),
-      'date'      => $description->meta['date'],
+      'date'      => $date,
+      'timezone'  => $date->getTimeZone()->name(),
       'title'     => $description->meta['title'],
       'keywords'  => $description->meta['keywords'] ?? [],
       'content'   => $description->content,
-      'locations' => [...$description->locations(($date instanceof Date ? $date : new Date($date))->getTimeZone())],
+      'locations' => [...$description->locations($date->getTimeZone())],
       'is'        => ['content' => true],
     ];
   }

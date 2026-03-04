@@ -19,7 +19,10 @@ parent: feed
     <!-- The journey itself -->
     <section id="summary">
       <div class="meta">
-        {{date journey.is.from format="d.m.Y"}} - {{date journey.is.until format="d.m.Y"}} @
+        {{date journey.is.from format="d.m.Y" timezone=journey.timezone}}
+        -
+        {{date journey.is.until format="d.m.Y" timezone=journey.timezone}}
+        @
         <ul class="locations" role="list">
           {{#each journey.locations}}
             <li><a title="@{{lat}},{{lon}}" href="{{link}}">{{name}}</a></li>
@@ -39,7 +42,7 @@ parent: feed
         {{#each itinerary}}
           <li>
             <a href="#{{scroll slug}}">{{title}}</a>
-            <span class="date">{{date ./date format="d.m.Y"}}</span>
+            <span class="date">{{date ./date format="d.m.Y" timezone=timezone}}</span>
           </li>
         {{/each}}
       </ul>
@@ -55,7 +58,7 @@ parent: feed
           </h2>
 
           <div class="meta">
-            {{date ./date format="d.m.Y"}} @
+            {{date ./date format="d.m.Y" timezone=timezone}} @
             <ul class="locations" role="list">
               {{#each locations}}
                 <li><a href="{{link}}">{{name}}</a></li>
