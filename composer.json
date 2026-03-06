@@ -10,7 +10,7 @@
     "xp-framework/networking": "^10.4",
     "xp-forge/marshalling": "^2.4",
     "xp-forge/web": "^4.6",
-    "xp-forge/web-auth": "^6.0",
+    "xp-forge/web-auth": "^7.0",
     "xp-forge/frontend": "^7.0",
     "xp-forge/rest-api": "^5.0",
     "xp-forge/rest-client": "^6.0",

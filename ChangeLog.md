@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 3.2.0 / 2026-03-06
+
 * Added support for EXIF attribute `lens` as alternative if `lensModel` is
   not set - original Canon lenses use the latter, Sigma the first.
   (@thekid)
