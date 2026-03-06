@@ -52,7 +52,7 @@ class Mapping {
 
     // If there is more than one coordinate, connect with dotted lines
     if (connect && this.#coords.length > 1) {
-      const line = new ol.Feature({geometry: new ol.geom.LineString(this.#coords)});
+      const line = new ol.Feature({geometry: new ol.geom.LineString(this.#coords), line: true});
       line.setStyle(new ol.style.Style({
         stroke: new ol.style.Stroke({
           color: '#666666',
@@ -75,6 +75,8 @@ class Mapping {
       $popup.style.display = 'none';
       let list = '';
       map.forEachFeatureAtPixel(event.pixel, feature => {
+        if (feature.get('line')) return;
+
         const link = feature.get('link');
         if (null === link) {
           list += `<li>${this.html(feature.get('name'))}</li>`;
