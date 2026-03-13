@@ -31,6 +31,14 @@ class DescriptionsTest {
   }
 
   #[Test]
+  public function parse_quotes() {
+    Assert::equals(
+      ['title' => "Timm's test"],
+      $this->parse("---\ntitle: \"Timm's test\"\n---\nContent")->meta
+    );
+  }
+
+  #[Test]
   public function parse_content() {
     Assert::equals(
       '<p>Content</p>',
