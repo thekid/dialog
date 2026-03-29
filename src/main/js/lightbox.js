@@ -118,6 +118,8 @@ class Lightbox {
       y = e.touches[0].clientY;
     });
     $target.addEventListener('touchmove', e => {
+      if (e.touches.length > 1) return;
+
       const delta = e.changedTouches[0].clientX - x;
       $target.querySelector('.display').style.transform = `translate(${delta}px, 0)`;
       if (delta > 0) {
@@ -130,6 +132,8 @@ class Lightbox {
       e.cancelable && e.preventDefault();
     }, { passive: false });
     $target.addEventListener('touchend', e => {
+      if (e.touches.length > 1) return;
+
       const width = e.changedTouches[0].clientX - x;
       const height = e.changedTouches[0].clientY - y;
       $target.querySelector('.prev').style.visibility = null;
