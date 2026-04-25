@@ -7,7 +7,7 @@
     "xp-framework/compiler": "^9.5",
     "xp-framework/imaging": "^11.1",
     "xp-framework/command": "^12.0",
-    "xp-framework/networking": "^10.4",
+    "xp-framework/networking": "^11.0",
     "xp-forge/marshalling": "^2.4",
     "xp-forge/web": "^4.6",
     "xp-forge/web-auth": "^7.0",
