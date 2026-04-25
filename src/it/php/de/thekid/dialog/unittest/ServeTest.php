@@ -69,6 +69,15 @@ class ServeTest {
   }
 
   #[Test]
+  public function caches_assets_for_one_week() {
+    $res= $this->serve('GET', '/static/icon.svg');
+    Assert::equals(
+      [200, 'max-age=604800'],
+      [$res->status(), $res->headers()['Cache-Control']]
+    );
+  }
+
+  #[Test]
   public function type_ahead_api_publicly_accessible() {
     $res= $this->serve('GET', '/api/suggestions?q=');
     Assert::equals(
