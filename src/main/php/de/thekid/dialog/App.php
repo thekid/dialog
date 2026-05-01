@@ -8,7 +8,7 @@ use web\Application;
 use web\auth\Basic;
 use web\filters\BehindProxy;
 use web\frontend\helpers\{Assets, Dates, Numbers};
-use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars};
+use web\frontend\{Frontend, AssetsFrom, AssetsManifest, HandlersIn, Handlebars, Exceptions, CannotRoute};
 use web\rest\{RestApi, ResourcesIn};
 
 /** @test de.thekid.dialog.unittest.ServeTest */
@@ -55,6 +55,16 @@ class App extends Application {
     $assets= new AssetsFrom($this->environment->path('src/main/webapp'))->with(fn($file) => [
       'Cache-Control' => $manifest->immutable($file) ?? 'max-age=604800, must-revalidate'
     ]);
+    $frontend= new Frontend(
+      new HandlersIn('de.thekid.dialog.web', $inject->get(...)),
+      new Handlebars($this->environment->path('src/main/handlebars'), [
+        new Dates(new TimeZone('Europe/Berlin')),
+        new Numbers(),
+        new Assets($manifest),
+        $inject->get(Helpers::class),
+        new Scripts($this->environment->path('src/main/js'), 'dev' === $this->environment->profile()),
+      ]),
+    );
 
     return [
       '/static'      => $static,
@@ -63,16 +73,7 @@ class App extends Application {
       '/assets'      => $assets,
       '/image'       => $this->storage->with($caching),
       '/api'         => $auth->optional(new RestApi(new ResourcesIn('de.thekid.dialog.api', $inject->get(...)))),
-      '/'            => new Frontend(
-        new HandlersIn('de.thekid.dialog.web', $inject->get(...)),
-        new Handlebars($this->environment->path('src/main/handlebars'), [
-          new Dates(new TimeZone('Europe/Berlin')),
-          new Numbers(),
-          new Assets($manifest),
-          $inject->get(Helpers::class),
-          new Scripts($this->environment->path('src/main/js'), 'dev' === $this->environment->profile()),
-        ])
-      ),
+      '/'            => $frontend->handling(new Exceptions()->catch(CannotRoute::class)),
     ];
   }
 }

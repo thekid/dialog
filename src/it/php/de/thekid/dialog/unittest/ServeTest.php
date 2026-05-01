@@ -87,6 +87,15 @@ class ServeTest {
   }
 
   #[Test]
+  public function handles_404() {
+    $res= $this->serve('GET', '/not-found');
+    Assert::equals(
+      [404, 'text/html; charset=utf-8'],
+      [$res->status(), $res->headers()['Content-Type']]
+    );
+  }
+
+  #[Test]
   public function upload_api_needs_authentication() {
     $res= $this->serve('PUT', '/api/entries/test', ['Content-Type' => 'application/json; charset=utf-8'], '{
       "title"    : "Test",
