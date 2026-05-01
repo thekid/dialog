@@ -3,6 +3,11 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 3.3.0 / 2026-05-01
+
+* Merged PR #82: Add handling for 404 errors - @thekid
+* Fixed zooming in lightbox when using touch gestures - @thekid
+
 ## 3.2.0 / 2026-03-06
 
 * Added support for EXIF attribute `lens` as alternative if `lensModel` is
