@@ -35,7 +35,7 @@ class OpenMeteo {
       'end_date'   => ($end ?? $start)->toString('Y-m-d'),
       'timezone'   => ($tz ?? $start->getTimeZone())->name(),
       'daily'      => ['sunrise', 'sunset'],
-      'hourly'     => ['weather_code', 'apparent_temperature'],
+      'hourly'     => ['weather_code', 'temperature'],
     ];
 
     // There's a 5-day delay in the historical data; forecasts are provided for 7 days

@@ -45,7 +45,7 @@ class LookupWeather extends Task {
 
       // Determine most common weather codes and temperature range
       $codes= array_slice($result['hourly']['weather_code'], $offset, $length) |> array_count_values(...);
-      $temp= array_slice($result['hourly']['apparent_temperature'], $offset, $length);
+      $temp= array_slice($result['hourly']['temperature'], $offset, $length);
       $min= null === $min ? min($temp) : min($min, min($temp));
       $max= null === $max ? max($temp) : max($max, max($temp));
 
