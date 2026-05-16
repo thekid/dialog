@@ -27,6 +27,7 @@ class OpenMeteo {
     );
   }
 
+  /** Looks up weather for given coordinates and a start and end date */
   public function lookup(string|float $lat, string|float $lon, Date $start, ?Date $end= null, ?TimeZone $tz= null): array<string, mixed> {
     $params= $this->auth + [
       'latitude'   => $lat,
@@ -39,12 +40,10 @@ class OpenMeteo {
     ];
 
     // There's a 5-day delay in the historical data; forecasts are provided for 7 days
-    if ($start->getTime() >= time() - 604800) {
-      $resource= $this->endpoint('api')->resource('forecast');
-    } else {
-      $resource= $this->endpoint('archive-api')->resource('archive');
-    }
-
+    $resource= ($start->getTime() >= time() - 604800)
+      ? $this->endpoint('api')->resource('forecast')
+      : $this->endpoint('archive-api')->resource('archive')
+    ;
     return $resource->post($params, self::URLENCODED)->match([
       200 => fn($r) => $r->value(),
       400 => fn($r) => throw new IllegalArgumentException($r->content()),
