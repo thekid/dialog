@@ -36,5 +36,5 @@ class LookupLocationInfos extends Task {
     return $this->entry['locations'];
   }
 
-  public function description(): string { return 'Looking up location infos'; }
+  public function description(): string => 'Looking up location infos';
 }

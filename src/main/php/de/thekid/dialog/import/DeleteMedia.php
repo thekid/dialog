@@ -11,6 +11,6 @@ class DeleteMedia extends Task {
   }
 
   /** @return string */
-  public function description(): string { return "Deleting media {$this->slug}/{$this->name}"; }
+  public function description(): string => "Deleting media {$this->slug}/{$this->name}";
 
 }

@@ -11,7 +11,7 @@ abstract class Processing {
   public abstract function kind(): string;
 
   /** Returns prefixes used by the targets */
-  public function prefixes(): array<string> { return array_keys($this->targets); }
+  public function prefixes(): array<string> => array_keys($this->targets);
 
   /**
    * Adds a conversion target with a given prefix and conversion target.

@@ -13,5 +13,5 @@ class FetchEntry extends Task {
     ;
   }
 
-  public function description(): string { return "Fetching entry {$this->slug}"; }
+  public function description(): string => "Fetching entry {$this->slug}";
 }

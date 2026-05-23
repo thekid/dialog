@@ -13,10 +13,10 @@ class Pagination {
   }
 
   /** Returns how many items to skip */
-  public function skip(int $page): int { return $page < 1 ? 0 : ($page - 1) * $this->paged; }
+  public function skip(int $page): int => $page < 1 ? 0 : ($page - 1) * $this->paged;
 
   /** Returns limit */
-  public function limit(): int { return $this->paged + 1; }
+  public function limit(): int => $this->paged + 1;
 
   /** Returns the paginated elements as well as the links for previous and next */
   public function paginate(int $page, iterable $elements): array<string, mixed> {

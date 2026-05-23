@@ -66,5 +66,5 @@ class LookupWeather extends Task {
     ];
   }
 
-  public function description(): string { return 'Looking up weather'; }
+  public function description(): string => 'Looking up weather';
 }

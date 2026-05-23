@@ -11,5 +11,5 @@ class PublishEntry extends Task {
     return $api->resource('entries/{0}', [$this->slug])->patch($this->changes, 'application/json');
   }
 
-  public function description(): string { return "Publishing entry {$this->slug}"; }
+  public function description(): string => return "Publishing entry {$this->slug}";
 }

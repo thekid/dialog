@@ -41,16 +41,16 @@ abstract class Source implements Value {
   }
 
   /** Returns this source's name */
-  public function name(): string { return $this->name; }
+  public function name(): string => $this->name;
 
   /** Returns this source's parent name, if any */
-  public function parent(): ?string { return strstr($this->name(), '/', true) ?: null; }
+  public function parent(): ?string => strstr($this->name(), '/', true) ?: null;
+
+  /** Returns this source's origin */
+  public function origin(): Folder => $this->origin;
 
   /** Sets a parent for this source */
   public function nestedIn(string $parent): self { $this->name= $parent.'/'.$this->name; return $this; }
-
-  /** Returns this source's origin */
-  public function origin(): Folder { return $this->origin; }
 
   /** Yields all the media files in this source */
   protected function mediaIn(Files $files): iterable {
@@ -107,7 +107,5 @@ abstract class Source implements Value {
   }
 
   /** @return string */
-  public function toString() {
-    return nameof($this).'<'.$this->name().'>';
-  }
+  public function toString() => nameof($this).'<'.$this->name().'>';
 }

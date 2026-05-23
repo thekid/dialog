@@ -10,5 +10,5 @@ class DeleteEntry extends Task {
     return $api->resource('entries/{0}', [$this->slug])->delete();
   }
 
-  public function description(): string { return "Removing entry {$this->slug}"; }
+  public function description(): string => "Removing entry {$this->slug}";
 }
