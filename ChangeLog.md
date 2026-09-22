@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed *Cannot load class io.IOException* - @thekid
+
 ## 3.3.0 / 2026-05-01
 
 * Merged PR #82: Add handling for 404 errors - @thekid
