@@ -3,6 +3,7 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed queries for published content by using `$lte` operator - @thekid
 * Fixed *Cannot load class io.IOException* - @thekid
 
 ## 3.3.0 / 2026-05-01

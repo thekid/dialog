@@ -36,7 +36,7 @@ class Repository {
   /** Returns newest entries */
   public function newest(int $limit): array<Document> {
     $cursor= $this->collection('entries')->query([
-      ['$match' => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$match' => ['is.content' => ['$eq' => true], 'published' => ['$lte' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
       ['$limit' => $limit],
@@ -48,7 +48,7 @@ class Repository {
   /** Returns all journeys */
   public function journeys(): array<Document> {
     $cursor= $this->collection('entries')->query([
-      ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$match' => ['is.journey' => ['$eq' => true], 'published' => ['$lte' => Date::now()]]],
       ['$unset' => '_searchable'],
       ['$sort'  => ['date' => -1]],
     ]);
@@ -58,7 +58,7 @@ class Repository {
   /** Returns paginated entries */
   public function entries(Pagination $pagination, int $page): array<Document> {
     $cursor= $this->collection('entries')->query([
-      ['$match'  => ['is.content' => ['$eq' => true], 'published' => ['$lt' => Date::now()]]],
+      ['$match'  => ['is.content' => ['$eq' => true], 'published' => ['$lte' => Date::now()]]],
       ['$unset'  => '_searchable'],
       ['$sort'   => ['date' => -1]],
       ['$skip'   => $pagination->skip($page)],
@@ -134,7 +134,7 @@ class Repository {
   /** Returns a single entry */
   public function entry(string $slug, bool $published= true): ?Document {
     return $this->collection('entries')->first([
-      ['$match' => ['slug' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
+      ['$match' => ['slug' => $slug] + ($published ? ['published' => ['$lte' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
     ]);
   }
@@ -142,7 +142,7 @@ class Repository {
   /** Returns an entry's children, latest first */
   public function children(string $slug, bool $published= true, array<string, mixed> $sort= ['date' => -1]): Cursor {
     return $this->collection('entries')->query([
-      ['$match' => ['parent' => $slug] + ($published ? ['published' => ['$lt' => Date::now()]] : [])],
+      ['$match' => ['parent' => $slug] + ($published ? ['published' => ['$lte' => Date::now()]] : [])],
       ['$unset' => '_searchable'],
       ['$sort'  => $sort],
     ]);
