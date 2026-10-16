@@ -4,7 +4,6 @@
   "license": "bsd",
 
   "require": {
-    "xp-framework/core": "dev-main as 12.99.0",
     "xp-framework/compiler": "^9.11",
     "xp-framework/imaging": "^11.1",
     "xp-framework/command": "^13.0",
