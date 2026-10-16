@@ -3,6 +3,7 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Removed Twitter-specific meta data - @thekid
 * Fixed queries for published content by using `$lte` operator - @thekid
 * Fixed *Cannot load class io.IOException* - @thekid
 
