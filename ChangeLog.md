@@ -3,6 +3,7 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgraded `xp-forge/markdown` library - @thekid
 * Dropped support for PHP 7.4 - @thekid
 * Removed Twitter-specific meta data - @thekid
 * Fixed queries for published content by using `$lte` operator - @thekid
