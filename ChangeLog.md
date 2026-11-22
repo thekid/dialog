@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+## 3.4.0 / 2026-11-22
+
 * Upgraded to PHP 8.6, see https://www.php.net/archive/2026.php#2026-11-19-5
   (@thekid)
 * Upgraded `xp-forge/markdown` library - @thekid
