@@ -3,6 +3,8 @@ Dialog change log
 
 ## ?.?.? / ????-??-??
 
+* Upgraded to PHP 8.6, see https://www.php.net/archive/2026.php#2026-11-19-5
+  (@thekid)
 * Upgraded `xp-forge/markdown` library - @thekid
 * Dropped support for PHP 7.4 - @thekid
 * Removed Twitter-specific meta data - @thekid
