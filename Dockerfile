@@ -6,7 +6,7 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN sed -ri -e 's!memory_limit = .+!memory_limit = -1!g' "$PHP_INI_DIR/php.ini"
 
-RUN curl -sSL https://github.com/xp-runners/reference/releases/download/v9.3.0/xp-run-9.3.0.sh > /usr/bin/xp-run
+RUN curl -sSL https://github.com/xp-runners/evolution/releases/download/v10.0.0/xp-linux-amd64-10.0.0.tar.gz | tar xvz -C /usr/bin
 
 RUN mkdir /app
 
@@ -22,4 +22,4 @@ VOLUME /space
 
 EXPOSE 8080
 
-CMD ["/bin/sh", "/usr/bin/xp-run", "xp.web.Runner", "-a", "0.0.0.0:8080", "-p", "prod", "de.thekid.dialog.App", "/space"]
+CMD ["/usr/bin/xp", "xp.web.Runner", "-a", "0.0.0.0:8080", "-p", "prod", "de.thekid.dialog.App", "/space"]
